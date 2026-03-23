@@ -1,0 +1,31 @@
+30
+Da Nang|Cong ty TNHH Minh Quan|200 Nguyen Van Linh|2363123456
+Da Nang|Cong ty Co phan Thiet bi Viet|89 Le Duan|2363845678
+Da Nang|Cong ty Logistics Trung Nam|15 Hoang Dieu|2363777000
+Ha Noi|Cong ty Co phan Dau tu Thang Long|10 Pham Hung|2435000000
+Ha Noi|Cong ty Xuat nhap khau An Viet|55 Lang Ha|2435678901
+Ha Noi|Cong ty Thiet bi Cong nghiep Dong A|120 Nguyen Trai|2434333444
+TP HCM|Cong ty TNHH Bao Minh|220 Tran Hung Dao|2834000000
+TP HCM|Cong ty Co phan Giao duc Tri Viet|33 Dien Bien Phu|2834567890
+TP HCM|Cong ty Dich vu Ky thuat Sai Gon|18 Cach Mang Thang 8|2834888999
+Hai Phong|Cong ty Dong tau Hai Phong|99 Le Loi|2256000111
+Hai Phong|Cong ty Thuong mai Bien Bac|45 Tran Nguyen Han|2256111222
+Can Tho|Cong ty Nong san Tay Do|77 30/4|2923000111
+Can Tho|Cong ty Xay dung Song Hau|12 Mau Than|2923456789
+Hue|Cong ty TNHH Hue Travel|25 Le Loi|2345000222
+Hue|Cong ty May mac Huong Giang|88 Ba Trieu|2345999888
+Quang Nam|Cong ty Du lich Hoi An Xanh|10 Tran Phu|2353888999
+Quang Nam|Cong ty TNHH Gach men Dai Loc|45 Hung Vuong|2353444555
+Binh Duong|Cong ty Co phan KCN My Phuoc|100 Dai lo Binh Duong|2743999888
+Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|2363845678
+Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|2363555123
+Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|2363777888
+Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|2363999000
+Ha Noi|Cong ty Co phan Minh Phat|45 Tran Duy Hung|2435678901
+Ha Noi|Cong ty TNHH Thuong mai Hoang Long|22 Nguyen Chi Thanh|2438889999
+Ha Noi|Cong ty Van tai Bac Nam|90 Giai Phong|2434561234
+TP HCM|Cong ty TNHH Hoang Gia|78 Le Loi|2834567890
+TP HCM|Cong ty Phan mem Sai Gon Tech|15 Nguyen Hue|2839991111
+Hai Phong|Cong ty Van tai Bien Dong|12 Lach Tray|2256789123
+Can Tho|Cong ty Thuc pham Mekong|90 Nguyen Trai|2923456789
+Hue|Cong ty Du lich Co do|15 Hung Vuong|2345671234
