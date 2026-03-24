@@ -1,10 +1,10 @@
-struct Tinh {
+typedef struct Province {
     char tentinh[50];
-};
+} Province;
 
-struct ThueBao {
-    Tinh tinh; // long
-    char donvi[100];
-    char diachi[100];
-    char sodienthoai[15];
-};
+typedef struct Record {
+    Province province;
+    char name[100];
+    char address[100];
+    char phone[15];
+} Record;
