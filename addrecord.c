@@ -28,6 +28,46 @@ Node* createNode(Record R) {
     return newNode;
 }
 
+void readFile(const char *filename,Node **head) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+
+    char line[300];
+
+    while(fgets(line, sizeof(line),f) != NULL) {
+        line[strcspn(line,"\n")] = '\0';
+
+        Record temp;
+        char *token =strtok(line,"|");
+
+        if (token != NULL) {
+            strcpy(temp.province.tentinh,token);
+        }
+
+        token = strtok(NULL,"|");
+        if (token != NULL) {
+            strcpy(temp.name,token);
+        }
+
+        token = strtok(NULL,"|");
+        if (token != NULL) {
+            strcpy(temp.address,token);
+        }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            strcpy(temp.phone, token);
+        }
+        addRecord(head,temp);
+    }
+
+    fclose(f);
+    printf("Doc du lieu thanh cong!\n");
+}
+
 Record inputRecord() {
     Record R;
     while(getchar()!='\n');
@@ -275,24 +315,8 @@ void menu() {
 int main() {
     Node* head = NULL;
 
-    Node* n1 = (Node*)malloc(sizeof(Node));
-    strcpy(n1->data.name, "An");
-    strcpy(n1->data.phone, "0123");
-    strcpy(n1->data.address, "HCM");
-    strcpy(n1->data.province.tentinh, "TPHCM");
-    n1->next = NULL;
-
-    Node* n2 = (Node*)malloc(sizeof(Node));
-    strcpy(n2->data.name, "Binh");
-    strcpy(n2->data.phone, "0456");
-    strcpy(n2->data.address, "Ha Noi");
-    strcpy(n2->data.province.tentinh, "HN");
-    n2->next = NULL;
-
-    // nối list
-    head = n1;
-    n1->next = n2;
-
+    readFile("data1.txt",&head);
+    
     int choice;
     do {
         menu();
