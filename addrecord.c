@@ -28,7 +28,19 @@ Node* createNode(Record R) {
     return newNode;
 }
 
-void readFile(const char *filename,Node **head) {
+void addRecord(Node** head,Record R) {
+    Node* newNode = createNode(R);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return ;
+    }
+
+    newNode->next = *head;
+    *head = newNode;
+}
+
+void readFile(const char *filename, Node **head) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
         printf("Khong mo duoc file!\n");
@@ -41,7 +53,7 @@ void readFile(const char *filename,Node **head) {
         line[strcspn(line,"\n")] = '\0';
 
         Record temp;
-        char *token =strtok(line,"|");
+        char *token = strtok(line,"|");
 
         if (token != NULL) {
             strcpy(temp.province.tentinh,token);
@@ -68,17 +80,55 @@ void readFile(const char *filename,Node **head) {
     printf("Doc du lieu thanh cong!\n");
 }
 
+int validatePhone(char phone[]) {
+    int len = strlen(phone);
+    if (len < 9 || len > 11) {
+        return 0;
+    }
+    for (int i = 0; i < len; i++) {
+        if (phone[i] < '0' || phone[i] > '9') 
+        return 0;
+    }
+    return 1;
+}
+
+int validateInput(char str[]) {
+    int len = strlen(str);
+    if (len == 0)
+        return 0;
+    int space = 1;
+    for (int i = 0; i < len; i++) {
+        if (str[i] != ' ') {
+            space = 0;
+            break;
+        }
+    }
+    if(space)
+        return 0;
+    return 1;
+}
+
 Record inputRecord() {
     Record R;
     while(getchar()!='\n');
 
     printf("Nhap so dien thoai: ");
-    scanf("%s", R.phone);
+    do {
+        scanf("%s", R.phone);
+        if (!validatePhone(R.phone)) {
+            printf("So dien thoai khong hop le! Nhap lai: ");
+        }
+    } while(!validatePhone(R.phone));
     getchar();
 
     printf("Nhap ten don vi: ");
-    fgets(R.name,sizeof(R.name),stdin);
-    R.name[strcspn(R.name,"\n")]='\0';
+    do {
+        fgets(R.name,sizeof(R.name),stdin);
+        R.name[strcspn(R.name,"\n")]='\0';
+        if (!validateInput(R.name)) {
+            printf("Ten khong hop le!\n");
+        }
+    } while(!validateInput(R.name));
 
     printf("Nhap dia chi: ");
     fgets(R.address,sizeof(R.address),stdin);
@@ -89,18 +139,6 @@ Record inputRecord() {
     R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
 
     return R;
-}
-
-void addRecord(Node** head,Record R) {
-    Node* newNode = createNode(R);
-
-    if (*head == NULL) {
-        *head = newNode;
-        return ;
-    }
-
-    newNode->next = *head;
-    *head = newNode;
 }
 
 void printList(Node* head) {
@@ -188,15 +226,17 @@ void print_record(Node* node) {
     printf("Tinh: %s\n", node->data.province.tentinh);
 }
 
-
 void updateRecord(Node* head){
     char phone[15];
     Node* found=NULL;
 
     while(found==NULL) {
-        printf("Nhap so dien thoai thue bao can sua:\n");
+        printf("Nhap so dien thoai thue bao can sua: ");
         scanf("%s",phone);
-
+        if (!validatePhone(phone)) {
+            printf("So dien thoai khong hop le!\n");
+            return;
+        }
         found=search_record(head,phone);
         if(found==NULL) {
             printf("Khong tim thay thue bao vui long nhap lai: \n");
@@ -209,9 +249,6 @@ void updateRecord(Node* head){
     printf("Cap nhat thanh cong!\n");
 
 }
-
-
-Node *head = NULL;
 
 void displayAll(Node* head) {
     Node *p = head;
@@ -268,32 +305,67 @@ void deleteRecord(Node **head) {
     printf("Xoa thanh cong!\n");
 }
 
-int validatePhone(char phone[]) {
-    int len = strlen(phone);
-    if (len < 9 || len > 11) {
-        return 0;
+void listByProvince(Node* head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
     }
-    for (int i = 0; i < len; i++) {
-        if (phone[i] < '0' || phone[i] > '9') 
-        return 0;
+    char province[50];
+    int found = 0;
+    printf("Nhap tinh can tim: ");
+    while(getchar() != '\n');
+    fgets(province, sizeof(province), stdin);
+    province[strcspn(province, "\n")] = '\0';
+    Node* p = head;
+    while (p != NULL) {
+        if (strcmp(p->data.province.tentinh, province) == 0) {
+            printf("\nTen: %s\n", p->data.name);
+            printf("so dien thoai: %s", p->data.phone);
+            printf("Dia chi: %s\n", p->data.address);
+            printf("Tinh: %s\n", p->data.province.tentinh);
+            printf("-------------------\n");
+            found = 1;
+        }
+        p = p->next;
     }
-    return 1;
+    if (!found) {
+        printf("Khong tim thay tinh nay!\n");
+    }
 }
 
-int validateInput(char str[]) {
-    int len = strlen(str);
-    if (len == 0)
-        return 0;
-    int space = 1;
-    for (int i = 0; i < len; i++) {
-        if (str[i] != ' ') {
-            space = 0;
-            break;
-        }
+void statisticsByProvince(Node* head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
     }
-    if(space)
-        return 0;
-    return 1;
+    printf("\nTHONG KE SO THUE BAO THEO TINH\n");
+    int total = 0;
+    Node* p = head;
+    while (p != NULL) {
+        total++;
+        int printed = 0;
+        Node* t = head;
+        while (t != p) {
+            if (strcmp(t->data.province.tentinh, p->data.province.tentinh) == 0) {
+                printed = 1;
+                break;
+            }
+            t = t->next;
+        }
+        if (!printed) {
+            int count = 0;
+            Node* q = head;
+            while (q != NULL) {
+                if (strcmp(p->data.province.tentinh, q->data.province.tentinh) == 0) {
+                    count++;
+                }
+                q = q->next;
+            }
+            printf("Tinh %s co %d thue bao\n", p->data.province.tentinh, count);
+        }
+        p = p->next;
+    }
+    printf("Tong so thue bao: %d\n", total);
 }
 
 void menu() {
@@ -328,21 +400,24 @@ int main() {
         }
 
         switch(choice) {
-            case 1:
+            case 1: {
                 Record newR = inputRecord();
                 addRecord(&head,newR);
                 printf("Da them thue bao thanh cong!\n");
                 break;
+            }
             case 2: 
                 displayAll(head);
                 break;
-            case 3:
+            case 3: {
                 char phone[15];
                 printf("Nhap thue bao can tim:\n");
-                scanf("%s",&phone);
+                scanf("%s",phone);
                 Node* cur=search_record(head,phone);
-                print_record(cur);
+                if (cur != NULL) 
+                    print_record(cur);
                 break;
+            }
             case 4:
                 updateRecord(head);
                 break;
@@ -350,16 +425,17 @@ int main() {
                 deleteRecord(&head);
                 break;
             case 6:
-                //listRecordByProvince();
+                listByProvince(head);
                 break;
             case 7: 
-                //statisticsRecord();
+                statisticsByProvince(head);
                 break;
             case 8: 
                 //checkDuplicate();
                 break;
             case 9:
-                //reading_file();
+                //readingFile();
+                break;
             case 0:
                 printf("Da thoat chuong trinh.\n");
                 break;
@@ -368,7 +444,5 @@ int main() {
         }
     } while(choice != 0);
 
-
     return 0;
-
 }
