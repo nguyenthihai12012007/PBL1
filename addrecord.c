@@ -14,6 +14,7 @@ typedef struct Record {
     char name[100];
     char address[100];
     char phone[15];
+    int status;
 } Record;
 
 typedef struct Node {
@@ -23,9 +24,25 @@ typedef struct Node {
 
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
+    if(newNode == NULL) {
+        printf("Khong du bo nho\n");
+        exit(1);
+    }
     newNode->data = R;
     newNode->next = NULL;
     return newNode;
+}
+
+void addRecord(Node** head,Record R) {
+    Node* newNode = createNode(R);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return ;
+    }
+
+    newNode->next = *head;
+    *head = newNode;
 }
 
 void readFile(const char *filename,Node **head) {
@@ -61,6 +78,11 @@ void readFile(const char *filename,Node **head) {
         if (token != NULL) {
             strcpy(temp.phone, token);
         }
+
+        token = strtok(NULL, "|");
+        if (token != NULL) {
+            temp.status = atoi(token);
+        }
         addRecord(head,temp);
     }
 
@@ -68,39 +90,117 @@ void readFile(const char *filename,Node **head) {
     printf("Doc du lieu thanh cong!\n");
 }
 
+int validatePhone(char phone[]) {
+    int len = strlen(phone);
+    if (len < 9 || len > 11) {
+        return 0;
+    }
+    for (int i = 0; i < len; i++) {
+        if (phone[i] < '0' || phone[i] > '9') 
+        return 0;
+    }
+    return 1;
+}
+
+int validateInput(char str[]) {
+    int len = strlen(str);
+    if (len == 0)
+        return 0;
+    int space = 1;
+    for (int i = 0; i < len; i++) {
+        if (str[i] != ' ') {
+            space = 0;
+            break;
+        }
+    }
+    if(space)
+        return 0;
+    return 1;
+}
+
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int inputStatus() {
+    int choice;
+    do {
+        printf("Chon trang thai thue bao:\n");
+        printf("1. Dang hoat dong\n");
+        printf("2. Tam khoa\n");
+        printf("3. Da huy\n");
+        printf("Nhap lua chon: ");
+        scanf("%d", &choice);
+        clearInputBuffer();
+
+        if (choice < 1 || choice > 3) {
+            printf("Lua chon khong hop le! Vui long nhap lai.\n");
+        }
+    } while (choice < 1 || choice > 3);
+
+    return choice;
+}
+
 Record inputRecord() {
     Record R;
-    while(getchar()!='\n');
+    clearInputBuffer();
 
-    printf("Nhap so dien thoai: ");
-    scanf("%s", R.phone);
-    getchar();
+    do {
+        printf("Nhap so dien thoai: ");
+        scanf("%14s",R.phone);
+        getchar();
+        if(!validatePhone(R.phone)) {
+            printf("So dien thoai khong hop le! Vui long nhap lai.\n");
+        }
+    } while(!validatePhone(R.phone));
 
-    printf("Nhap ten don vi: ");
-    fgets(R.name,sizeof(R.name),stdin);
-    R.name[strcspn(R.name,"\n")]='\0';
+    do {
+        printf("Nhap ten don vi: ");
+        fgets(R.name,sizeof(R.name),stdin);
+        R.name[strcspn(R.name,"\n")]='\0';
+        if(!validateInput(R.name)) {
+            printf("Ten khong hop le! Vui long nhap lai.\n");
+        }
+    } while(!validateInput(R.name));
 
-    printf("Nhap dia chi: ");
-    fgets(R.address,sizeof(R.address),stdin);
-    R.address[strcspn(R.address,"\n")]='\0';
+    do {
+        printf("Nhap dia chi: ");
+        fgets(R.address,sizeof(R.address),stdin);
+        R.address[strcspn(R.address,"\n")]='\0';
+        if(!validateInput(R.address)) {
+            printf("Dia chi khong hop le! Vui long nhap lai.\n");
+        }
+    } while(!validateInput(R.address));
 
-    printf("Nhap tinh: ");
-    fgets(R.province.tentinh,sizeof(R.province.tentinh),stdin);
-    R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
+    do {
+        printf("Nhap tinh: ");
+        fgets(R.province.tentinh,sizeof(R.province.tentinh),stdin);
+        R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
+        if(!validateInput(R.province.tentinh)) {
+            printf("Tinh khong hop le! Vui long nhap lai.\n");
+        }
+    } while(!validateInput(R.province.tentinh));
 
+    R.status = inputStatus();
+    
     return R;
 }
 
-void addRecord(Node** head,Record R) {
-    Node* newNode = createNode(R);
-
-    if (*head == NULL) {
-        *head = newNode;
-        return ;
+void printStatus(int status) {
+    switch (status) {
+        case 1:
+            printf("Dang hoat dong");
+            break;
+        case 2:
+            printf("Tam khoa");
+            break;
+        case 3:
+            printf("Da huy");
+            break;
+        default:
+            printf("Khong xac dinh");
     }
-
-    newNode->next = *head;
-    *head = newNode;
 }
 
 void printList(Node* head) {
@@ -111,6 +211,8 @@ void printList(Node* head) {
         printf("\nName: %s", temp->data.name);
         printf("\nAddress: %s", temp->data.address);
         printf("\nProvince: %s", temp->data.province.tentinh);
+        printf("Trang thai: ");
+        printStatus(temp->data.status);
         printf("--------------------\n");
 
         temp = temp->next;
@@ -186,10 +288,18 @@ void print_record(Node* node) {
     printf("So dien thoai: %s\n", node->data.phone);
     printf("Dia chi: %s\n", node->data.address);
     printf("Tinh: %s\n", node->data.province.tentinh);
+    printf("Trang thai: ");
+    printStatus(node->data.status);
+    printf("\n");
 }
 
 
 void updateRecord(Node* head){
+    if(head == NULL) {
+        printf("Danh sach rong.\n");
+        return ;
+    }
+
     char phone[15];
     Node* found=NULL;
 
@@ -211,8 +321,6 @@ void updateRecord(Node* head){
 }
 
 
-Node *head = NULL;
-
 void displayAll(Node* head) {
     Node *p = head;
     if (head == NULL) {
@@ -221,10 +329,7 @@ void displayAll(Node* head) {
     }
     printf("\nDANH SACH DANH BA\n");
     while (p != NULL) {
-        printf("Tinh: %s\n", p->data.province.tentinh);
-        printf("Ten don vi: %s\n", p->data.name);
-        printf("Dia chi: %s\n", p->data.address);
-        printf("So dien thoai: %s\n", p->data.phone);
+        print_record(p);
         printf("\n");
         p = p->next;
     }
@@ -268,33 +373,6 @@ void deleteRecord(Node **head) {
     printf("Xoa thanh cong!\n");
 }
 
-int validatePhone(char phone[]) {
-    int len = strlen(phone);
-    if (len < 9 || len > 11) {
-        return 0;
-    }
-    for (int i = 0; i < len; i++) {
-        if (phone[i] < '0' || phone[i] > '9') 
-        return 0;
-    }
-    return 1;
-}
-
-int validateInput(char str[]) {
-    int len = strlen(str);
-    if (len == 0)
-        return 0;
-    int space = 1;
-    for (int i = 0; i < len; i++) {
-        if (str[i] != ' ') {
-            space = 0;
-            break;
-        }
-    }
-    if(space)
-        return 0;
-    return 1;
-}
 
 void menu() {
     printf("CHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
@@ -316,7 +394,7 @@ int main() {
     Node* head = NULL;
 
     readFile("data1.txt",&head);
-    
+
     int choice;
     do {
         menu();
@@ -339,7 +417,7 @@ int main() {
             case 3:
                 char phone[15];
                 printf("Nhap thue bao can tim:\n");
-                scanf("%s",&phone);
+                scanf("%14s", phone);
                 Node* cur=search_record(head,phone);
                 print_record(cur);
                 break;
