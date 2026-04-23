@@ -45,7 +45,7 @@ void addRecord(Node** head,Record R) {
     *head = newNode;
 }
 
-void readFile(const char *filename,Node **head) {
+void readFile(const char *filename, Node **head) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
         printf("Khong mo duoc file!\n");
@@ -58,7 +58,7 @@ void readFile(const char *filename,Node **head) {
         line[strcspn(line,"\n")] = '\0';
 
         Record temp;
-        char *token =strtok(line,"|");
+        char *token = strtok(line,"|");
 
         if (token != NULL) {
             strcpy(temp.province.tentinh,token);
@@ -78,7 +78,7 @@ void readFile(const char *filename,Node **head) {
         if (token != NULL) {
             strcpy(temp.phone, token);
         }
-
+        
         token = strtok(NULL, "|");
         if (token != NULL) {
             temp.status = atoi(token);
@@ -145,27 +145,27 @@ int inputStatus() {
 Record inputRecord() {
     Record R;
     clearInputBuffer();
-
+    
+    printf("Nhap so dien thoai: ");
     do {
-        printf("Nhap so dien thoai: ");
-        scanf("%14s",R.phone);
-        getchar();
-        if(!validatePhone(R.phone)) {
-            printf("So dien thoai khong hop le! Vui long nhap lai.\n");
+        scanf("%s", R.phone);
+        if (!validatePhone(R.phone)) {
+            printf("So dien thoai khong hop le! Nhap lai: ");
         }
     } while(!validatePhone(R.phone));
+    getchar();
 
+    printf("Nhap ten don vi: ");
     do {
-        printf("Nhap ten don vi: ");
         fgets(R.name,sizeof(R.name),stdin);
         R.name[strcspn(R.name,"\n")]='\0';
-        if(!validateInput(R.name)) {
-            printf("Ten khong hop le! Vui long nhap lai.\n");
+        if (!validateInput(R.name)) {
+            printf("Ten khong hop le!\n");
         }
     } while(!validateInput(R.name));
 
+    printf("Nhap dia chi: ");
     do {
-        printf("Nhap dia chi: ");
         fgets(R.address,sizeof(R.address),stdin);
         R.address[strcspn(R.address,"\n")]='\0';
         if(!validateInput(R.address)) {
@@ -173,8 +173,8 @@ Record inputRecord() {
         }
     } while(!validateInput(R.address));
 
+    printf("Nhap tinh: ");
     do {
-        printf("Nhap tinh: ");
         fgets(R.province.tentinh,sizeof(R.province.tentinh),stdin);
         R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
         if(!validateInput(R.province.tentinh)) {
@@ -183,7 +183,7 @@ Record inputRecord() {
     } while(!validateInput(R.province.tentinh));
 
     R.status = inputStatus();
-    
+
     return R;
 }
 
@@ -202,23 +202,6 @@ void printStatus(int status) {
             printf("Khong xac dinh");
     }
 }
-
-void printList(Node* head) {
-    Node* temp = head;
-
-    while (temp != NULL) {
-        printf("\nPhone: %s", temp->data.phone);
-        printf("\nName: %s", temp->data.name);
-        printf("\nAddress: %s", temp->data.address);
-        printf("\nProvince: %s", temp->data.province.tentinh);
-        printf("Trang thai: ");
-        printStatus(temp->data.status);
-        printf("--------------------\n");
-
-        temp = temp->next;
-    }
-}
-
 
 Node* search_record(Node* head,char phone[15]) {
     Node* cur = head;
@@ -241,6 +224,7 @@ void menu_update(Node* head) {
         printf("1. Sua ten\n");
         printf("2. Sua dia chi\n");
         printf("3. Sua so dien thoai\n");
+        //them sua trang thai hoat dong
         printf("0. Thoat\n");
         printf("Chon: ");
         scanf("%d", &choice);
@@ -293,20 +277,22 @@ void print_record(Node* node) {
     printf("\n");
 }
 
-
 void updateRecord(Node* head){
     if(head == NULL) {
         printf("Danh sach rong.\n");
         return ;
     }
-
+    
     char phone[15];
     Node* found=NULL;
 
     while(found==NULL) {
-        printf("Nhap so dien thoai thue bao can sua:\n");
+        printf("Nhap so dien thoai thue bao can sua: ");
         scanf("%s",phone);
-
+        if (!validatePhone(phone)) {
+            printf("So dien thoai khong hop le!\n");
+            return;
+        }
         found=search_record(head,phone);
         if(found==NULL) {
             printf("Khong tim thay thue bao vui long nhap lai: \n");
@@ -319,7 +305,6 @@ void updateRecord(Node* head){
     printf("Cap nhat thanh cong!\n");
 
 }
-
 
 void displayAll(Node* head) {
     Node *p = head;
@@ -373,6 +358,64 @@ void deleteRecord(Node **head) {
     printf("Xoa thanh cong!\n");
 }
 
+void listByProvince(Node* head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    char province[50];
+    int found = 0;
+    printf("Nhap tinh can tim: ");
+    while(getchar() != '\n');
+    fgets(province, sizeof(province), stdin);
+    province[strcspn(province, "\n")] = '\0';
+    Node* p = head;
+    while (p != NULL) {
+        if (strcmp(p->data.province.tentinh, province) == 0) {
+            print_record(p);
+            found = 1;
+        }
+        p = p->next;
+    }
+    if (!found) {
+        printf("Khong tim thay tinh nay!\n");
+    }
+}
+
+void statisticsByProvince(Node* head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    printf("\nTHONG KE SO THUE BAO THEO TINH\n");
+    int total = 0;
+    Node* p = head;
+    while (p != NULL) {
+        total++;
+        int printed = 0;
+        Node* t = head;
+        while (t != p) {
+            if (strcmp(t->data.province.tentinh, p->data.province.tentinh) == 0) {
+                printed = 1;
+                break;
+            }
+            t = t->next;
+        }
+        if (!printed) {
+            int count = 0;
+            Node* q = head;
+            while (q != NULL) {
+                if (strcmp(p->data.province.tentinh, q->data.province.tentinh) == 0) {
+                    count++;
+                }
+                q = q->next;
+            }
+            printf("Tinh %s co %d thue bao\n", p->data.province.tentinh, count);
+        }
+        p = p->next;
+    }
+    printf("Tong so thue bao: %d\n", total);
+}
 
 void menu() {
     printf("CHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
@@ -394,7 +437,7 @@ int main() {
     Node* head = NULL;
 
     readFile("data1.txt",&head);
-
+    
     int choice;
     do {
         menu();
@@ -406,21 +449,24 @@ int main() {
         }
 
         switch(choice) {
-            case 1:
+            case 1: {
                 Record newR = inputRecord();
                 addRecord(&head,newR);
                 printf("Da them thue bao thanh cong!\n");
                 break;
+            }
             case 2: 
                 displayAll(head);
                 break;
-            case 3:
+            case 3: {
                 char phone[15];
                 printf("Nhap thue bao can tim:\n");
-                scanf("%14s", phone);
+                scanf("%s",phone);
                 Node* cur=search_record(head,phone);
-                print_record(cur);
+                if (cur != NULL) 
+                    print_record(cur);
                 break;
+            }
             case 4:
                 updateRecord(head);
                 break;
@@ -428,16 +474,17 @@ int main() {
                 deleteRecord(&head);
                 break;
             case 6:
-                //listRecordByProvince();
+                listByProvince(head);
                 break;
             case 7: 
-                //statisticsRecord();
+                statisticsByProvince(head);
                 break;
             case 8: 
                 //checkDuplicate();
                 break;
             case 9:
-                //reading_file();
+                //readingFile();
+                break;
             case 0:
                 printf("Da thoat chuong trinh.\n");
                 break;
@@ -446,7 +493,5 @@ int main() {
         }
     } while(choice != 0);
 
-
     return 0;
-
 }
