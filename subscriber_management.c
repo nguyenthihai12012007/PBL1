@@ -19,7 +19,7 @@ Node* createNode(Record R) {
     return newNode;
 }
 
-void addRecord(Node** head,Record R) {
+void addRecord(Node** head, Record R) {
     Node* newNode = createNode(R);
 
     if (*head == NULL) {
@@ -29,57 +29,6 @@ void addRecord(Node** head,Record R) {
 
     newNode->next = *head;
     *head = newNode;
-}
-
-void readFile(const char *filename, Node **head) {
-    FILE *f = fopen(filename, "r");
-    if (f == NULL) {
-        printf("Khong mo duoc file!\n");
-        return;
-    }
-
-    char line[300];
-    
-
-    while(fgets(line, sizeof(line),f) != NULL) {
-        line[strcspn(line,"\n")] = '\0';
-
-        //bỏ qua dong trong
-        if (strlen(line) == 0) {
-            continue;
-        }
-
-        Record temp;
-        char *token = strtok(line,"|");
-
-        if (token != NULL) {
-            strcpy(temp.province.tentinh,token);
-        }
-
-        token = strtok(NULL,"|");
-        if (token != NULL) {
-            strcpy(temp.name,token);
-        }
-
-        token = strtok(NULL,"|");
-        if (token != NULL) {
-            strcpy(temp.address,token);
-        }
-
-        token = strtok(NULL, "|");
-        if (token != NULL) {
-            strcpy(temp.phone, token);
-        }
-        
-        token = strtok(NULL, "|");
-        if (token != NULL) {
-            temp.status = atoi(token);
-        }
-        addRecord(head,temp);
-    }
-
-    fclose(f);
-    printf("Doc du lieu thanh cong!\n");
 }
 
 int validatePhone(char phone[]) {
@@ -108,6 +57,74 @@ int validateInput(char str[]) {
     if(space)
         return 0;
     return 1;
+}
+
+void readFile(const char *filename, Node **head) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+
+    char line[300];
+    int valid = 0, invalid = 0;
+
+    while(fgets(line, sizeof(line),f) != NULL) {
+        line[strcspn(line,"\n")] = '\0';
+
+        //bỏ qua dong trong
+        if (strlen(line) == 0) {
+            continue;
+        }
+
+        Record temp;
+        char *token = strtok(line,"|");
+
+        if (token == NULL || !validateInput(token)) {
+            invalid++;
+            continue;
+        }
+        strcpy(temp.province.tentinh,token);
+
+        token = strtok(NULL,"|");
+        if (token == NULL || !validateInput(token)) {
+            invalid++;
+            continue;
+        }
+        strcpy(temp.name,token);
+
+        token = strtok(NULL,"|");
+        if (token == NULL || !validateInput(token)) {
+            invalid++;
+            continue;
+        }
+        strcpy(temp.address,token);
+
+        token = strtok(NULL, "|");
+        if (token == NULL || !validatePhone(token)) {
+            invalid++;
+            continue;
+        }
+        strcpy(temp.phone, token);
+        
+        token = strtok(NULL, "|");
+        if (token == NULL) {
+            invalid++;
+            continue;
+        }
+        temp.status = atoi(token);
+        if (temp.status < 1 || temp.status > 3) {
+            invalid++;
+            continue;
+        }
+        addRecord(head, temp);
+        valid++;
+    }
+
+    fclose(f);
+    printf("Doc du lieu thanh cong!\n");
+    printf("Hop le: %d dong\n", valid);
+    printf("Khong hop le: %d dong\n", invalid);
 }
 
 void clearInputBuffer() {
@@ -212,7 +229,7 @@ void menu_update(Node* head) {
         printf("\n1. Sua ten\n");
         printf("2. Sua dia chi\n");
         printf("3. Sua so dien thoai\n");
-        //them sua trang thai hoat dong
+        printf("4. Sua trang thai hoat dong\n");
         printf("0. Thoat\n");
         printf("Chon: ");
         scanf("%d", &choice);
@@ -240,6 +257,13 @@ void menu_update(Node* head) {
                 scanf("%s", head->data.phone);
                 getchar();
                 printf("Sua so thue bao thanh cong!\n");
+                pauseScreen();
+                break;
+
+            case 4: 
+                printf("Nhap trang thai moi:\n");
+                head->data.status = inputStatus();
+                printf("Sua trang thai thanh cong!\n");
                 pauseScreen();
                 break;
 
@@ -365,7 +389,11 @@ void statisticsByProvince(Node* head) {
         return;
     }
     printf("\nTHONG KE SO THUE BAO THEO TINH\n");
+    printf("+-----+----------------------+----------------+\n");
+    printf("| %-3s | %-20s | %-14s |\n", "STT", "Tinh", "So thue bao");
+    printf("+-----+----------------------+----------------+\n");
     int total = 0;
+    int stt = 1;
     Node* p = head;
     while (p != NULL) {
         total++;
@@ -387,10 +415,12 @@ void statisticsByProvince(Node* head) {
                 }
                 q = q->next;
             }
-            printf("Tinh %s co %d thue bao\n", p->data.province.tentinh, count);
+            printf("| %-3d | %-20.20s | %-14d |\n", stt, p->data.province.tentinh, count);
+            stt++;
         }
         p = p->next;
     }
+    printf("+-----+----------------------+----------------+\n");
     printf("Tong so thue bao: %d\n", total);
 }
 
@@ -432,6 +462,32 @@ void checkDuplicate(Node** head) {
     }
 }
 
+void filterByStatus(Node *head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    printf("\n");
+    int status = inputStatus();
+    Node *p = head;
+    int stt = 1;
+    int found = 0;
+    printf("\n        DANH SACH THUE BAO THEO TRANG THAI\n");
+    printHeader();
+    while (p != NULL) {
+        if (p->data.status == status) {
+            printRow(stt, p);
+            stt++;
+            found = 1;
+        }  
+        p = p->next;
+    }
+    printFooter();
+    if (!found) {
+        printf("Khong tim thay thue bao nao phu hop!\n");
+    }
+}
+
 void readFileByUser(Node **head) {
     char filename[100];
 
@@ -441,10 +497,47 @@ void readFileByUser(Node **head) {
     readFile(filename,head);
 }
 
+void exportReport(Node *head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    FILE *f = fopen("report.txt", "w");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+    int total = 0;
+    int active = 0;
+    int locked = 0;
+    int canceled = 0;
+    Node *p = head;
+    while (p != NULL) {
+        total++;
+        if (p->data.status == 1)
+            active++;
+        else if (p->data.status == 2)
+            locked++;
+        else if (p->data.status == 3)
+            canceled++;
+        p = p->next;   
+    }
+    fprintf(f, "========================================\n");
+    fprintf(f, "          THONG KE THUE BAO\n");
+    fprintf(f, "========================================\n");
+    fprintf(f, "| Tong so thue bao           : %-6d |\n", total);
+    fprintf(f, "| Dang hoat dong             : %-6d |\n", active);
+    fprintf(f, "| Tam khoa                   : %-6d |\n", locked);
+    fprintf(f, "| Da huy                     : %-6d |\n", canceled);
+    fprintf(f, "========================================\n");
+    fclose(f);
+    printf("Da xuat bao cao ra file report.txt!\n");
+}
+
 int main() {
     Node* head = NULL;
 
-    readFile("data1.txt",&head);
+    readFile("data1.txt", &head);
     
     int choice;
     do {
@@ -500,6 +593,14 @@ int main() {
                 break;
             case 9:
                 readFileByUser(&head);
+                endScreen();
+                break;
+            case 10: 
+                filterByStatus(head);
+                endScreen();
+                break;
+            case 11:
+                exportReport(head);
                 endScreen();
                 break;
             case 0:
