@@ -2,25 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "print.h"
+#include "record.h"
+
 #define False 0
 #define True 1
-
-typedef struct Province {
-    char tentinh[50];
-} Province;
-
-typedef struct Record {
-    Province province;
-    char name[100];
-    char address[100];
-    char phone[15];
-    int status;
-} Record;
-
-typedef struct Node {
-    Record data;
-    struct Node *next;
-} Node;
 
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
@@ -53,9 +39,15 @@ void readFile(const char *filename, Node **head) {
     }
 
     char line[300];
+    
 
     while(fgets(line, sizeof(line),f) != NULL) {
         line[strcspn(line,"\n")] = '\0';
+
+        //bỏ qua dong trong
+        if (strlen(line) == 0) {
+            continue;
+        }
 
         Record temp;
         char *token = strtok(line,"|");
@@ -198,21 +190,6 @@ Record inputRecord() {
     return R;
 }
 
-void printStatus(int status) {
-    switch (status) {
-        case 1:
-            printf("Dang hoat dong");
-            break;
-        case 2:
-            printf("Tam khoa");
-            break;
-        case 3:
-            printf("Da huy");
-            break;
-        default:
-            printf("Khong xac dinh");
-    }
-}
 
 Node* search_record(Node* head,char phone[15]) {
     Node* cur = head;
@@ -278,20 +255,6 @@ void menu_update(Node* head) {
     } while (choice != 0);
 }
 
-
-
-void print_record(Node* node) {
-    if (node == NULL) return;
-
-    printf("Ten: %s\n", node->data.name);
-    printf("So dien thoai: %s\n", node->data.phone);
-    printf("Dia chi: %s\n", node->data.address);
-    printf("Tinh: %s\n", node->data.province.tentinh);
-    printf("Trang thai: ");
-    printStatus(node->data.status);
-    printf("\n");
-}
-
 void updateRecord(Node* head){
     if(head == NULL) {
         printf("Danh sach rong.\n");
@@ -318,50 +281,6 @@ void updateRecord(Node* head){
 
     printf("Cap nhat thanh cong!\n");
 
-}
-
-void printHeader() {
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
-    printf("| %-3s | %-35s | %-12s | %-20s | %-10s | %-10s |\n", "STT", "Ten", "Dien thoai", "Dia chi", "Tinh", "Trang thai");
-    //printf("| STT |                  Ten                |  Dien thoai  |       Dia chi        |    Tinh    | Trang thai |\n");
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
-}
-
-void printRow(int stt, Node* p) {
-    char status[20];
-
-    switch (p->data.status) {
-        case 1: strcpy(status, "Hoat dong"); break;
-        case 2: strcpy(status, "Tam khoa"); break;
-        case 3: strcpy(status, "Da huy"); break;
-        default: strcpy(status, "Khong ro");
-    }
-
-    printf("| %-3d | %-35.35s | %-12s | %-20.20s | %-10.10s | %-10s |\n", stt, p->data.name, p->data.phone, p->data.address, p->data.province.tentinh, status);
-}
-
-void printFooter() {
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
-}
-
-void displayAll(Node* head) {
-    if (head == NULL) {
-        printf("Danh sach rong!\n");
-        return;
-    }
-
-    printf("\n                                          DANH SACH DANH BA\n");
-    printHeader();
-
-    Node *p = head;
-    int stt = 1;
-
-    while (p != NULL) {
-        printRow(stt, p);
-        p = p->next;
-        stt++;
-    }
-    printFooter();
 }
 
 void deleteRecord(Node **head) {
@@ -475,20 +394,51 @@ void statisticsByProvince(Node* head) {
     printf("Tong so thue bao: %d\n", total);
 }
 
-void menu() {
-    printf("\nCHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
-    printf("1. Them thue bao\n");
-    printf("2. Hien thi toan bo danh ba\n");
-    printf("3. Tim kiem thue bao\n");
-    printf("4. Sua thong tin thue bao\n");
-    printf("5. Xoa thue bao\n");
-    printf("6. Liet ke danh ba tung tinh thanh\n");
-    printf("7. Thong ke thue bao\n");
-    printf("8. Kiem tra trung so dien thoai\n");
-    printf("9. Ghi file du lieu thue bao\n");
-    printf("0. Thoat chuong trinh\n");
-    printf("-----------------------------------\n");
-    printf("Nhap lua chon cua ban: ");
+void checkDuplicate(Node** head) {
+    Node *p = *head;
+    int found = 0;
+
+    while(p != NULL) {
+        Node *prev = p;
+        Node *q = p->next;
+
+        while(q != NULL) {
+            if(strcmp(p->data.province.tentinh,q->data.province.tentinh) == 0 &&
+                strcmp(p->data.phone,q->data.phone) == 0) {
+                    printf("Phat hien thue bao trung so dien thoai trong tinh %s:\n",p->data.province.tentinh);
+                    found = 1;
+                    printf("Thue bao 1:\n");
+                    print_record(q);
+                    printf("\n");
+                    printf("Thue bao 2:\n");
+                    print_record(p);
+                    printf("\n");
+                    printf("Xoa thanh cong thue bao 2\n");
+                    printf("\n");
+
+                    Node* temp = q;
+                    prev->next = q->next;
+                    q = q->next;
+                    free(temp);
+            } else {
+                prev = q;
+                q = q->next;
+            }
+        }
+        p = p->next;
+    }
+    if(found == 0) {
+        printf("Khong tim thay thue bao trung!");
+    }
+}
+
+void readFileByUser(Node **head) {
+    char filename[100];
+
+    printf("Nhap ten file muon doc: ");
+    scanf("%s", filename);
+
+    readFile(filename,head);
 }
 
 int main() {
@@ -545,10 +495,12 @@ int main() {
                 endScreen();
                 break;
             case 8: 
-                //checkDuplicate();
+                checkDuplicate(&head);
+                endScreen();
                 break;
             case 9:
-                //saveToFile();
+                readFileByUser(&head);
+                endScreen();
                 break;
             case 0:
                 printf("Da thoat chuong trinh!\n");
