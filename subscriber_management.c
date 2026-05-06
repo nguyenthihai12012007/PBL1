@@ -5,6 +5,9 @@
 #include "print.h"
 #include "record.h"
 
+#define On_net_rate 1500
+#define Off_net_rate 3000
+#define VAT 0.10
 #define False 0
 #define True 1
 
@@ -112,11 +115,25 @@ void readFile(const char *filename, Node **head) {
             invalid++;
             continue;
         }
+
         temp.status = atoi(token);
         if (temp.status < 1 || temp.status > 3) {
             invalid++;
             continue;
         }
+
+        token = strtok(NULL, "|"); 
+        if (token == NULL) {
+            invalid++;
+            continue;
+        }
+        temp.offNetMinutes = atoi(token);
+
+        if (temp.offNetMinutes < 0) {
+            invalid++;
+            continue;
+        }
+
         addRecord(head, temp);
         valid++;
     }
@@ -532,6 +549,58 @@ void exportReport(Node *head) {
     fprintf(f, "========================================\n");
     fclose(f);
     printf("Da xuat bao cao ra file report.txt!\n");
+}
+
+double total_Fee(Record R) {
+    double onNet = R.onNetMinutes*On_net_rate;
+    double offNet = R.offNetMinutes*Off_net_rate;
+    double subtotal = onNet + offNet;
+    double total = subtotal + subtotal*VAT;
+
+    return total;
+}
+int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]) {
+    for (int i = 0; i < count; i++) {
+        if (strcmp(stats[i].provinceName, provinceName) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void printTop3ProvinceByFee(Node *head) {
+    if (head == NULL) {
+        return ;
+    }
+
+    ProvinceFee stats[100];
+    int count = 0;
+
+    Node* p = head;
+
+    while(p!=NULL) {
+        if (p->data.status != 1) {
+            p = p->next;
+            continue;
+        }
+        
+        char *provinceName = p->data.province.tentinh;
+        double fee = total_Fee(p->data);
+
+        int index = findProvinceIndex(stats,count,provinceName);
+
+        if(index == -1) {
+            strcpy(stats[count].provinceName,provinceName);
+            stats[count].totalFee = fee;
+            count++;
+        } else {
+            stats[index].totalFee += fee;
+        }
+
+        p=p->next;
+    }
+
+    printTop3ProvinceFee(stats,count);
 }
 
 int main() {

@@ -11,11 +11,19 @@ typedef struct Record {
     char address[100];
     char phone[15];
     int status;
+
+    int onNetMinutes; // noi mang
+    int offNetMinutes;
 } Record;
 
 typedef struct Node {
     Record data;
     struct Node *next;
 } Node;
+
+typedef struct {
+    char provinceName[50];
+    double totalFee;
+} ProvinceFee;
 
 #endif

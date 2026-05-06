@@ -74,6 +74,47 @@ void displayAll(Node* head) {
     printFooter();
 }
 
+void printTop3ProvinceFee(ProvinceFee stats[], int count) {
+    int first = -1;
+    int second = -1;
+    int third = -1;
+
+    for (int i = 0; i < count; i++) {
+        if (first == -1 || stats[i].totalFee > stats[first].totalFee) {
+            third = second;
+            second = first;
+            first = i;
+        } 
+        else if (second == -1 || stats[i].totalFee > stats[second].totalFee) {
+            third = second;
+            second = i;
+        } 
+        else if (third == -1 || stats[i].totalFee > stats[third].totalFee) {
+            third = i;
+        }
+    }
+
+    printf("\n===== TOP 3 TINH/THANH CO CUOC CAO NHAT =====\n");
+
+    if (first != -1) {
+        printf("1. %s - Tong cuoc: %.0lf VND\n",
+               stats[first].provinceName,
+               stats[first].totalFee);
+    }
+
+    if (second != -1) {
+        printf("2. %s - Tong cuoc: %.0lf VND\n",
+               stats[second].provinceName,
+               stats[second].totalFee);
+    }
+
+    if (third != -1) {
+        printf("3. %s - Tong cuoc: %.0lf VND\n",
+               stats[third].provinceName,
+               stats[third].totalFee);
+    }
+}
+
 void menu() {
     printf("\nCHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
     printf("1. Them thue bao\n");
@@ -84,7 +125,11 @@ void menu() {
     printf("6. Liet ke danh ba tung tinh thanh\n");
     printf("7. Thong ke thue bao\n");
     printf("8. Kiem tra trung so dien thoai\n");
-    printf("9. Ghi file du lieu thue bao\n");
+    printf("9. Tinh toan phi cuoc\n");
+    printf("10. ");
+//in thống kê nên để vào mục thống kê thuê bao đoạn cuối có mục chọn bạn có muốn in 
+//tương tự in bill ở mục tính toán
+    printf("12. Ghi file du lieu thue bao\n");
     printf("0. Thoat chuong trinh\n");
     printf("-----------------------------------\n");
     printf("Nhap lua chon cua ban: ");
