@@ -4,12 +4,7 @@
 
 #include "print.h"
 #include "record.h"
-
-#define On_net_rate 1500
-#define Off_net_rate 3000
-#define VAT 0.10
-#define False 0
-#define True 1
+#include "constants.h"
 
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
@@ -27,11 +22,14 @@ void addRecord(Node** head, Record R) {
 
     if (*head == NULL) {
         *head = newNode;
-        return ;
+        return;
     }
 
-    newNode->next = *head;
-    *head = newNode;
+    Node* p = *head;
+    while (p->next != NULL)
+        p = p->next;
+
+    p->next = newNode;
 }
 
 int validatePhone(char phone[]) {
@@ -118,6 +116,18 @@ void readFile(const char *filename, Node **head) {
 
         temp.status = atoi(token);
         if (temp.status < 1 || temp.status > 3) {
+            invalid++;
+            continue;
+        }
+
+        token = strtok(NULL, "|"); 
+        if (token == NULL) {
+            invalid++;
+            continue;
+        }
+        temp.onNetMinutes = atoi(token);
+
+        if (temp.onNetMinutes < 0) {
             invalid++;
             continue;
         }
@@ -400,12 +410,49 @@ void listByProvince(Node* head) {
     printFooter();
 }
 
+void exportReport(Node *head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    FILE *f = fopen("report.txt", "w");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+    int total = 0;
+    int active = 0;
+    int locked = 0;
+    int canceled = 0;
+    Node *p = head;
+    while (p != NULL) {
+        total++;
+        if (p->data.status == 1)
+            active++;
+        else if (p->data.status == 2)
+            locked++;
+        else if (p->data.status == 3)
+            canceled++;
+        p = p->next;   
+    }
+    fprintf(f, "========================================\n");
+    fprintf(f, "          THONG KE THUE BAO\n");
+    fprintf(f, "========================================\n");
+    fprintf(f, "| Tong so thue bao           : %-6d |\n", total);
+    fprintf(f, "| Dang hoat dong             : %-6d |\n", active);
+    fprintf(f, "| Tam khoa                   : %-6d |\n", locked);
+    fprintf(f, "| Da huy                     : %-6d |\n", canceled);
+    fprintf(f, "========================================\n");
+    fclose(f);
+    printf("Da xuat bao cao ra file report.txt!\n");
+}
+
 void statisticsByProvince(Node* head) {
     if (head == NULL) {
         printf("Danh sach rong!\n");
         return;
     }
-    printf("\nTHONG KE SO THUE BAO THEO TINH\n");
+    printf("\n        THONG KE SO THUE BAO THEO TINH\n");
     printf("+-----+----------------------+----------------+\n");
     printf("| %-3s | %-20s | %-14s |\n", "STT", "Tinh", "So thue bao");
     printf("+-----+----------------------+----------------+\n");
@@ -439,6 +486,12 @@ void statisticsByProvince(Node* head) {
     }
     printf("+-----+----------------------+----------------+\n");
     printf("Tong so thue bao: %d\n", total);
+    char choice;
+    printf("\nBan co muon xuat bao cao ra file khong? (y/n): ");
+    scanf(" %c", &choice);
+    if (choice == 'y' || choice == 'Y') {
+        exportReport(head);
+    }
 }
 
 void checkDuplicate(Node** head) {
@@ -514,43 +567,6 @@ void readFileByUser(Node **head) {
     readFile(filename,head);
 }
 
-void exportReport(Node *head) {
-    if (head == NULL) {
-        printf("Danh sach rong!\n");
-        return;
-    }
-    FILE *f = fopen("report.txt", "w");
-    if (f == NULL) {
-        printf("Khong mo duoc file!\n");
-        return;
-    }
-    int total = 0;
-    int active = 0;
-    int locked = 0;
-    int canceled = 0;
-    Node *p = head;
-    while (p != NULL) {
-        total++;
-        if (p->data.status == 1)
-            active++;
-        else if (p->data.status == 2)
-            locked++;
-        else if (p->data.status == 3)
-            canceled++;
-        p = p->next;   
-    }
-    fprintf(f, "========================================\n");
-    fprintf(f, "          THONG KE THUE BAO\n");
-    fprintf(f, "========================================\n");
-    fprintf(f, "| Tong so thue bao           : %-6d |\n", total);
-    fprintf(f, "| Dang hoat dong             : %-6d |\n", active);
-    fprintf(f, "| Tam khoa                   : %-6d |\n", locked);
-    fprintf(f, "| Da huy                     : %-6d |\n", canceled);
-    fprintf(f, "========================================\n");
-    fclose(f);
-    printf("Da xuat bao cao ra file report.txt!\n");
-}
-
 double total_Fee(Record R) {
     double onNet = R.onNetMinutes*On_net_rate;
     double offNet = R.offNetMinutes*Off_net_rate;
@@ -559,6 +575,75 @@ double total_Fee(Record R) {
 
     return total;
 }
+
+void exportBill(Node *p) {
+    if (p == NULL) {
+        printf("Khong ton tai thue bao!\n");
+        return;
+    }
+    char filename[50];
+    sprintf(filename, "bill_%s_txt", p->data.phone);
+    FILE *f = fopen(filename, "w");
+    if (f == NULL) {
+        printf("Khong mo duoc file!\n");
+        return;
+    }
+    double onNetFee = p->data.onNetMinutes * On_net_rate;
+    double offNetFee = p->data.offNetMinutes * Off_net_rate;
+    double subtotal = onNetFee + offNetFee;
+    double vat = subtotal * VAT;
+    double total = total_Fee(p->data);
+    fprintf(f, "=====================================================\n");
+    fprintf(f, "               HOA DON CUOC DIEN THOAI\n");
+    fprintf(f, "=====================================================\n");
+    fprintf(f, "Ten don vi      : %s\n", p->data.name);
+    fprintf(f, "So dien thoai   : %s\n", p->data.phone);
+    fprintf(f, "Tinh/Thanh      : %s\n", p->data.province.tentinh);
+    fprintf(f, "-----------------------------------------------------\n");
+    fprintf(f, "Noi mang        : %4d phut x %d = %.0lf VND\n", p->data.onNetMinutes, On_net_rate, onNetFee);
+    fprintf(f, "Ngoai mang      : %4d phut x %d = %.0lf VND\n", p->data.offNetMinutes, Off_net_rate, offNetFee);
+    fprintf(f, "-----------------------------------------------------\n");
+    fprintf(f, "Tam tinh        : %.0lf VND\n", subtotal);
+    fprintf(f, "VAT (10%%)       : %.0lf VND\n", vat);
+    fprintf(f, "=====================================================\n");
+    fprintf(f, "TONG THANH TOAN : %.0lf VND\n", total);
+    fprintf(f, "=====================================================\n");
+    fclose(f);
+    printf("Da xuat bill ra file %s\n", filename);
+}
+
+void calculateFee(Node *head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    char phone[15];
+    printf("Nhap so dien thoai can tinh cuoc: ");
+    scanf("%14s", phone);
+    Node *found = search_record(head, phone);
+    if (found == NULL) 
+        return;
+    double total = total_Fee(found->data);
+    printf("\n=====================================\n");
+    printf("           THONG TIN CUOC\n");
+    printf("=====================================\n");
+    printf("So dien thoai : %s\n", found->data.phone);
+    printf("Ten don vi    : %s\n", found->data.name);
+    printf("Tong cuoc     : %.0lf VND\n", total);
+    printf("=====================================\n");
+    char choice;
+    printf("\nBan co muon in bill khong? (y/n): ");
+    scanf(" %c", &choice);
+    if (choice == 'y' || choice == 'Y') {
+        printBill(found);
+        printf("\nBan co muon xuat bill ra file khong? (y/n): ");
+        scanf(" %c", &choice);
+        if (choice == 'y' || choice == 'Y') {
+            exportBill(found);
+        }
+    }
+}
+
 int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]) {
     for (int i = 0; i < count; i++) {
         if (strcmp(stats[i].provinceName, provinceName) == 0) {
@@ -649,27 +734,27 @@ int main() {
                 endScreen();
                 break;
             case 6:
-                listByProvince(head);
-                endScreen();
-                break;
-            case 7: 
-                statisticsByProvince(head);
-                endScreen();
-                break;
-            case 8: 
-                checkDuplicate(&head);
-                endScreen();
-                break;
-            case 9:
-                readFileByUser(&head);
-                endScreen();
-                break;
-            case 10: 
                 filterByStatus(head);
                 endScreen();
                 break;
+            case 7: 
+                listByProvince(head);
+                endScreen();
+                break;
+            case 8: 
+                statisticsByProvince(head);
+                endScreen();
+                break;
+            case 9:
+                calculateFee(head);
+                endScreen();
+                break;
+            case 10: 
+                checkDuplicate(&head);
+                endScreen();
+                break;
             case 11:
-                exportReport(head);
+                readFileByUser(&head);
                 endScreen();
                 break;
             case 0:
