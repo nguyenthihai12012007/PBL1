@@ -10,6 +10,7 @@ void printRow(int stt, Node* p);
 void printFooter();
 void displayAll(Node* head);
 void printTop3ProvinceFee(ProvinceFee stats[], int count);
+void printBill(Node *p);
 void menu();
 
 #endif
