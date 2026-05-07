@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+
 #include "print.h"
+#include "constants.h"
+#include "billing.h"
 
 void printStatus(int status) {
     switch (status) {
@@ -115,22 +118,57 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
     }
 }
 
-void menu() {
-    printf("\nCHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
-    printf("1. Them thue bao\n");
-    printf("2. Hien thi toan bo danh ba\n");
-    printf("3. Tim kiem thue bao\n");
-    printf("4. Sua thong tin thue bao\n");
-    printf("5. Xoa thue bao\n");
-    printf("6. Liet ke danh ba tung tinh thanh\n");
-    printf("7. Thong ke thue bao\n");
-    printf("8. Kiem tra trung so dien thoai\n");
-    printf("9. Tinh toan phi cuoc\n");
-    printf("10. ");
-//in thống kê nên để vào mục thống kê thuê bao đoạn cuối có mục chọn bạn có muốn in 
-//tương tự in bill ở mục tính toán
-    printf("12. Ghi file du lieu thue bao\n");
-    printf("0. Thoat chuong trinh\n");
-    printf("-----------------------------------\n");
-    printf("Nhap lua chon cua ban: ");
+void printBill(Node *p) {
+    if (p == NULL) {
+        printf("Khong ton tai thue bao!\n");
+        return;
+    }
+    double onNetFee = p->data.onNetMinutes * On_net_rate;
+    double offNetFee = p->data.offNetMinutes * Off_net_rate;
+    double subtotal = onNetFee + offNetFee;
+    double vat = subtotal * VAT;
+    double total = total_Fee(p->data);
+    printf("\n");
+    printf("=====================================================\n");
+    printf("                 HOA DON CUOC DIEN THOAI\n");
+    printf("=====================================================\n");
+    printf("Ten don vi      : %s\n", p->data.name);
+    printf("So dien thoai   : %s\n", p->data.phone);
+    printf("Tinh/Thanh      : %s\n", p->data.province.tentinh);
+    printf("-----------------------------------------------------\n");
+    printf("Noi mang        : %4d phut x %d = %.0lf VND\n", p->data.onNetMinutes, On_net_rate, onNetFee);
+    printf("Ngoai mang      : %4d phut x %d = %.0lf VND\n", p->data.offNetMinutes, Off_net_rate, offNetFee);
+    printf("-----------------------------------------------------\n");
+    printf("Tam tinh        : %.0lf VND\n", subtotal);
+    printf("VAT (10%%)       : %.0lf VND\n", vat);
+    printf("=====================================================\n");
+    printf("TONG THANH TOAN : %.0lf VND\n", total);
+    printf("=====================================================\n");
 }
+
+void menu() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("       CHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Them thue bao");
+    printf("| 2. %-45s |\n", "Hien thi toan bo danh ba");
+    printf("| 3. %-45s |\n", "Tim kiem thue bao");
+    printf("| 4. %-45s |\n", "Sua thong tin thue bao");
+    printf("| 5. %-45s |\n", "Xoa thue bao");
+    printf("| 6. %-45s |\n", "Loc thue bao theo trang thai");
+    printf("| 7. %-45s |\n", "Liet ke thue bao theo tinh thanh");
+    printf("| 8. %-45s |\n", "Thong ke thue bao");
+    printf("| 9. %-45s |\n", "Tinh cuoc thue bao");
+    printf("| 10. %-44s |\n", "Kiem tra trung so dien thoai");
+    printf("| 11. %-44s |\n", "Doc file du lieu thue bao");
+    printf("| 0. %-45s |\n", "Thoat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
