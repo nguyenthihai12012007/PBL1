@@ -1,4 +1,4 @@
-Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|2363845678|1|120|45
+Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|1|120|45
 Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|2363555123|1|90|60
 Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|2363777888|2|75|30
 Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|2363999000|3|200|110

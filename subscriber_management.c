@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "print.h"
 #include "record.h"
@@ -30,6 +31,12 @@ void addRecord(Node** head, Record R) {
         p = p->next;
 
     p->next = newNode;
+}
+
+void toLowerCase(char *str) {
+    for (int i = 0; str[i]; i++) {
+        str[i] = tolower(str[i]);
+    }
 }
 
 int validatePhone(char phone[]) {
@@ -377,16 +384,26 @@ void listByProvince(Node* head) {
         printf("Danh sach rong!\n"); 
         return; 
     } 
+
     char province[50]; 
+    char tempProvince[50];
     int found = 0;
     int stt = 1;
+
     printf("Nhap tinh can tim: ");
     clearInputBuffer();
+
     fgets(province, sizeof(province), stdin);
     province[strcspn(province, "\n")] = '\0';
+
+    toLowerCase(province);
+
     Node* p = head;
     while (p != NULL) {
-        if (strcmp(p->data.province.tentinh, province) == 0) {
+        strcpy(tempProvince,p->data.province.tentinh);
+        toLowerCase(tempProvince);
+
+        if (strcmp(tempProvince, province) == 0) {
             found = 1;
             break;
         }
@@ -400,7 +417,10 @@ void listByProvince(Node* head) {
     p = head;
     printHeader();
     while (p != NULL) {
-        if (strcmp(p->data.province.tentinh, province) == 0) {
+        strcpy(tempProvince, p->data.province.tentinh);
+        toLowerCase(tempProvince);
+
+        if (strcmp(tempProvince, province) == 0) {
             printRow(stt, p);
             stt++;
             found = 1;
@@ -568,6 +588,14 @@ void readFileByUser(Node **head) {
 }
 
 double total_Fee(Record R) {
+    if(R.status == 2) {
+        return 0;
+    }
+
+    if(R.status == 3) {
+        return 0;
+    }
+
     double onNet = R.onNetMinutes*On_net_rate;
     double offNet = R.offNetMinutes*Off_net_rate;
     double subtotal = onNet + offNet;
@@ -582,7 +610,7 @@ void exportBill(Node *p) {
         return;
     }
     char filename[50];
-    sprintf(filename, "bill_%s_txt", p->data.phone);
+    sprintf(filename, "bill_%s.txt", p->data.phone);
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
         printf("Khong mo duoc file!\n");
@@ -617,12 +645,36 @@ void calculateFee(Node *head) {
         printf("Danh sach rong!\n");
         return;
     }
+
     char phone[15];
     printf("Nhap so dien thoai can tinh cuoc: ");
     scanf("%14s", phone);
+
     Node *found = search_record(head, phone);
-    if (found == NULL) 
+    if (found == NULL) {
         return;
+    }
+
+    if (found->data.status == 2) {
+        printf("\n=====================================\n");
+        printf("THUE BAO TAM KHOA\n");
+        printf("Tong cuoc : 0 VND\n");
+        printf("Ly do     : Thue bao dang tam khoa\n");
+        printf("=====================================\n");
+
+        return;
+    }
+
+    if (found->data.status == 3) {
+        printf("\n=====================================\n");
+        printf("THUE BAO DA HUY\n");
+        printf("Tong cuoc : 0 VND\n");
+        printf("Ly do     : Thue bao da huy\n");
+        printf("=====================================\n");
+
+        return;
+    }
+
     double total = total_Fee(found->data);
     printf("\n=====================================\n");
     printf("           THONG TIN CUOC\n");
