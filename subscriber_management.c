@@ -499,6 +499,7 @@ void statisticsByProvince(Node* head) {
                 }
                 q = q->next;
             }
+
             printf("| %-3d | %-20.20s | %-14d |\n", stt, p->data.province.tentinh, count);
             stt++;
         }
