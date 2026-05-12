@@ -127,28 +127,24 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
 }
 
 void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex) {
-    printf("\n+======================================================+\n");
-    printf("|          TINH CO NHIEU THUE BAO NHAT                 |\n");
-    printf("+==========================+===========================+\n");
-    printf("| Tinh/Thanh               | Tong thue bao            |\n");
-    printf("+==========================+===========================+\n");
-    printf("| %-24s | %-24d |\n",
-           stats[maxIndex].tentinh,
-           stats[maxIndex].total);
-    printf("+==========================+===========================+\n");
+    printf("\n+===========================================+\n");
+    printf("|        TINH CO NHIEU THUE BAO NHAT        |\n");
+    printf("+===========================================+\n");
+    printf("| Tinh thanh  : %-27s |\n", stats[maxIndex].provinceName);
+    printf("| So thue bao : %-27d |\n", stats[maxIndex].total);
+    printf("+===========================================+\n");
 }
 
-void printRecordMaxFee(Node *maxNode, double maxFee) {
-    printf("\n+======================================================+\n");
-    printf("|          DOANH NGHIEP CO TIEN CUOC CAO NHAT          |\n");
-    printf("+================+=====================+===============+\n");
-    printf("| CUUUU          | Ten doanh nghiep    | Tong cuoc     |\n");
-    printf("+================+=====================+===============+\n");
-    printf("| %-14s | %-19s | %-13.0lf |\n",
-           maxNode->data.phone,
-           maxNode->data.address,
-           maxFee);
-    printf("+================+=====================+===============+\n");
+void printTop3RecordMaxFee(CompanyFee stats[], int limit) {
+    printf("\n+=============================================================+\n");
+    printf("|          TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT           |\n");
+    printf("+=====+=====================================+=================+\n");
+    printf("| STT |          Ten doanh nghiep           | Tong cuoc (VND) |\n");
+    printf("+=====+=====================================+=================+\n");
+    for (int i = 0; i < limit; i++) {
+        printf("| %-3d | %-35s | %-15.0lf |\n", i+1, stats[i].companyName, stats[i].totalFee);
+    }
+    printf("+=====+=====================================+=================+\n");
 }
 
 void printBill(Node *p) {
@@ -204,4 +200,3 @@ void menu() {
     printf("Nhap lua chon cua ban: ");
     printf(RESET);
 }
-
