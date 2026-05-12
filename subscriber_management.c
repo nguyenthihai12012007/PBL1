@@ -742,14 +742,14 @@ void pronvinceMaxRecord (Node *head) {
     while(p != NULL) {
         int found = -1;
         for(int i=0 ;i < count ;i++) {
-            if(strcmp(stats[i].tentinh,p->data.province.tentinh) == 0) {
+            if(strcmp(stats[i].provinceName,p->data.province.tentinh) == 0) {
                 found = i;
                 break;
             }
         }
 
         if(found == -1) {
-            strcpy(stats[count].tentinh,p->data.province.tentinh);
+            strcpy(stats[count].provinceName,p->data.province.tentinh);
             stats[count].total = 1;
             count++;
         } else {
@@ -769,25 +769,35 @@ void pronvinceMaxRecord (Node *head) {
     printProvinceMaxRecord(stats, count, maxIndex);
 }
 
-void recordMaxFee (Node *head) {
+void top3RecordMaxFee (Node *head) {
     if(head == NULL) {
-        return ;
+        printf("Danh sach rong!\n");
+        return;
     }
 
-    double maxFee = 0;
-    Node *maxNode = NULL;
+    CompanyFee stats[100];
+    int count = 0;
+
     Node *p = head;
     
-    while(p != NULL) {
-        double temp = total_Fee(p->data);
-        if(temp > maxFee) {
-            maxFee = temp;
-            maxNode = p;
-        }
+    while (p != NULL) {
+        strcpy(stats[count].companyName, p->data.name);
+        stats[count].totalFee = total_Fee(p->data);
+        count++;
         p = p->next;
     }
 
-    printRecordMaxFee(maxNode, maxFee);
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (stats[i].totalFee < stats[j].totalFee) {
+                CompanyFee temp = stats[i];
+                stats[i] = stats[j];
+                stats[j] = temp;
+            }
+        }
+    }
+    int limit = (count < 3) ? count : 3;
+    printTop3RecordMaxFee(stats, limit);
 }
 
 void printTop3ProvinceByFee(Node *head) {
@@ -872,7 +882,7 @@ void statisticsMenu(Node *head) {
                 break;
 
             case 4: 
-                recordMaxFee (head);
+                top3RecordMaxFee(head);
                 break;
 
             case 5:
