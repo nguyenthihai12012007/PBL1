@@ -11,7 +11,7 @@ void printFooter();
 void displayAll(Node* head);
 void printTop3ProvinceFee(ProvinceFee stats[], int count);
 void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex);
-void printRecordMaxFee(Node *maxNode, double maxFee);
+void printTop3RecordMaxFee(CompanyFee stats[], int limit);
 void printBill(Node *p);
 void menu();
 
