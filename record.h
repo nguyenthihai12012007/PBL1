@@ -26,4 +26,10 @@ typedef struct {
     double totalFee;
 } ProvinceFee;
 
+typedef struct {
+    char tentinh[50];
+    int total;
+} ProvinceStat;
+
+
 #endif

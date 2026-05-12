@@ -729,6 +729,67 @@ int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]) {
     return -1;
 }
 
+void pronvinceMaxRecord (Node *head) {
+    if(head == NULL) {
+        return ;
+    }
+
+    ProvinceStat stats[100];
+    int count = 0;
+
+    Node *p = head;
+
+    while(p != NULL) {
+        int found = -1;
+        for(int i=0 ;i < count ;i++) {
+            if(strcmp(stats[i].tentinh,p->data.province.tentinh) == 0) {
+                found = i;
+                break;
+            }
+        }
+
+        if(found == -1) {
+            strcpy(stats[count].tentinh,p->data.province.tentinh);
+            stats[count].total = 1;
+            count++;
+        } else {
+            stats[found].total++;
+        }
+
+        p=p->next;
+    }
+
+    int maxIndex = 0;
+    for (int i = 1; i < count; i++) {
+        if (stats[i].total > stats[maxIndex].total) {
+            maxIndex = i;
+        }
+    }
+
+    printProvinceMaxRecord(stats, count, maxIndex);
+}
+
+void recordMaxFee (Node *head) {
+    if(head == NULL) {
+        return ;
+    }
+
+    double maxFee = 0;
+    Node *maxNode = NULL;
+    Node *p = head;
+    
+    while(p != NULL) {
+        double temp = total_Fee(p->data);
+        if(temp > maxFee) {
+            maxFee = temp;
+            maxNode = p;
+        }
+        p = p->next;
+    }
+
+    printRecordMaxFee(maxNode, maxFee);
+}
+
 void printTop3ProvinceByFee(Node *head) {
     if (head == NULL) {
         return ;
@@ -803,7 +864,7 @@ void statisticsMenu(Node *head) {
                 break;
             
             case 2: 
-                //
+                pronvinceMaxRecord(head);
                 break;
 
             case 3:
@@ -811,7 +872,7 @@ void statisticsMenu(Node *head) {
                 break;
 
             case 4: 
-                //
+                recordMaxFee (head);
                 break;
 
             case 5:

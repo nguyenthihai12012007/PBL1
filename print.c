@@ -126,6 +126,31 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
     printf("+=====+==========================+=====================+\n");
 }
 
+void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex) {
+    printf("\n+======================================================+\n");
+    printf("|          TINH CO NHIEU THUE BAO NHAT                 |\n");
+    printf("+==========================+===========================+\n");
+    printf("| Tinh/Thanh               | Tong thue bao            |\n");
+    printf("+==========================+===========================+\n");
+    printf("| %-24s | %-24d |\n",
+           stats[maxIndex].tentinh,
+           stats[maxIndex].total);
+    printf("+==========================+===========================+\n");
+}
+
+void printRecordMaxFee(Node *maxNode, double maxFee) {
+    printf("\n+======================================================+\n");
+    printf("|          DOANH NGHIEP CO TIEN CUOC CAO NHAT          |\n");
+    printf("+================+=====================+===============+\n");
+    printf("| CUUUU          | Ten doanh nghiep    | Tong cuoc     |\n");
+    printf("+================+=====================+===============+\n");
+    printf("| %-14s | %-19s | %-13.0lf |\n",
+           maxNode->data.phone,
+           maxNode->data.address,
+           maxFee);
+    printf("+================+=====================+===============+\n");
+}
+
 void printBill(Node *p) {
     if (p == NULL) {
         printf("Khong ton tai thue bao!\n");
