@@ -70,7 +70,7 @@ int validateInput(char str[]) {
 void readFile(const char *filename, Node **head) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
-        printf("Khong mo duoc file!\n");
+        printf(RED "Khong mo duoc file!\n" RESET);
         return;
     }
 
@@ -189,7 +189,7 @@ int inputStatus() {
         clearInputBuffer();
 
         if (choice < 1 || choice > 3) {
-            printf("Lua chon khong hop le! Vui long nhap lai.\n");
+            printf("Lua chon khong hop le! Vui long nhap lai: \n");
         }
     } while (choice < 1 || choice > 3);
 
@@ -288,14 +288,19 @@ void menu_update(Node* head) {
 
             case 3:
                 printf("Nhap so moi: ");
-                scanf("%s", head->data.phone);
+                do {
+                    scanf("%s", head->data.phone);
+                    if (!validatePhone(head->data.phone)) {
+                        printf("So dien thoai khong hop le! Nhap lai: ");
+                    }
+                } while (!validatePhone(head->data.phone));
                 getchar();
                 printf("Sua so thue bao thanh cong!\n");
                 pauseScreen();
                 break;
 
             case 4: 
-                printf("Nhap trang thai moi:\n");
+                printf("Nhap trang thai moi: ");
                 head->data.status = inputStatus();
                 printf("Sua trang thai thanh cong!\n");
                 pauseScreen();
@@ -331,7 +336,7 @@ void updateRecord(Node* head){
         }
         found=search_record(head,phone);
         if(found==NULL) {
-            printf("Khong tim thay thue bao vui long nhap lai: \n");
+            printf("Khong tim thay thue bao! Vui long nhap lai: \n");
         }
     }
     print_record(found);
@@ -430,6 +435,23 @@ void listByProvince(Node* head) {
     printFooter();
 }
 
+double total_Fee(Record R) {
+    if(R.status == 2) {
+        return 0;
+    }
+
+    if(R.status == 3) {
+        return 0;
+    }
+
+    double onNet = R.onNetMinutes*On_net_rate;
+    double offNet = R.offNetMinutes*Off_net_rate;
+    double subtotal = onNet + offNet;
+    double total = subtotal + subtotal*VAT;
+
+    return total;
+}
+
 void exportReport(Node *head) {
     if (head == NULL) {
         printf("Danh sach rong!\n");
@@ -444,6 +466,13 @@ void exportReport(Node *head) {
     int active = 0;
     int locked = 0;
     int canceled = 0;
+
+    int totalOnNet = 0 ;
+    int totalOffNet = 0;
+    double totalFee = 0;
+    double maxFee = 0;
+
+    Node *maxNode = NULL;
     Node *p = head;
     while (p != NULL) {
         total++;
@@ -453,16 +482,33 @@ void exportReport(Node *head) {
             locked++;
         else if (p->data.status == 3)
             canceled++;
+        totalOnNet += p->data.onNetMinutes;
+        totalOffNet += p->data.offNetMinutes;
+        double fee = total_Fee(p->data);
+        totalFee += fee;
+        if (fee > maxFee) {
+            maxFee = fee;
+            maxNode = p;
+        }
         p = p->next;   
     }
-    fprintf(f, "========================================\n");
-    fprintf(f, "          THONG KE THUE BAO\n");
-    fprintf(f, "========================================\n");
-    fprintf(f, "| Tong so thue bao           : %-6d |\n", total);
-    fprintf(f, "| Dang hoat dong             : %-6d |\n", active);
-    fprintf(f, "| Tam khoa                   : %-6d |\n", locked);
-    fprintf(f, "| Da huy                     : %-6d |\n", canceled);
-    fprintf(f, "========================================\n");
+    fprintf(f, "+==================================================+\n");
+    fprintf(f, "|                THONG KE THUE BAO                 |\n");
+    fprintf(f, "+==================================================+\n");
+    fprintf(f, "| %-35s : %-10d |\n", "Tong so thue bao", total);
+    fprintf(f, "| %-35s : %-10d |\n", "Dang hoat dong", active);
+    fprintf(f, "| %-35s : %-10d |\n", "Tam khoa", locked);
+    fprintf(f, "| %-35s : %-10d |\n", "Da huy", canceled);
+    fprintf(f, "+==================================================+\n");
+    fprintf(f, "| %-35s : %-10d |\n", "Tong phut noi mang", totalOnNet);
+    fprintf(f, "| %-35s : %-10d |\n", "Tong phut ngoai mang", totalOffNet);
+    fprintf(f, "+==================================================+\n");
+    fprintf(f, "| %-35s : %-10.0lf |\n", "Tong doanh thu", totalFee);
+    if (maxNode != NULL) {
+        fprintf(f, "| %-35s : %-10s |\n", "Thue bao co cuoc cao nhat", maxNode->data.phone);
+        fprintf(f, "| %-35s : %-10.0lf |\n", "Cuoc cao nhat", maxFee);
+    }
+    fprintf(f, "+==================================================+\n");
     fclose(f);
     printf("Da xuat bao cao ra file report.txt!\n");
 }
@@ -507,12 +553,6 @@ void statisticsByProvince(Node* head) {
     }
     printf("+-----+----------------------+----------------+\n");
     printf("Tong so thue bao: %d\n", total);
-    char choice;
-    printf("\nBan co muon xuat bao cao ra file khong? (y/n): ");
-    scanf(" %c", &choice);
-    if (choice == 'y' || choice == 'Y') {
-        exportReport(head);
-    }
 }
 
 void checkDuplicate(Node** head) {
@@ -586,23 +626,6 @@ void readFileByUser(Node **head) {
     scanf("%s", filename);
 
     readFile(filename,head);
-}
-
-double total_Fee(Record R) {
-    if(R.status == 2) {
-        return 0;
-    }
-
-    if(R.status == 3) {
-        return 0;
-    }
-
-    double onNet = R.onNetMinutes*On_net_rate;
-    double offNet = R.offNetMinutes*Off_net_rate;
-    double subtotal = onNet + offNet;
-    double total = subtotal + subtotal*VAT;
-
-    return total;
 }
 
 void exportBill(Node *p) {
@@ -741,6 +764,74 @@ void printTop3ProvinceByFee(Node *head) {
     printTop3ProvinceFee(stats,count);
 }
 
+void statisticsMenu(Node *head) {
+    int choice;
+    do {
+        printf("\n");
+        printf(CYAN BOLD);
+        printf("+===========================================+\n");
+        printf("|               MENU THONG KE               |\n");
+        printf("+===========================================+\n");
+        printf(RESET);
+        printf("| " YELLOW "1." RESET " Thong ke so thue bao theo tinh         |\n");
+        printf("| " YELLOW "2." RESET " Tinh nhieu thue bao nhat               |\n");
+        printf("| " YELLOW "3." RESET " Ba tinh nhieu tien cuoc nhat           |\n");
+        printf("| " YELLOW "4." RESET " Ba doanh nghiep nhieu tien cuoc nhat   |\n");
+        printf("| " YELLOW "5." RESET " Xuat bao cao thong ke ra file          |\n");
+        printf("| " RED "0." RESET " Quay lai                               |\n");
+        printf(CYAN);
+        printf("+===========================================+\n");
+        printf(RESET);
+        printf(GREEN "Nhap lua chon cua ban: " RESET); 
+
+        while (1) {                       
+            if(scanf("%d", &choice) != 1) {  
+                while(getchar() != '\n');                 
+                printf(RED "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                continue;            
+            }            
+            if(choice < 0 || choice > 5) {                
+                printf(RED "Lua chon khong hop le! Nhap lai: " RESET);                
+                continue;            
+            }            
+            break;        
+        }        
+        
+        switch(choice) {
+            case 1:
+                statisticsByProvince(head);
+                break;
+            
+            case 2: 
+                //
+                break;
+
+            case 3:
+                printTop3ProvinceByFee(head);
+                break;
+
+            case 4: 
+                //
+                break;
+
+            case 5:
+                exportReport(head);
+                break;
+                
+            case 0:
+                printf("Quay lai menu chinh...\n");
+                break;
+            
+            default:
+                printf("Lua chon khong hop le!");
+        }
+
+        if (choice != 0) 
+            endScreen();
+
+    } while(choice != 0);
+}
+
 int main() {
     Node* head = NULL;
 
@@ -770,7 +861,7 @@ int main() {
                 break;
             case 3: {
                 char phone[15];
-                printf("Nhap thue bao can tim: ");
+                printf("Nhap so dien thoai thue bao can tim: ");
                 scanf("%s",phone);
                 Node* cur=search_record(head,phone);
                 if (cur != NULL) 
@@ -795,8 +886,7 @@ int main() {
                 endScreen();
                 break;
             case 8: 
-                statisticsByProvince(head);
-                endScreen();
+                statisticsMenu(head);
                 break;
             case 9:
                 calculateFee(head);

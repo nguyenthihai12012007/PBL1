@@ -97,25 +97,33 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
         }
     }
 
-    printf("\n===== TOP 3 TINH/THANH CO CUOC CAO NHAT =====\n");
+    printf("\n+======================================================+\n");
+    printf("|             TOP 3 TINH CO CUOC CAO NHAT              |\n");
+    printf("+=====+==========================+=====================+\n");
+    printf("| STT | Tinh/Thanh               | Tong cuoc (VND)     |\n");
+    printf("+=====+==========================+=====================+\n");
 
     if (first != -1) {
-        printf("1. %s - Tong cuoc: %.0lf VND\n",
+        printf("| %-3d | %-24s | %-19.0lf |\n",
+               1,
                stats[first].provinceName,
                stats[first].totalFee);
     }
 
     if (second != -1) {
-        printf("2. %s - Tong cuoc: %.0lf VND\n",
+        printf("| %-3d | %-24s | %-19.0lf |\n",
+               2,
                stats[second].provinceName,
                stats[second].totalFee);
     }
 
     if (third != -1) {
-        printf("3. %s - Tong cuoc: %.0lf VND\n",
+        printf("| %-3d | %-24s | %-19.0lf |\n",
+               3,
                stats[third].provinceName,
                stats[third].totalFee);
     }
+    printf("+=====+==========================+=====================+\n");
 }
 
 void printBill(Node *p) {
