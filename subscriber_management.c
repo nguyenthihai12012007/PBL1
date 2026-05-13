@@ -161,6 +161,32 @@ void readFile(const char *filename, Node **head) {
     printf("Khong hop le: %d dong\n", invalid);
 }
 
+void saveToFile(const char *filename, Node *head) {
+    FILE *f = fopen(filename, "w");
+
+    if (f == NULL) {
+        printf(RED "Khong mo duoc file de ghi!\n" RESET);
+        return;
+    }
+
+    Node *p = head;
+
+    while (p != NULL) {
+        fprintf(f, "%s|%s|%s|%s|%d|%d|%d\n",
+                p->data.province.tentinh,
+                p->data.name,
+                p->data.address,
+                p->data.phone,
+                p->data.status,
+                p->data.onNetMinutes,
+                p->data.offNetMinutes);
+
+        p = p->next;
+    }
+
+    fclose(f);
+}
+
 void clearInputBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -237,6 +263,22 @@ Record inputRecord() {
     } while(!validateInput(R.province.tentinh));
 
     R.status = inputStatus();
+
+    printf("Nhap so phut noi mang: ");
+    do {
+        scanf("%d", &R.onNetMinutes);
+        if (R.onNetMinutes < 0) {
+            printf("So phut khong hop le! Nhap lai: ");
+        }
+    } while (R.onNetMinutes < 0);
+
+    printf("Nhap so phut ngoai mang: ");
+    do {
+        scanf("%d", &R.offNetMinutes);
+        if (R.offNetMinutes < 0) {
+            printf("So phut khong hop le! Nhap lai: ");
+        }
+    } while (R.offNetMinutes < 0);
 
     return R;
 }
@@ -742,14 +784,14 @@ void pronvinceMaxRecord (Node *head) {
     while(p != NULL) {
         int found = -1;
         for(int i=0 ;i < count ;i++) {
-            if(strcmp(stats[i].provinceName,p->data.province.tentinh) == 0) {
+            if(strcmp(stats[i].province_name,p->data.province.tentinh) == 0) {
                 found = i;
                 break;
             }
         }
 
         if(found == -1) {
-            strcpy(stats[count].provinceName,p->data.province.tentinh);
+            strcpy(stats[count].province_name,p->data.province.tentinh);
             stats[count].total = 1;
             count++;
         } else {
@@ -922,7 +964,8 @@ int main() {
             case 1: {
                 Record newR = inputRecord();
                 addRecord(&head,newR);
-                printf("Da them thue bao thanh cong!\n");
+                saveToFile("data1.txt", head);
+                printf("Da them thue bao va luu vao file thanh cong!\n");
                 endScreen();
                 break;
             }

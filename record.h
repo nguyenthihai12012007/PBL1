@@ -27,7 +27,7 @@ typedef struct {
 } ProvinceFee;
 
 typedef struct {
-    char provinceName[50];
+    char province_name[50];
     int total;
 } ProvinceStat;
 

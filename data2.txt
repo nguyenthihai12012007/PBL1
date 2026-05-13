@@ -1,31 +1,30 @@
-
-Da Nang|Cong ty TNHH Minh Quan|200 Nguyen Van Linh|2363123456|1
-Da Nang|Cong ty Co phan Thiet bi Viet|89 Le Duan|2363845678|1
-Da Nang|Cong ty Logistics Trung Nam|15 Hoang Dieu|2363777000|2
-Ha Noi|Cong ty Co phan Dau tu Thang Long|10 Pham Hung|2435000000|3
-Ha Noi|Cong ty Xuat nhap khau An Viet|55 Lang Ha|2435678900|1
-Ha Noi|Cong ty Thiet bi Cong nghiep Dong A|120 Nguyen Trai|2434333444|1
-TP HCM|Cong ty TNHH Bao Minh|220 Tran Hung Dao|2834000000|1
-TP HCM|Cong ty Co phan Giao duc Tri Viet|33 Dien Bien Phu|2834567890|1
-TP HCM|Cong ty Dich vu Ky thuat Sai Gon|18 Cach Mang Thang 8|2834888999|1
-Hai Phong|Cong ty Dong tau Hai Phong|99 Le Loi|2256000111|1
-Hai Phong|Cong ty Thuong mai Bien Bac|45 Tran Nguyen Han|2256111222|1
-Can Tho|Cong ty Nong san Tay Do|77 30/4|2923000111|1
-Can Tho|Cong ty Xay dung Song Hau|12 Mau Than|2923456789|1
-Hue|Cong ty TNHH Hue Travel|25 Le Loi|2345000222|1
-Hue|Cong ty May mac Huong Giang|88 Ba Trieu|2345999888|1
-Quang Nam|Cong ty Du lich Hoi An Xanh|10 Tran Phu|2353888999|1
-Quang Nam|Cong ty TNHH Gach men Dai Loc|45 Hung Vuong|2353444555|1
-Binh Duong|Cong ty Co phan KCN My Phuoc|100 Dai lo Binh Duong|2743999888|1
-Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|2363845678|1
-Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|2363555123|1
-Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|2363777888|1
-Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|2363999000|1
-Ha Noi|Cong ty Co phan Minh Phat|45 Tran Duy Hung|2435678901|1
-Ha Noi|Cong ty TNHH Thuong mai Hoang Long|22 Nguyen Chi Thanh|2438889999|1
-Ha Noi|Cong ty Van tai Bac Nam|90 Giai Phong|2434561234|1
-TP HCM|Cong ty TNHH Hoang Gia|78 Le Loi|2834567890|1
-TP HCM|Cong ty Phan mem Sai Gon Tech|15 Nguyen Hue|2839991111|1
-Hai Phong|Cong ty Van tai Bien Dong|12 Lach Tray|2256789123|1
-Can Tho|Cong ty Thuc pham Mekong|90 Nguyen Trai|2923456789|1
-Hue|Cong ty Du lich Co do|15 Hung Vuong|2345671234|1
+Da Nang|Cong ty TNHH Minh Quan|200 Nguyen Van Linh|02363123456|1|120|45
+Da Nang|Cong ty Co phan Thiet bi Viet|89 Le Duan|02363845678|1|95|30
+Da Nang|Cong ty Logistics Trung Nam|15 Hoang Dieu|02363777000|2|80|25
+Ha Noi|Cong ty Co phan Dau tu Thang Long|10 Pham Hung|02435000000|3|150|70
+Ha Noi|Cong ty Xuat nhap khau An Viet|55 Lang Ha|02435678900|1|200|90
+Ha Noi|Cong ty Thiet bi Cong nghiep Dong A|120 Nguyen Trai|02434333444|1|110|40
+TP HCM|Cong ty TNHH Bao Minh|220 Tran Hung Dao|02834000000|1|170|85
+TP HCM|Cong ty Co phan Giao duc Tri Viet|33 Dien Bien Phu|02834567890|1|140|60
+TP HCM|Cong ty Dich vu Ky thuat Sai Gon|18 Cach Mang Thang 8|02834888999|1|125|55
+Hai Phong|Cong ty Dong tau Hai Phong|99 Le Loi|02256000111|1|90|35
+Hai Phong|Cong ty Thuong mai Bien Bac|45 Tran Nguyen Han|02256111222|1|100|50
+Can Tho|Cong ty Nong san Tay Do|77 30/4|02923000111|1|75|20
+Can Tho|Cong ty Xay dung Song Hau|12 Mau Than|02923456789|1|130|65
+Hue|Cong ty TNHH Hue Travel|25 Le Loi|02345000222|1|85|30
+Hue|Cong ty May mac Huong Giang|88 Ba Trieu|02345999888|1|145|70
+Quang Nam|Cong ty Du lich Hoi An Xanh|10 Tran Phu|02353888999|1|95|40
+Quang Nam|Cong ty TNHH Gach men Dai Loc|45 Hung Vuong|02353444555|1|115|55
+Binh Duong|Cong ty Co phan KCN My Phuoc|100 Dai lo Binh Duong|02743999888|1|180|95
+Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|02363845678|1|120|45
+Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|02363555123|1|90|60
+Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|02363777888|1|75|30
+Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|02363999000|1|200|110
+Ha Noi|Cong ty Co phan Minh Phat|45 Tran Duy Hung|02435678901|1|150|80
+Ha Noi|Cong ty TNHH Thuong mai Hoang Long|22 Nguyen Chi Thanh|02438889999|1|180|95
+Ha Noi|Cong ty Van tai Bac Nam|90 Giai Phong|02434561234|1|65|40
+TP HCM|Cong ty TNHH Hoang Gia|78 Le Loi|02834567890|1|220|130
+TP HCM|Cong ty Phan mem Sai Gon Tech|15 Nguyen Hue|02839991111|1|300|180
+Hai Phong|Cong ty Van tai Bien Dong|12 Lach Tray|02256789123|1|100|55
+Can Tho|Cong ty Thuc pham Mekong|90 Nguyen Trai|02923456789|1|85|35
+Hue|Cong ty Du lich Co do|15 Hung Vuong|02345671234|1|140|70

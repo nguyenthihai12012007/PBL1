@@ -130,7 +130,7 @@ void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex) {
     printf("\n+===========================================+\n");
     printf("|        TINH CO NHIEU THUE BAO NHAT        |\n");
     printf("+===========================================+\n");
-    printf("| Tinh thanh  : %-27s |\n", stats[maxIndex].provinceName);
+    printf("| Tinh thanh  : %-27s |\n", stats[maxIndex].province_name);
     printf("| So thue bao : %-27d |\n", stats[maxIndex].total);
     printf("+===========================================+\n");
 }
