@@ -1,12 +1,12 @@
-Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|01234567890|1|120|45
-Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|02363555123|1|90|60
-Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|02363777888|2|75|30
-Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|02363999000|3|200|110
-Ha Noi|Cong ty Co phan Minh Phat|45 Tran Duy Hung|02434561234|2|150|80
-Ha Noi|Cong ty TNHH Thuong mai Hoang Long|22 Nguyen Chi Thanh|02438889999|1|180|95
-Ha Noi|Cong ty Van tai Bac Nam|90 Giai Phong|02434561234|1|65|40
-TP HCM|Cong ty TNHH Hoang Gia|78 Le Loi|02834567890|1|220|130
-TP HCM|Cong ty Phan mem Sai Gon Tech|15 Nguyen Hue|02839991111|1|300|180
-Hai Phong|Cong ty Van tai Bien Dong|12 Lach Tray|02256789123|2|100|55
-Can Tho|Cong ty Thuc pham Mekong|90 Nguyen Trai|02923456789|3|85|35
-Hue|Cong ty Du lich Co Do|15 Hung Vuong|02345671234|2|140|70
+Da Nang|Cong ty TNHH ABC|123 Nguyen Van Linh|0123456789|1|120|45
+Da Nang|Cong ty Co phan Xay dung Minh Tien|45 Le Duan|0236355123|1|90|60
+Da Nang|Cong ty Thiet ke Noi that An Phu|78 Phan Chau Trinh|0236377888|2|75|30
+Da Nang|Cong ty Du lich Bien Vang|12 Vo Nguyen Giap|0123456789|3|200|110
+Ha Noi|Cong ty Co phan Minh Phat|45 Tran Duy Hung|0243451234|2|150|80
+Ha Noi|Cong ty TNHH Thuong mai Hoang Long|22 Nguyen Chi Thanh|0243889999|1|180|95
+Ha Noi|Cong ty Van tai Bac Nam|90 Giai Phong|0243451235|1|65|40
+TP HCM|Cong ty TNHH Hoang Gia|78 Le Loi|0283457890|1|220|130
+TP HCM|Cong ty Phan mem Sai Gon Tech|15 Nguyen Hue|0283991111|1|300|180
+Hai Phong|Cong ty Van tai Bien Dong|12 Lach Tray|0225679123|2|100|55
+Can Tho|Cong ty Thuc pham Mekong|90 Nguyen Trai|0292346789|3|85|35
+Hue|Cong ty Du lich Co Do|15 Hung Vuong|0234561234|2|140|70
