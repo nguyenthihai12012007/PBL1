@@ -175,25 +175,111 @@ void printBill(Node *p) {
     printf("=====================================================\n");
 }
 
-void menu() {
+void menu_admin() {
     printf(CYAN BOLD);
     printf("=======================================================\n");
-    printf("       CHUONG TRINH QUAN LY DANH BA DIEN THOAI\n");
+    printf("               CHUC NANG CUA ADMIN\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Quan ly thue bao");
+    printf("| 2. %-45s |\n", "Tra cuu thue bao");
+    printf("| 3. %-45s |\n", "Thong ke & Cuoc");
+    printf("| 4. %-45s |\n", "Quan ly tai khoan");
+    printf("| 0. %-45s |\n", "Dang xuat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
+void menu_manage() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("               Quan ly thue bao\n");
     printf("=======================================================\n");
     printf(RESET);
     printf(YELLOW);
     printf("| 1. %-45s |\n", "Them thue bao");
-    printf("| 2. %-45s |\n", "Hien thi toan bo danh ba");
-    printf("| 3. %-45s |\n", "Tim kiem thue bao");
-    printf("| 4. %-45s |\n", "Sua thong tin thue bao");
-    printf("| 5. %-45s |\n", "Xoa thue bao");
-    printf("| 6. %-45s |\n", "Loc thue bao theo trang thai");
-    printf("| 7. %-45s |\n", "Liet ke thue bao theo tinh thanh");
-    printf("| 8. %-45s |\n", "Thong ke thue bao");
-    printf("| 9. %-45s |\n", "Tinh cuoc thue bao");
-    printf("| 10. %-44s |\n", "Kiem tra trung so dien thoai");
-    printf("| 11. %-44s |\n", "Doc file du lieu thue bao");
+    printf("| 2. %-45s |\n", "Sua thue bao");
+    printf("| 3. %-45s |\n", "Xoa thue bao");
+    printf("| 4. %-45s |\n", "Doc file du lieu");
     printf("| 0. %-45s |\n", "Thoat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
+void menu_search() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("               Tra cuu thue bao\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Tim kiem thue bao");
+    printf("| 2. %-45s |\n", "Loc thue bao theo tinh thanh");
+    printf("| 3. %-45s |\n", "Loc thue bao theo trang thai");
+    printf("| 4. %-45s |\n", "Kiem tra trung thue bao");
+    printf("| 0. %-45s |\n", "Thoat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
+void menu_statistical() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("               Thong Ke & Cuoc\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Thong ke thue bao");
+    printf("| 2. %-45s |\n", "Thong ke tien cuoc");
+    printf("| 3. %-45s |\n", "Tinh cuoc thue bao");
+    printf("| 0. %-45s |\n", "Thoat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
+void menu_account() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("               Quan Ly Tai Khoan\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Them nhan vien");
+    printf("| 2. %-45s |\n", "Xoa nhan vien");
+    printf("| 3. %-45s |\n", "Sua nhan vien");
+    printf("| 0. %-45s |\n", "Thoat");
+    printf(RESET);
+    printf("=======================================================\n");
+    printf(GREEN BOLD);
+    printf("Nhap lua chon cua ban: ");
+    printf(RESET);
+}
+
+void menu_staff() {
+    printf(CYAN BOLD);
+    printf("=======================================================\n");
+    printf("               CHUC NANG CUA NHAN VIEN\n");
+    printf("=======================================================\n");
+    printf(RESET);
+    printf(YELLOW);
+    printf("| 1. %-45s |\n", "Tra cuu thong tin thue bao");
+    printf("| 2. %-45s |\n", "Kiem tra trang thai thue bao");
+    printf("| 3. %-45s |\n", "Liet ke thue bao theo tinh thanh");
+    printf("| 4. %-45s |\n", "Tinh cuoc cho khach hang");
+    printf("| 0. %-45s |\n", "Dang xuat");
     printf(RESET);
     printf("=======================================================\n");
     printf(GREEN BOLD);

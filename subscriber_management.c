@@ -7,9 +7,6 @@
 #include "record.h"
 #include "constants.h"
 
-#define ROLE_ADMIN 1
-#define ROLE_STAFF 2
-
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
     if(newNode == NULL) {
@@ -1008,78 +1005,83 @@ int main() {
     loadAccounts(accounts, &accountCount);
 
     role = login(accounts, accountCount);
-    
-    int choice;
-    do {
-        menu();
 
-        if (scanf("%d", &choice) != 1) {   
-            printf("Loi: Vui long chi nhap chu so!\n");
-            while(getchar() != '\n'); // Xoa bo nho dem
-            continue;
-        }
+    if (role == ROLE_ADMIN) {
+        int choice;
+        do {
+            menu_admin();
 
-        switch(choice) {
-            case 1: {
-                Record newR = inputRecord();
-                addRecord(&head,newR);
-                saveToFile("data1.txt", head);
-                printf("Da them thue bao va luu vao file thanh cong!\n");
-                endScreen();
-                break;
+            if (scanf("%d", &choice) != 1) {   
+                printf("Loi: Vui long chi nhap chu so!\n");
+                while(getchar() != '\n'); // Xoa bo nho dem
+                continue;
             }
-            case 2: 
-                displayAll(head);
-                endScreen();
-                break;
-            case 3: {
-                char phone[15];
-                printf("Nhap so dien thoai thue bao can tim: ");
-                scanf("%s",phone);
-                Node* cur=search_record(head,phone);
-                if (cur != NULL) 
-                    print_record(cur);
-                endScreen();
-                break;
-            }
-            case 4:
-                updateRecord(head);
-                endScreen();
-                break;
-            case 5:
-                deleteRecord(&head);
-                endScreen();
-                break;
-            case 6:
-                filterByStatus(head);
-                endScreen();
-                break;
-            case 7: 
-                listByProvince(head);
-                endScreen();
-                break;
-            case 8: 
-                statisticsMenu(head);
-                break;
-            case 9:
-                calculateFee(head);
-                endScreen();
-                break;
-            case 10: 
-                checkDuplicate(&head);
-                endScreen();
-                break;
-            case 11:
-                readFileByUser(&head);
-                endScreen();
-                break;
-            case 0:
-                printf("Da thoat chuong trinh!\n");
-                break;
-            default:
-                printf("Lua chon khong hop le!\n");
-        }
-    } while(choice != 0);
 
+            switch(choice) {
+                case 1 : 
+                    menu_manage();
+                    endScreen();
+                    break;
+                case 2 :
+                    menu_search();
+                    endScreen();
+                    break;
+                case 3 :
+                    menu_statistical();
+                    endScreen();
+                    break;
+                case 4 :
+                    menu_account();
+                    endScreen();
+                    break;
+                case 0 :
+                    printf("Da dang xuat\n");
+                    break;
+                default :
+                    printf("Lua chon khong hop le");
+            }
+        }while(1);
+    } else if (role == ROLE_STAFF) {
+        int choice;
+        do {
+            menu_staff();
+
+            if (scanf("%d", &choice) != 1) {   
+                printf("Loi: Vui long chi nhap chu so!\n");
+                while(getchar() != '\n'); // Xoa bo nho dem
+                continue;
+            }
+
+            switch(choice) {
+                case 1 : {
+                    char phone[15];
+                    printf("Nhap so dien thoai thue bao can tim: ");
+                    scanf("%s",phone);
+                    Node* cur=search_record(head,phone);
+                    if (cur != NULL) 
+                        print_record(cur);
+                    endScreen();
+                    break;
+                }
+                case 2 : 
+                    filterByStatus(head);
+                    endScreen();
+                    break;
+                case 3:
+                    listByProvince(head);
+                    endScreen();
+                    break;
+                case 4 :
+                    calculateFee(head);
+                    endScreen();
+                    break;
+                case 0 :
+                    printf("Da dang xuat\n");
+                    break;
+                default :
+                    printf("Lua chon khong hop le");
+            }
+        }while(1);
+    }
     return 0;
 }

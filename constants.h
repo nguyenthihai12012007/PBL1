@@ -5,6 +5,9 @@
 #define Off_net_rate 3000
 #define VAT 0.10
 
+#define ROLE_ADMIN 1
+#define ROLE_STAFF 2
+
 #define False 0
 #define True 1
 
