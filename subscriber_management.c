@@ -995,6 +995,137 @@ void statisticsMenu(Node *head) {
     } while(choice != 0);
 }
 
+void menu_manage(Node *head) {
+    int choice;
+    do {
+        printf(CYAN BOLD);
+        printf("=======================================================\n");
+        printf("               Quan ly thue bao\n");
+        printf("=======================================================\n");
+        printf(RESET);
+        printf(YELLOW);
+        printf("| 1. %-45s |\n", "Them thue bao");
+        printf("| 2. %-45s |\n", "Sua thue bao");
+        printf("| 3. %-45s |\n", "Xoa thue bao");
+        printf("| 4. %-45s |\n", "Doc file du lieu");
+        printf("| 0. %-45s |\n", "Thoat");
+        printf(RESET);
+        printf("=======================================================\n");
+        printf(GREEN BOLD);
+        printf("Nhap lua chon cua ban: ");
+        printf(RESET);
+
+        while (1) {                       
+            if(scanf("%d", &choice) != 1) {  
+                while(getchar() != '\n');                 
+                printf(RED "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                continue;            
+            }            
+            if(choice < 0 || choice > 4) {                
+                printf(RED "Lua chon khong hop le! Nhap lai: " RESET);                
+                continue;            
+            }            
+            break;        
+        } 
+
+        switch(choice) {
+            case 1: {
+                Record newR = inputRecord();
+                addRecord(&head,newR);
+                saveToFile("data1.txt", head);
+                printf("Da them thue bao va luu vao file thanh cong!\n");
+                break;
+            }
+            case 2: 
+                updateRecord(head);
+                break;
+            case 3:
+                deleteRecord(&head);
+                break;
+            case 4:
+                readFileByUser(&head);
+                break;
+            case 0:
+                printf("Quay lai menu chinh...\n");
+                break;
+            
+            default:
+                printf("Lua chon khong hop le!");
+        }
+
+        if (choice != 0) 
+            endScreen();
+
+    } while(choice != 0);
+}
+
+void menu_search(Node *head) {
+    int choice;
+    do {
+        printf(CYAN BOLD);
+        printf("=======================================================\n");
+        printf("               Tra cuu thue bao\n");
+        printf("=======================================================\n");
+        printf(RESET);
+        printf(YELLOW);
+        printf("| 1. %-45s |\n", "Tim kiem thue bao");
+        printf("| 2. %-45s |\n", "Loc thue bao theo tinh thanh");
+        printf("| 3. %-45s |\n", "Loc thue bao theo trang thai");
+        printf("| 4. %-45s |\n", "Kiem tra trung thue bao");
+        printf("| 0. %-45s |\n", "Thoat");
+        printf(RESET);
+        printf("=======================================================\n");
+        printf(GREEN BOLD);
+        printf("Nhap lua chon cua ban: ");
+        printf(RESET);
+
+        while (1) {                       
+            if(scanf("%d", &choice) != 1) {  
+                while(getchar() != '\n');                 
+                printf(RED "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                continue;            
+            }            
+            if(choice < 0 || choice > 4) {                
+                printf(RED "Lua chon khong hop le! Nhap lai: " RESET);                
+                continue;            
+            }            
+            break;        
+        } 
+
+        switch(choice) {
+            case 1: {
+                char phone[15];
+                printf("Nhap so dien thoai thue bao can tim: ");
+                scanf("%s",phone);
+                Node* cur=search_record(head,phone);
+                if (cur != NULL) 
+                    print_record(cur);
+                endScreen();
+                break;
+            }
+            case 2: 
+                listByProvince(head);
+                break;
+            case 3:
+                filterByStatus(head);
+                break;
+            case 4:
+                checkDuplicate(&head);
+                break;
+            case 0:
+                printf("Quay lai menu chinh...\n");
+                break;
+            
+            default:
+                printf("Lua chon khong hop le!");
+        }
+
+        if (choice != 0) 
+            endScreen();
+
+    } while(choice != 0);
+}
+
 int main() {
     Node* head = NULL;
     Account accounts[100];
@@ -1019,11 +1150,11 @@ int main() {
 
             switch(choice) {
                 case 1 : 
-                    menu_manage();
+                    menu_manage(head);
                     endScreen();
                     break;
                 case 2 :
-                    menu_search();
+                    menu_search(head);
                     endScreen();
                     break;
                 case 3 :

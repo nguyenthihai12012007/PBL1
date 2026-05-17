@@ -14,8 +14,6 @@ void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex);
 void printTop3RecordMaxFee(CompanyFee stats[], int limit);
 void printBill(Node *p);
 void menu_admin();
-void menu_manage();
-void menu_search();
 void menu_statistical();
 void menu_account();
 void menu_staff();
