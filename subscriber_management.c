@@ -272,6 +272,26 @@ int inputStatus() {
     return choice;
 }
 
+Account inputAccount() {
+    Account A;
+    clearInputBuffer();
+
+    printf("Nhap ten dang nhap: ");
+    scanf("%s", A.username);
+    getchar();
+
+    printf("Nhap mat khau: ");
+    scanf("%s", A.password);
+    getchar();
+
+    printf("Chon chuc vu : 1. Nhan vien      2. Admin");
+    int role;
+    scanf("%d",&role);
+    if(role == ROLE_ADMIN) A.role = role;
+    if(role == ROLE_STAFF) A.role = role;
+    return A;
+}
+
 Record inputRecord() {
     Record R;
     clearInputBuffer();
@@ -435,6 +455,14 @@ void updateRecord(Node* head){
     menu_update(found);
 
     printf("Cap nhat thanh cong!\n");
+
+}
+
+void deleteAccount(Node **head) {
+    char userName[30];
+    printf("Nhap tai khoan can xoa: ");
+    scanf("%s", userName);
+
 
 }
 
@@ -1172,7 +1200,8 @@ int main() {
                     printf("Lua chon khong hop le");
             }
         }while(1);
-    } else if (role == ROLE_STAFF) {
+    } 
+    else if (role == ROLE_STAFF) {
         int choice;
         do {
             menu_staff();
