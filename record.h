@@ -36,4 +36,10 @@ typedef struct {
     double totalFee;
 } CompanyFee;
 
+typedef struct {
+    char username[30];
+    char password[30];
+    int role;
+} Account;
+
 #endif

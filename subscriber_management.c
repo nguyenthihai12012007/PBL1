@@ -7,6 +7,9 @@
 #include "record.h"
 #include "constants.h"
 
+#define ROLE_ADMIN 1
+#define ROLE_STAFF 2
+
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
     if(newNode == NULL) {
@@ -65,6 +68,56 @@ int validateInput(char str[]) {
     if(space)
         return 0;
     return 1;
+}
+
+void loadAccounts(Account accounts[], int *accountCount) {
+    FILE *f = fopen("account.txt", "r");
+
+    if (f == NULL) {
+        printf("Khong mo duoc file accounts.txt!\n");
+        return;
+    }
+
+    *accountCount = 0;
+
+    while (fscanf(f, "%[^|]|%[^|]|%d\n",
+                  accounts[*accountCount].username,
+                  accounts[*accountCount].password,
+                  &accounts[*accountCount].role) == 3) {
+        (*accountCount)++;
+    }
+
+    fclose(f);
+}
+
+int login (Account accounts[],int accountCount) {
+    char username[30];
+    char password[50];
+
+    do {
+        printf("\n===== DANG NHAP HE THONG =====\n");
+
+        printf("Ten dang nhap: ");
+        fgets(username, sizeof(username), stdin);
+        username[strcspn(username, "\n")] = '\0';
+
+        printf("Mat khau: ");
+        fgets(password, sizeof(password), stdin);
+        password[strcspn(password, "\n")] = '\0';
+
+        for(int i=0; i<accountCount; i++) {
+            if(strcmp(username,accounts[i].username) == 0 && strcmp(password,accounts[i].password) == 0) {
+                if (accounts[i].role == 1) {
+                    printf("Xin chao admin : %s\n",username);
+                    return 1;
+                } else {
+                    printf("Xin chao nhan vien : %s\n",username);
+                    return 2;
+                }
+            }
+        }
+        printf("Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n");
+    } while(1);
 }
 
 void readFile(const char *filename, Node **head) {
@@ -947,8 +1000,14 @@ void statisticsMenu(Node *head) {
 
 int main() {
     Node* head = NULL;
+    Account accounts[100];
+    int accountCount = 0;
+    int role;
 
     readFile("data1.txt", &head);
+    loadAccounts(accounts, &accountCount);
+
+    role = login(accounts, accountCount);
     
     int choice;
     do {
