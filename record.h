@@ -42,4 +42,9 @@ typedef struct {
     int role;
 } Account;
 
+typedef struct AccountNode {
+    Account A;
+    struct AccountNode *next;
+} AccountNode;
+
 #endif

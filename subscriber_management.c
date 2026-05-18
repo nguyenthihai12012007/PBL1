@@ -18,20 +18,20 @@ Node* createNode(Record R) {
     return newNode;
 }
 
-void addRecord(Node** head, Record R) {
-    Node* newNode = createNode(R);
+AccountNode *createAccountNode(Account A) {
+    AccountNode *newNode = (AccountNode *)malloc(sizeof(AccountNode));
 
-    if (*head == NULL) {
-        *head = newNode;
-        return;
+    if (newNode == NULL) {
+        printf("Khong du bo nho!\n");
+        return NULL;
     }
 
-    Node* p = *head;
-    while (p->next != NULL)
-        p = p->next;
+    newNode->A = A;
+    newNode->next = NULL;
 
-    p->next = newNode;
+    return newNode;
 }
+
 
 void toLowerCase(char *str) {
     for (int i = 0; str[i]; i++) {
@@ -115,6 +115,21 @@ int login (Account accounts[],int accountCount) {
         }
         printf("Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n");
     } while(1);
+}
+
+void addRecord(Node** head, Record R) {
+    Node* newNode = createNode(R);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    Node* p = *head;
+    while (p->next != NULL)
+        p = p->next;
+
+    p->next = newNode;
 }
 
 void readFile(const char *filename, Node **head) {
@@ -292,6 +307,30 @@ Account inputAccount() {
     return A;
 }
 
+void addAccount(AccountNode **head) {
+    Account A = inputAccount();
+
+    AccountNode *newNode = createAccountNode(A);
+
+    if (newNode == NULL) {
+        return;
+    }
+
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        AccountNode *p = *head;
+
+        while (p->next != NULL) {
+            p = p->next;
+        }
+
+        p->next = newNode;
+    }
+
+    printf("Them tai khoan thanh cong!\n");
+}
+
 Record inputRecord() {
     Record R;
     clearInputBuffer();
@@ -430,6 +469,21 @@ void menu_update(Node* head) {
     } while (choice != 0);
 }
 
+void updateAccount(AccountNode *head) {
+    if(head == NULL) {
+        printf("Danh sach rong!\n");
+        return ;
+    }
+
+    char userName[30];
+    Node* found = NULL;
+
+    while(found == NULL) {
+        printf("Nhap tai khoan can sua: ");
+        scanf("%s",userName);
+    }
+}
+
 void updateRecord(Node* head){
     if(head == NULL) {
         printf("Danh sach rong.\n");
@@ -458,12 +512,41 @@ void updateRecord(Node* head){
 
 }
 
-void deleteAccount(Node **head) {
+void deleteAccount(AccountNode **head) {
     char userName[30];
     printf("Nhap tai khoan can xoa: ");
     scanf("%s", userName);
 
+    AccountNode *p = *head;
+    AccountNode *prev = NULL;
 
+    while(p != NULL && strcmp(p->A.username,userName) != 0) {
+        prev = p;
+        p = p->next;
+    }
+
+    if(p == NULL) {
+        printf("Khong tim thay tai khoan can xoa!\n");
+        return ;
+    }
+
+    print_account(p);
+
+    char confirm;
+    printf("Xac nhan xoa lien he nay? (y/n): ");
+    scanf(" %c", &confirm);
+    if (confirm != 'y' && confirm != 'Y') {
+        printf("Da huy xoa!\n");
+        return;
+    }
+
+    if(prev == NULL) {
+        *head = p->next;
+    } else {
+        prev->next = p->next;
+    }
+    free(p);
+    printf("Xoa thanh cong!\n");
 }
 
 void deleteRecord(Node **head) {
@@ -966,9 +1049,7 @@ void statisticsMenu(Node *head) {
         printf(RESET);
         printf("| " YELLOW "1." RESET " Thong ke so thue bao theo tinh         |\n");
         printf("| " YELLOW "2." RESET " Tinh nhieu thue bao nhat               |\n");
-        printf("| " YELLOW "3." RESET " Ba tinh nhieu tien cuoc nhat           |\n");
-        printf("| " YELLOW "4." RESET " Ba doanh nghiep nhieu tien cuoc nhat   |\n");
-        printf("| " YELLOW "5." RESET " Xuat bao cao thong ke ra file          |\n");
+        printf("| " YELLOW "3." RESET " Xuat bao cao thong ke ra file          |\n");
         printf("| " RED "0." RESET " Quay lai                               |\n");
         printf(CYAN);
         printf("+===========================================+\n");
@@ -996,16 +1077,7 @@ void statisticsMenu(Node *head) {
             case 2: 
                 pronvinceMaxRecord(head);
                 break;
-
             case 3:
-                printTop3ProvinceByFee(head);
-                break;
-
-            case 4: 
-                top3RecordMaxFee(head);
-                break;
-
-            case 5:
                 exportReport(head);
                 break;
                 
@@ -1154,8 +1226,120 @@ void menu_search(Node *head) {
     } while(choice != 0);
 }
 
+void menu_statistical(Node *head) {
+    int choice;
+    do {
+        printf(CYAN BOLD);
+        printf("=======================================================\n");
+        printf("               Thong Ke & Cuoc\n");
+        printf("=======================================================\n");
+        printf(RESET);
+        printf(YELLOW);
+        printf("| 1. %-45s |\n", "Thong ke thue bao");
+        printf("| 2. %-45s |\n", "Thong ke doanh thu"); // viết thêm hàm thống kê doanh thu
+        printf("| 3. %-45s |\n", "Tinh cuoc thue bao");
+        printf("| 0. %-45s |\n", "Thoat");
+        printf(RESET);
+        printf("=======================================================\n");
+        printf(GREEN BOLD);
+        printf("Nhap lua chon cua ban: ");
+        printf(RESET);
+
+        while (1) {                       
+            if(scanf("%d", &choice) != 1) {  
+                while(getchar() != '\n');                 
+                printf(RED "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                continue;            
+            }            
+            if(choice < 0 || choice > 4) {                
+                printf(RED "Lua chon khong hop le! Nhap lai: " RESET);                
+                continue;            
+            }            
+            break;        
+        } 
+
+        switch(choice) {
+            case 1: {
+                statisticsMenu(head);
+                break;
+            }
+            case 2: 
+                //thong ke doanh thu
+                break;
+            case 3:
+                calculateFee(head);
+                break;
+            case 0:
+                printf("Quay lai menu chinh...\n");
+                break;
+            
+            default:
+                printf("Lua chon khong hop le!");
+        }
+        if (choice != 0) 
+            endScreen();
+    } while(1);
+}
+
+void menu_account(AccountNode **head) {
+    int choice;
+    do{
+        printf(CYAN BOLD);
+        printf("=======================================================\n");
+        printf("               Quan Ly Tai Khoan\n");
+        printf("=======================================================\n");
+        printf(RESET);
+        printf(YELLOW);
+        printf("| 1. %-45s |\n", "Them nhan vien");
+        printf("| 2. %-45s |\n", "Xoa nhan vien");
+        printf("| 3. %-45s |\n", "Sua nhan vien");
+        printf("| 0. %-45s |\n", "Thoat");
+        printf(RESET);
+        printf("=======================================================\n");
+        printf(GREEN BOLD);
+        printf("Nhap lua chon cua ban: ");
+        printf(RESET);
+
+        while (1) {                       
+            if(scanf("%d", &choice) != 1) {  
+                while(getchar() != '\n');                 
+                printf(RED "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                continue;            
+            }            
+            if(choice < 0 || choice > 3) {                
+                printf(RED "Lua chon khong hop le! Nhap lai: " RESET);                
+                continue;            
+            }            
+            break;        
+        } 
+
+        switch(choice) {
+            case 1: 
+                addAccount(head);
+                endScreen();
+                break;
+            case 2: 
+                deleteAccount(head);
+                break;
+            case 3:
+                updateAccount(*head);
+                break;
+            case 0:
+                printf("Quay lai menu chinh...\n");
+                break;
+            
+            default:
+                printf("Lua chon khong hop le!");
+        }
+        if (choice != 0) 
+            endScreen();
+
+    } while(1);
+}
+
 int main() {
     Node* head = NULL;
+    AccountNode *headAccount = NULL;
     Account accounts[100];
     int accountCount = 0;
     int role;
@@ -1186,11 +1370,11 @@ int main() {
                     endScreen();
                     break;
                 case 3 :
-                    menu_statistical();
+                    menu_statistical(head);
                     endScreen();
                     break;
                 case 4 :
-                    menu_account();
+                    menu_account(&headAccount);
                     endScreen();
                     break;
                 case 0 :
@@ -1201,6 +1385,7 @@ int main() {
             }
         }while(1);
     } 
+    
     else if (role == ROLE_STAFF) {
         int choice;
         do {

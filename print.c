@@ -33,6 +33,15 @@ void print_record(Node* node) {
     printf("\n");
 }
 
+void print_account(AccountNode *Node) {
+    if(Node == NULL) return ;
+
+    printf("Ten dang nhap: \n",Node->A.username);
+    printf("Mat khau: \n",Node->A.username);
+    printf("Chuc vu: \n",Node->A.role);
+    printf("\n");
+}
+
 void printHeader() {
     printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
     printf("| %-3s | %-35s | %-12s | %-20s | %-10s | %-10s |\n", "STT", "Ten", "Dien thoai", "Dia chi", "Tinh", "Trang thai");
@@ -187,43 +196,6 @@ void menu_admin() {
     printf("| 3. %-45s |\n", "Thong ke & Cuoc");
     printf("| 4. %-45s |\n", "Quan ly tai khoan");
     printf("| 0. %-45s |\n", "Dang xuat");
-    printf(RESET);
-    printf("=======================================================\n");
-    printf(GREEN BOLD);
-    printf("Nhap lua chon cua ban: ");
-    printf(RESET);
-}
-
-
-void menu_statistical() {
-    printf(CYAN BOLD);
-    printf("=======================================================\n");
-    printf("               Thong Ke & Cuoc\n");
-    printf("=======================================================\n");
-    printf(RESET);
-    printf(YELLOW);
-    printf("| 1. %-45s |\n", "Thong ke thue bao");
-    printf("| 2. %-45s |\n", "Thong ke tien cuoc");
-    printf("| 3. %-45s |\n", "Tinh cuoc thue bao");
-    printf("| 0. %-45s |\n", "Thoat");
-    printf(RESET);
-    printf("=======================================================\n");
-    printf(GREEN BOLD);
-    printf("Nhap lua chon cua ban: ");
-    printf(RESET);
-}
-
-void menu_account() {
-    printf(CYAN BOLD);
-    printf("=======================================================\n");
-    printf("               Quan Ly Tai Khoan\n");
-    printf("=======================================================\n");
-    printf(RESET);
-    printf(YELLOW);
-    printf("| 1. %-45s |\n", "Them nhan vien");
-    printf("| 2. %-45s |\n", "Xoa nhan vien");
-    printf("| 3. %-45s |\n", "Sua nhan vien");
-    printf("| 0. %-45s |\n", "Thoat");
     printf(RESET);
     printf("=======================================================\n");
     printf(GREEN BOLD);
