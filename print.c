@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "print.h"
+#include "function.h"
 #include "constants.h"
-#include "billing.h"
 
 void printStatus(int status) {
     switch (status) {
@@ -36,9 +37,9 @@ void print_record(Node* node) {
 void print_account(AccountNode *Node) {
     if(Node == NULL) return ;
 
-    printf("Ten dang nhap: \n",Node->A.username);
-    printf("Mat khau: \n",Node->A.username);
-    printf("Chuc vu: \n",Node->A.role);
+    printf("Ten dang nhap: %s\n",Node->A.username);
+    printf("Mat khau: %s\n",Node->A.username);
+    printf("Chuc vu: %d\n",Node->A.role);
     printf("\n");
 }
 
@@ -184,40 +185,32 @@ void printBill(Node *p) {
     printf("=====================================================\n");
 }
 
-void menu_admin() {
-    printf(CYAN BOLD);
-    printf("=======================================================\n");
-    printf("               CHUC NANG CUA ADMIN\n");
-    printf("=======================================================\n");
-    printf(RESET);
+void showScreen() {
     printf(YELLOW);
-    printf("| 1. %-45s |\n", "Quan ly thue bao");
-    printf("| 2. %-45s |\n", "Tra cuu thue bao");
-    printf("| 3. %-45s |\n", "Thong ke & Cuoc");
-    printf("| 4. %-45s |\n", "Quan ly tai khoan");
-    printf("| 0. %-45s |\n", "Dang xuat");
+    printf("                ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
+    printf("                ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
+    printf("                ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
+    printf("                ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
+    printf("                ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
+    printf("                 ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
     printf(RESET);
-    printf("=======================================================\n");
-    printf(GREEN BOLD);
-    printf("Nhap lua chon cua ban: ");
+    printf("\n");
+    printf(BRIGHT GREEN);
+    printf("                                   Loading...\n");
+    for(int i = 0; i <= 20; i++) {
+        printf("\r                                   [");
+        for(int j = 0; j < i; j++) {
+            printf("█");
+        }
+        for(int j = i; j < 20; j++) {
+            printf(" ");
+        }
+        printf("] %d%%", i * 5);
+        fflush(stdout);
+        usleep(150000);
+    }
     printf(RESET);
-}
-
-void menu_staff() {
-    printf(CYAN BOLD);
-    printf("=======================================================\n");
-    printf("               CHUC NANG CUA NHAN VIEN\n");
-    printf("=======================================================\n");
-    printf(RESET);
-    printf(YELLOW);
-    printf("| 1. %-45s |\n", "Tra cuu thong tin thue bao");
-    printf("| 2. %-45s |\n", "Kiem tra trang thai thue bao");
-    printf("| 3. %-45s |\n", "Liet ke thue bao theo tinh thanh");
-    printf("| 4. %-45s |\n", "Tinh cuoc cho khach hang");
-    printf("| 0. %-45s |\n", "Dang xuat");
-    printf(RESET);
-    printf("=======================================================\n");
-    printf(GREEN BOLD);
-    printf("Nhap lua chon cua ban: ");
-    printf(RESET);
+    printf("\n");
+    printf("                                   Nhan Enter de tiep tuc...");
+    getchar();
 }
