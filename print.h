@@ -3,6 +3,9 @@
 
 #include "record.h"
 
+void printCenter(const char *text, int width);
+void printSystemHeader(const char *title);
+void printSystemFooter();
 void printStatus(int status);
 void print_record(Node* node);
 void print_account(AccountNode *Node);
