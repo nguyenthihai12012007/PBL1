@@ -13,7 +13,7 @@
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
     if(newNode == NULL) {
-        printf("Khong du bo nho\n");
+        printf(RED BOLD "Khong du bo nho!\n" RESET);
         exit(1);
     }
     newNode->data = R;
@@ -25,7 +25,7 @@ AccountNode *createAccountNode(Account A) {
     AccountNode *newNode = (AccountNode *)malloc(sizeof(AccountNode));
 
     if (newNode == NULL) {
-        printf("Khong du bo nho!\n");
+        printf(RED BOLD "Khong du bo nho!\n" RESET);
         return NULL;
     }
 
@@ -75,7 +75,7 @@ void loadAccounts(Account accounts[], int *accountCount) {
     FILE *f = fopen("account.txt", "r");
 
     if (f == NULL) {
-        printf("Khong mo duoc file accounts.txt!\n");
+        printf(RED BOLD "Khong mo duoc file accounts.txt!\n" RESET);  
         return;
     }
 
@@ -96,28 +96,43 @@ int login (Account accounts[],int accountCount) {
     char password[50];
 
     do {
-        printf("\n===== DANG NHAP HE THONG =====\n");
-
-        printf("Ten dang nhap: ");
+        system("clear");
+        printf(BLUE BOLD);
+        printf("+======================================================================+\n");
+        printf("|                                                                      |\n");
+        printf("|                 HE THONG QUAN LY DANH BA DIEN THOAI                  |\n");
+        printf("|                                                                      |\n");
+        printf("+======================================================================+\n");
+        printf(RESET);
+        printf(CYAN BOLD);
+        printf("\n");
+        printf("                    +----------------------------------+\n");
+        printf("                    |        DANG NHAP HE THONG        |\n");
+        printf("                    +----------------------------------+\n");
+        printf(RESET);
+        printf("                      Ten dang nhap : ");
         fgets(username, sizeof(username), stdin);
         username[strcspn(username, "\n")] = '\0';
 
-        printf("Mat khau: ");
+        printf("                      Mat khau      : ");
         fgets(password, sizeof(password), stdin);
         password[strcspn(password, "\n")] = '\0';
+        printf(CYAN BOLD);
+        printf("                    +----------------------------------+\n");
+        printf(RESET);
 
         for(int i=0; i<accountCount; i++) {
             if(strcmp(username,accounts[i].username) == 0 && strcmp(password,accounts[i].password) == 0) {
                 if (accounts[i].role == 1) {
-                    printf("Xin chao admin : %s\n",username);
+                    printf(GREEN BOLD "\n   Dang nhap thanh cong!\n   Xin chao admin : %s\n\n" RESET ,username);
                     return 1;
                 } else {
-                    printf("Xin chao nhan vien : %s\n",username);
+                    printf(GREEN BOLD "\n   Dang nhap thanh cong!\n   Xin chao nhan vien : %s\n\n" RESET ,username);
                     return 2;
                 }
             }
         }
-        printf("Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n");
+        printf(RED BOLD "\n   Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n\n" RESET);
     } while(1);
 }
 
@@ -139,7 +154,7 @@ void addRecord(Node** head, Record R) {
 void readFile(const char *filename, Node **head) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
-        printf(RED "Khong mo duoc file!\n" RESET);
+        printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
 
@@ -234,7 +249,7 @@ void saveToFile(const char *filename, Node *head) {
     FILE *f = fopen(filename, "w");
 
     if (f == NULL) {
-        printf(RED "Khong mo duoc file de ghi!\n" RESET);
+        printf(RED BOLD "Khong mo duoc file de ghi!\n" RESET);
         return;
     }
 
@@ -284,7 +299,7 @@ int inputStatus() {
         clearInputBuffer();
 
         if (choice < 1 || choice > 3) {
-            printf("Lua chon khong hop le! Vui long nhap lai: \n");
+            printf(RED BOLD "Lua chon khong hop le! Vui long nhap lai: \n" RESET);
         }
     } while (choice < 1 || choice > 3);
 
@@ -295,7 +310,7 @@ Account inputAccount() {
     Account A;
     clearInputBuffer();
 
-    printf("Nhap ten dang nhap: ");
+    printf("\nNhap ten dang nhap: ");
     scanf("%s", A.username);
     getchar();
 
@@ -303,7 +318,10 @@ Account inputAccount() {
     scanf("%s", A.password);
     getchar();
 
-    printf("Chon chuc vu : 1. Admin      2. Nhan vien");
+    printf("\n Chon chuc vu\n");
+    printf("| 1. Admin      |\n");
+    printf("| 2. Nhan vien  |\n");
+    printf("Nhap lua chon: ");
     int role;
     scanf("%d",&role);
     if(role == ROLE_ADMIN) A.role = role;
@@ -332,18 +350,18 @@ void addAccount(AccountNode **head) {
         p->next = newNode;
     }
 
-    printf("Them tai khoan thanh cong!\n");
+    printf(GREEN BOLD "Them tai khoan thanh cong!\n" RESET);
 }
 
 Record inputRecord() {
     Record R;
     clearInputBuffer();
     
-    printf("Nhap so dien thoai: ");
+    printf("\nNhap so dien thoai: ");
     do {
         scanf("%s", R.phone);
         if (!validatePhone(R.phone)) {
-            printf("So dien thoai khong hop le! Nhap lai: ");
+            printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
         }
     } while(!validatePhone(R.phone));
     getchar();
@@ -353,7 +371,7 @@ Record inputRecord() {
         fgets(R.name,sizeof(R.name),stdin);
         R.name[strcspn(R.name,"\n")]='\0';
         if (!validateInput(R.name)) {
-            printf("Ten khong hop le!\n");
+            printf(RED BOLD "Ten khong hop le!\n" RESET);
         }
     } while(!validateInput(R.name));
 
@@ -362,7 +380,7 @@ Record inputRecord() {
         fgets(R.address,sizeof(R.address),stdin);
         R.address[strcspn(R.address,"\n")]='\0';
         if(!validateInput(R.address)) {
-            printf("Dia chi khong hop le! Vui long nhap lai.\n");
+            printf(RED BOLD "Dia chi khong hop le! Vui long nhap lai.\n" RESET);
         }
     } while(!validateInput(R.address));
 
@@ -371,7 +389,7 @@ Record inputRecord() {
         fgets(R.province.tentinh,sizeof(R.province.tentinh),stdin);
         R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
         if(!validateInput(R.province.tentinh)) {
-            printf("Tinh khong hop le! Vui long nhap lai.\n");
+            printf(RED BOLD "Tinh khong hop le! Vui long nhap lai.\n" RESET);
         }
     } while(!validateInput(R.province.tentinh));
 
@@ -381,7 +399,7 @@ Record inputRecord() {
     do {
         scanf("%d", &R.onNetMinutes);
         if (R.onNetMinutes < 0) {
-            printf("So phut khong hop le! Nhap lai: ");
+            printf(RED BOLD "So phut khong hop le! Nhap lai: " RESET);
         }
     } while (R.onNetMinutes < 0);
 
@@ -389,7 +407,7 @@ Record inputRecord() {
     do {
         scanf("%d", &R.offNetMinutes);
         if (R.offNetMinutes < 0) {
-            printf("So phut khong hop le! Nhap lai: ");
+            printf(RED BOLD "So phut khong hop le! Nhap lai: " RESET);
         }
     } while (R.offNetMinutes < 0);
 
@@ -406,13 +424,13 @@ Node* search_record(Node* head,char phone[15]) {
         }
         cur=cur->next;
     }
-    printf("Khong tim thay thue bao!\n");
+    printf(RED BOLD "Khong tim thay thue bao!\n" RESET);
     return NULL;
 }
 
 void updateAccount(AccountNode *head) {
     if(head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "\nDanh sach rong!\n" RESET);
         return ;
     }
 
@@ -420,14 +438,14 @@ void updateAccount(AccountNode *head) {
     Node* found = NULL;
 
     while(found == NULL) {
-        printf("Nhap tai khoan can sua: ");
+        printf("\nNhap tai khoan can sua: ");
         scanf("%s",userName);
     }
 }
 
 void updateRecord(Node* head) {
     if(head == NULL) {
-        printf("Danh sach rong.\n");
+        printf(RED BOLD "\nDanh sach rong.\n" RESET);
         return ;
     }
     
@@ -435,15 +453,15 @@ void updateRecord(Node* head) {
     Node* found=NULL;
 
     while(found==NULL) {
-        printf("Nhap so dien thoai thue bao can sua: ");
+        printf("\nNhap so dien thoai thue bao can sua: ");
         scanf("%s",phone);
         if (!validatePhone(phone)) {
-            printf("So dien thoai khong hop le!\n");
+            printf(RED BOLD "So dien thoai khong hop le!\n" RESET);
             return;
         }
         found=search_record(head,phone);
         if(found==NULL) {
-            printf("Khong tim thay thue bao! Vui long nhap lai: \n");
+            printf(RED BOLD "Khong tim thay thue bao! Vui long nhap lai: \n" RESET);
         }
     }
     print_record(found);
@@ -455,8 +473,9 @@ void updateRecord(Node* head) {
 
 void deleteAccount(AccountNode **head) {
     char userName[30];
-    printf("Nhap tai khoan can xoa: ");
+    printf("\nNhap tai khoan can xoa: ");
     scanf("%s", userName);
+    printf("\n");
 
     AccountNode *p = *head;
     AccountNode *prev = NULL;
@@ -467,7 +486,7 @@ void deleteAccount(AccountNode **head) {
     }
 
     if(p == NULL) {
-        printf("Khong tim thay tai khoan can xoa!\n");
+        printf(RED BOLD "Khong tim thay tai khoan can xoa!\n" RESET);
         return ;
     }
 
@@ -492,7 +511,7 @@ void deleteAccount(AccountNode **head) {
 
 void deleteRecord(Node **head) {
     char phone[15];
-    printf("Nhap so dien thoai can xoa: ");
+    printf("\nNhap so dien thoai can xoa: ");
     scanf("%s", phone);
 
     Node *p = *head;
@@ -504,7 +523,7 @@ void deleteRecord(Node **head) {
     }
 
     if (p == NULL) {
-        printf("Khong tim thay so dien thoai!\n");
+        printf(RED BOLD "Khong tim thay so dien thoai!\n" RESET);
         return;
     }
 
@@ -530,7 +549,7 @@ void deleteRecord(Node **head) {
 
 void listByProvince(Node* head) {
     if (head == NULL) { 
-        printf("Danh sach rong!\n"); 
+        printf(RED BOLD "\nDanh sach rong!\n" RESET); 
         return; 
     } 
 
@@ -539,7 +558,7 @@ void listByProvince(Node* head) {
     int found = 0;
     int stt = 1;
 
-    printf("Nhap tinh can tim: ");
+    printf("\nNhap tinh can tim: ");
     clearInputBuffer();
 
     fgets(province, sizeof(province), stdin);
@@ -559,7 +578,7 @@ void listByProvince(Node* head) {
         p = p->next;
     }
     if (!found) {
-        printf("Khong tim thay tinh nay!\n");
+        printf(RED BOLD "Khong tim thay tinh nay!\n" RESET);
         return;
     }
     printf("\n                                     DANH SACH THEO TINH: %s\n", province);
@@ -598,12 +617,12 @@ double total_Fee(Record R) {
 
 void exportReport(Node *head) {
     if (head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
     FILE *f = fopen("report.txt", "w");
     if (f == NULL) {
-        printf("Khong mo duoc file!\n");
+        printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
     int total = 0;
@@ -654,12 +673,12 @@ void exportReport(Node *head) {
     }
     fprintf(f, "+==================================================+\n");
     fclose(f);
-    printf("Da xuat bao cao ra file report.txt!\n");
+    printf("   Da xuat bao cao ra file report.txt!\n");
 }
 
 void statisticsByProvince(Node* head) {
     if (head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
     printf("\n        THONG KE SO THUE BAO THEO TINH\n");
@@ -703,6 +722,7 @@ void checkDuplicate(Node** head) {
     Node *p = *head;
     int found = 0;
 
+    printf("\n");
     while(p != NULL) {
         Node *prev = p;
         Node *q = p->next;
@@ -739,7 +759,7 @@ void checkDuplicate(Node** head) {
 
 void filterByStatus(Node *head) {
     if (head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
     printf("\n");
@@ -747,7 +767,7 @@ void filterByStatus(Node *head) {
     Node *p = head;
     int stt = 1;
     int found = 0;
-    printf("\n        DANH SACH THUE BAO THEO TRANG THAI\n");
+    printf("\n                         DANH SACH THUE BAO THEO TRANG THAI\n");
     printHeader();
     while (p != NULL) {
         if (p->data.status == status) {
@@ -766,7 +786,7 @@ void filterByStatus(Node *head) {
 void readFileByUser(Node **head) {
     char filename[100];
 
-    printf("Nhap ten file muon doc: ");
+    printf("\nNhap ten file muon doc: ");
     scanf("%s", filename);
 
     readFile(filename,head);
@@ -774,14 +794,14 @@ void readFileByUser(Node **head) {
 
 void exportBill(Node *p) {
     if (p == NULL) {
-        printf("Khong ton tai thue bao!\n");
+        printf(RED BOLD "Khong ton tai thue bao!\n" RESET);
         return;
     }
     char filename[50];
     sprintf(filename, "bill_%s.txt", p->data.phone);
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
-        printf("Khong mo duoc file!\n");
+        printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
     double onNetFee = p->data.onNetMinutes * On_net_rate;
@@ -810,12 +830,12 @@ void exportBill(Node *p) {
 
 void calculateFee(Node *head) {
     if (head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
 
     char phone[15];
-    printf("Nhap so dien thoai can tinh cuoc: ");
+    printf("\nNhap so dien thoai can tinh cuoc: ");
     scanf("%14s", phone);
 
     Node *found = search_record(head, phone);
@@ -824,8 +844,8 @@ void calculateFee(Node *head) {
     }
 
     if (found->data.status == 2) {
-        printf("\n=====================================\n");
-        printf("THUE BAO TAM KHOA\n");
+        printf("=====================================\n");
+        printf("         THUE BAO TAM KHOA\n");
         printf("Tong cuoc : 0 VND\n");
         printf("Ly do     : Thue bao dang tam khoa\n");
         printf("=====================================\n");
@@ -834,8 +854,8 @@ void calculateFee(Node *head) {
     }
 
     if (found->data.status == 3) {
-        printf("\n=====================================\n");
-        printf("THUE BAO DA HUY\n");
+        printf("=====================================\n");
+        printf("         THUE BAO DA HUY\n");
         printf("Tong cuoc : 0 VND\n");
         printf("Ly do     : Thue bao da huy\n");
         printf("=====================================\n");
@@ -844,7 +864,7 @@ void calculateFee(Node *head) {
     }
 
     double total = total_Fee(found->data);
-    printf("\n=====================================\n");
+    printf("=====================================\n");
     printf("           THONG TIN CUOC\n");
     printf("=====================================\n");
     printf("So dien thoai : %s\n", found->data.phone);
@@ -915,7 +935,7 @@ void pronvinceMaxRecord (Node *head) {
 
 void top3RecordMaxFee (Node *head) {
     if(head == NULL) {
-        printf("Danh sach rong!\n");
+        printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
 
@@ -1019,10 +1039,10 @@ int main() {
                     menu_account(&headAccount);
                     break;
                 case 0 :
-                    printf("Da dang xuat!\n");
+                    printf(RED BOLD "   Da dang xuat!\n" RESET);
                     break;
                 default :
-                    printf("Lua chon khong hop le!");
+                    printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
             }
         }while(choice != 0);
     } 
@@ -1041,7 +1061,7 @@ int main() {
             switch(choice) {
                 case 1 : {
                     char phone[15];
-                    printf("Nhap so dien thoai thue bao can tim: ");
+                    printf("\nNhap so dien thoai thue bao can tim: ");
                     scanf("%s",phone);
                     Node* cur=search_record(head,phone);
                     if (cur != NULL) 
@@ -1062,10 +1082,10 @@ int main() {
                     endScreen();
                     break;
                 case 0 :
-                    printf("Da dang xuat!\n");
+                    printf(RED BOLD "   Da dang xuat!\n" RESET);
                     break;
                 default :
-                    printf("Lua chon khong hop le!");
+                    printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
             }
         }while(choice != 0);
     }
