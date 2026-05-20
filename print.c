@@ -1,10 +1,64 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "print.h"
 #include "function.h"
 #include "constants.h"
+
+void printCenter(const char *text, int width) {
+    int len = strlen(text);
+    int left = (width - len) / 2;
+    printf("|");
+    for (int i = 0; i < left; i++) {
+        printf(" ");
+    }
+    printf("%s", text);
+    for (int i = left + len; i < width; i++) {
+        printf(" ");
+    }
+    printf("|\n");
+}
+
+void printSystemHeader(const char *title) {
+    system("clear");
+    printf(BLUE BOLD);
+    printf("+======================================================================+\n");
+    printf("|                                                                      |\n");
+    printf("|                 HE THONG QUAN LY DANH BA DIEN THOAI                  |\n");
+    printf("|                                                                      |\n");
+    printf("+======================================================================+\n");
+    printf(RESET);
+    time_t t;
+    time(&t);
+    struct tm *local = localtime(&t);
+    printf(YELLOW);
+    printf("\n");
+    printf("   Thoi gian: %02d:%02d:%02d\n",
+           local->tm_hour,
+           local->tm_min,
+           local->tm_sec);
+
+    printf(RESET);
+    printf(CYAN BOLD);
+    printf("\n");
+    printf("+======================================================================+\n");
+    printCenter(title, 70);
+    printf("+======================================================================+\n");
+    printf(RESET);
+}
+
+void printSystemFooter() {
+    printf(CYAN BOLD);
+    printf("+======================================================================+\n");
+    printf(RESET);
+    printf(GREEN BOLD);
+    printf("\n");
+    printf("   Nhap lua chon cua ban: ");
+    printf(RESET);
+}
 
 void printStatus(int status) {
     switch (status) {
@@ -46,7 +100,6 @@ void print_account(AccountNode *Node) {
 void printHeader() {
     printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
     printf("| %-3s | %-35s | %-12s | %-20s | %-10s | %-10s |\n", "STT", "Ten", "Dien thoai", "Dia chi", "Tinh", "Trang thai");
-    //printf("| STT |                  Ten                |  Dien thoai  |       Dia chi        |    Tinh    | Trang thai |\n");
     printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
 }
 
@@ -159,7 +212,7 @@ void printTop3RecordMaxFee(CompanyFee stats[], int limit) {
 
 void printBill(Node *p) {
     if (p == NULL) {
-        printf("Khong ton tai thue bao!\n");
+        printf(RED BOLD "Khong ton tai thue bao!\n" RESET);
         return;
     }
     double onNetFee = p->data.onNetMinutes * On_net_rate;
@@ -211,6 +264,6 @@ void showScreen() {
     }
     printf(RESET);
     printf("\n");
-    printf("                                   Nhan Enter de tiep tuc...");
+    printf("\n                                   Nhan Enter de tiep tuc...");
     getchar();
 }
