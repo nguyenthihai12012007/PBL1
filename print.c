@@ -23,7 +23,7 @@ void printCenter(const char *text, int width) {
 }
 
 void printSystemHeader(const char *title) {
-    system("clear");
+    clearScreen();
     printf(BLUE BOLD);
     printf("+======================================================================+\n");
     printf("|                                                                      |\n");
@@ -238,6 +238,7 @@ void printBill(Node *p) {
     printf("=====================================================\n");
 }
 
+
 void showScreen() {
     printf(YELLOW);
     printf("                ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
@@ -265,5 +266,6 @@ void showScreen() {
     printf(RESET);
     printf("\n");
     printf("\n                                   Nhan Enter de tiep tuc...");
+    clearInputBuffer();
     getchar();
 }

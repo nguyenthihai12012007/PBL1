@@ -15,6 +15,7 @@ void readFile(const char *filename, Node **head);
 void saveToFile(const char *filename, Node *head);
 void clearInputBuffer();
 void pauseScreen();
+void clearScreen();
 void endScreen();
 int inputStatus();
 Account inputAccount();

@@ -96,7 +96,7 @@ int login (Account accounts[],int accountCount) {
     char password[50];
 
     do {
-        system("clear");
+        clearScreen();
         printf(BLUE BOLD);
         printf("+======================================================================+\n");
         printf("|                                                                      |\n");
@@ -282,9 +282,17 @@ void pauseScreen() {
     getchar(); 
 }
 
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
 void endScreen() {
     pauseScreen();
-    system("clear");
+    clearScreen();
 }
 
 int inputStatus() {
@@ -415,6 +423,11 @@ Record inputRecord() {
 }
 
 Node* search_record(Node* head,char phone[15]) {
+    if(head == NULL) {
+        printf(RED BOLD "\nDanh sach rong!\n" RESET);
+        return NULL;
+    }
+
     Node* cur = head;
 
     while(cur!=NULL) {
@@ -1012,82 +1025,92 @@ int main() {
     readFile("data1.txt", &head);
     loadAccounts(accounts, &accountCount);
 
-    role = login(accounts, accountCount);
+    while(1) {
+        role = login(accounts, accountCount);
 
-    if (role == ROLE_ADMIN) {
-        int choice;
-        do {
-            menu_admin();
+        if (role == ROLE_ADMIN) {
+            int choice;
+            do {
+                menu_admin();
 
-            if (scanf("%d", &choice) != 1) {   
-                printf("Loi: Vui long chi nhap chu so!\n");
-                while(getchar() != '\n'); // Xoa bo nho dem
-                continue;
-            }
-
-            switch(choice) {
-                case 1 : 
-                    menu_manage(&head);
-                    break;
-                case 2 :
-                    menu_search(head);
-                    break;
-                case 3 :
-                    menu_statistical(head);
-                    break;
-                case 4 :
-                    menu_account(&headAccount);
-                    break;
-                case 0 :
-                    printf(RED BOLD "   Da dang xuat!\n" RESET);
-                    break;
-                default :
-                    printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
-            }
-        }while(choice != 0);
-    } 
-    
-    else if (role == ROLE_STAFF) {
-        int choice;
-        do {
-            menu_staff();
-
-            if (scanf("%d", &choice) != 1) {   
-                printf("Loi: Vui long chi nhap chu so!\n");
-                while(getchar() != '\n'); // Xoa bo nho dem
-                continue;
-            }
-
-            switch(choice) {
-                case 1 : {
-                    char phone[15];
-                    printf("\nNhap so dien thoai thue bao can tim: ");
-                    scanf("%s",phone);
-                    Node* cur=search_record(head,phone);
-                    if (cur != NULL) 
-                        print_record(cur);
-                    endScreen();
-                    break;
+                if (scanf("%d", &choice) != 1) {   
+                    printf("Loi: Vui long chi nhap chu so!\n");
+                    while(getchar() != '\n'); // Xoa bo nho dem
+                    continue;
                 }
-                case 2 : 
-                    filterByStatus(head);
-                    endScreen();
-                    break;
-                case 3:
-                    listByProvince(head);
-                    endScreen();
-                    break;
-                case 4 :
-                    calculateFee(head);
-                    endScreen();
-                    break;
-                case 0 :
-                    printf(RED BOLD "   Da dang xuat!\n" RESET);
-                    break;
-                default :
-                    printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
-            }
-        }while(choice != 0);
+
+                switch(choice) {
+                    case 1 : 
+                        menu_manage(&head);
+                        break;
+                    case 2 :
+                        menu_search(head);
+                        break;
+                    case 3 :
+                        menu_statistical(head);
+                        break;
+                    case 4 :
+                        menu_account(&headAccount);
+                        break;
+                    case 0 :
+                        printf(RED BOLD "   Da dang xuat!\n" RESET);
+                        endScreen();
+                        break;
+                    default :
+                        printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
+                }
+            }while(choice != 0);
+        } 
+        
+        else if (role == ROLE_STAFF) {
+            int choice;
+            do {
+                menu_staff();
+
+                if (scanf("%d", &choice) != 1) {   
+                    printf("Loi: Vui long chi nhap chu so!\n");
+                    while(getchar() != '\n'); // Xoa bo nho dem
+                    continue;
+                }
+
+                switch(choice) {
+                    case 1 : {
+                        char phone[15];
+                        printf("\nNhap so dien thoai thue bao can tim: ");
+                        do {
+                            scanf("%s",phone);
+                            if (!validatePhone(phone)) {
+                                printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
+                            }
+                        } while (!validatePhone(phone));
+
+                        Node* cur=search_record(head,phone);
+                        if (cur != NULL) 
+                            print_record(cur);
+                        endScreen();
+                        break;
+                    }
+                    case 2 : 
+                        filterByStatus(head);
+                        endScreen();
+                        break;
+                    case 3:
+                        listByProvince(head);
+                        endScreen();
+                        break;
+                    case 4 :
+                        calculateFee(head);
+                        endScreen();
+                        break;
+                    case 0 :
+                        printf(RED BOLD "   Da dang xuat!\n" RESET);
+                        endScreen();
+                        break;
+                    default :
+                        printf(RED BOLD "\n   Lua chon khong hop le!" RESET);
+                }
+            }while(choice != 0);
+        }
     }
     return 0;
 }

@@ -176,7 +176,13 @@ void menu_search(Node *head) {
             case 1: {
                 char phone[15];
                 printf("\nNhap so dien thoai thue bao can tim: ");
-                scanf("%s",phone);
+                do {
+                    scanf("%s",phone);
+                    if (!validatePhone(phone)) {
+                        printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
+                    }
+                } while (!validatePhone(phone));
+
                 Node* cur=search_record(head,phone);
                 if (cur != NULL) 
                     print_record(cur);
