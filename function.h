@@ -40,5 +40,6 @@ int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]);
 void pronvinceMaxRecord (Node *head);
 void top3RecordMaxFee (Node *head);
 void printTop3ProvinceByFee(Node *head);
+void revenue(Node *head);
 
 #endif

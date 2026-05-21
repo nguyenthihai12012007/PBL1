@@ -1087,6 +1087,28 @@ void printTop3ProvinceByFee(Node *head) {
     printTop3ProvinceFee(stats,count);
 }
 
+void revenue(Node *head) {
+    if(head == NULL) {
+        return ;
+    }
+
+    double sumRevenue = 0;
+    Node* p = head;
+
+    while(p != NULL) {
+        if (p->data.status != 1) {
+            p = p->next;
+            continue;
+        }
+
+        double fee = total_Fee(p->data);
+        sumRevenue += fee;
+        p = p->next;
+    }
+
+    printf("Doanh thu thang nay: %.5f VND\n", sumRevenue);
+}
+
 int main() {
     Node* head = NULL;
     AccountNode *headAccount = NULL;
