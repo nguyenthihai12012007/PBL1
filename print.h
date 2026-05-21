@@ -3,7 +3,9 @@
 
 #include "record.h"
 
+void printSpace();
 void printCenter(const char *text, int width);
+void printMiddle(const char *text);
 void printSystemHeader(const char *title);
 void printSystemFooter();
 void printStatus(int status);
