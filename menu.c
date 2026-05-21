@@ -120,7 +120,7 @@ void menu_manage(Node **head) {
             case 1: {
                 Record newR = inputRecord();
                 addRecord(head,newR);
-                saveToFile("data1.txt", *head);
+                saveRecordToFile("data1.txt", *head);
                 printf("Da them thue bao va luu vao file thanh cong!\n");
                 break;
             }

@@ -11,6 +11,8 @@
 #define False 0
 #define True 1
 
+#define RECORD_FILE "data1.txt"
+
 #define RESET "\033[0m"
 #define BOLD "\033[1m"
 #define BLUE "\033[1;34m"
