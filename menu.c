@@ -363,11 +363,7 @@ void menu_statistical(Node *head) {
                 continue;
             }
             case 2: 
-<<<<<<< HEAD
                 revenueStatistics(head);
-=======
-                revenue(head);
->>>>>>> c7287308fd14f370bb80fd83010471e861bee1e7
                 break;
             case 3:
                 calculateFee(head);
