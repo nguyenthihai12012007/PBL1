@@ -194,8 +194,9 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
         }
     }
 
+    printf("\n");
     printSpace();
-    printf("\n+======================================================+\n");
+    printf("+======================================================+\n");
     printSpace();
     printf("|             TOP 3 TINH CO CUOC CAO NHAT              |\n");
     printSpace();
@@ -249,8 +250,9 @@ void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex) {
 }
 
 void printTop3RecordMaxFee(CompanyFee stats[], int limit) {
+    printf("\n");
     printSpace();
-    printf("\n+=============================================================+\n");
+    printf("+=============================================================+\n");
     printSpace();
     printf("|          TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT           |\n");
     printSpace();
@@ -353,6 +355,7 @@ void showScreen() {
 
 void revenueStatistics(Node *head) {
     if (head == NULL) {
+        printSpace();
         printf(RED BOLD "\nDanh sach thue bao rong!\n" RESET);
         return;
     }
@@ -360,16 +363,25 @@ void revenueStatistics(Node *head) {
     clearScreen();
 
     printf(CYAN BOLD);
+    printSpace();
     printf("+======================================================================+\n");
+    printSpace();
     printf("|                                                                      |\n");
+    printSpace();
     printf("|                         THONG KE DOANH THU                           |\n");
+    printSpace();
     printf("|                                                                      |\n");
+    printSpace();
     printf("+======================================================================+\n");
     printf(RESET);
 
     printf(YELLOW BOLD);
-    printf("\n+----------------------------------------------------------------------+\n");
+    printf("\n");
+    printSpace();
+    printf("+----------------------------------------------------------------------+\n");
+    printSpace();
     printf("| [1] DOANH THU CUA THANG                                              |\n");
+    printSpace();
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
@@ -378,27 +390,39 @@ void revenueStatistics(Node *head) {
     printf(RESET);
 
     printf(YELLOW BOLD);
-    printf("\n+----------------------------------------------------------------------+\n");
+
+    printf("\n");
+    printSpace();
+    printf("+----------------------------------------------------------------------+\n");
+    printSpace();
     printf("| [2] TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT                         |\n");
+    printSpace();
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
     top3RecordMaxFee(head);
 
     printf(YELLOW BOLD);
-    printf("\n+----------------------------------------------------------------------+\n");
+    printf("\n");
+    printSpace();
+    printf("+----------------------------------------------------------------------+\n");
+    printSpace();
     printf("| [3] TOP 3 TINH CO TIEN CUOC CAO NHAT                                 |\n");
+    printSpace();
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
     printTop3ProvinceByFee(head);
 
     printf(CYAN BOLD);
-    printf("\n+======================================================================+\n");
+    printf("\n");
+    printSpace();
+    printf("+======================================================================+\n");
+    printSpace();
     printf("|                         HOAN TAT THONG KE                            |\n");
+    printSpace();
     printf("+======================================================================+\n");
     printf(RESET);
 
-    printf(YELLOW "\nNhan Enter de quay lai..." RESET);
     getchar();
 }
