@@ -1238,6 +1238,7 @@ void printTop3ProvinceByFee(Node *head) {
 
 void revenue(Node *head) {
     if(head == NULL) {
+        printSpace();
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
@@ -1254,14 +1255,12 @@ void revenue(Node *head) {
         p = p->next;
     }
 
-<<<<<<< HEAD
-    printf("| %-35s : %20.0lf VND |\n", "Doanh thu thang nay", sumRevenue);
-    printf("+----------------------------------------------------------------------+\n");
-=======
-    printf("\n");
     printSpace();
-    printf("   Doanh thu thang nay: %.5f VND\n", sumRevenue);
->>>>>>> c7287308fd14f370bb80fd83010471e861bee1e7
+    printf("| %-35s : %20.0lf VND       |\n", "Doanh thu thang nay", sumRevenue);
+    printSpace();
+    printf(YELLOW);
+    printf("+----------------------------------------------------------------------+\n");
+    printf(RESET);
 }
 
 int main() {
