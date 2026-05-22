@@ -295,7 +295,7 @@ void menu_statistical(Node *head) {
                 continue;
             }
             case 2: 
-                //thong ke doanh thu
+                revenueStatistics(head);
                 break;
             case 3:
                 calculateFee(head);

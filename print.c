@@ -269,3 +269,55 @@ void showScreen() {
     clearInputBuffer();
     getchar();
 }
+
+void revenueStatistics(Node *head) {
+    if (head == NULL) {
+        printf(RED BOLD "\nDanh sach thue bao rong!\n" RESET);
+        return;
+    }
+
+    clearScreen();
+
+    printf(CYAN BOLD);
+    printf("+======================================================================+\n");
+    printf("|                                                                      |\n");
+    printf("|                         THONG KE DOANH THU                           |\n");
+    printf("|                                                                      |\n");
+    printf("+======================================================================+\n");
+    printf(RESET);
+
+    printf(YELLOW BOLD);
+    printf("\n+----------------------------------------------------------------------+\n");
+    printf("| [1] DOANH THU CUA THANG                                              |\n");
+    printf("+----------------------------------------------------------------------+\n");
+    printf(RESET);
+
+    printf(GREEN);
+    revenue(head);
+    printf(RESET);
+
+    printf(YELLOW BOLD);
+    printf("\n+----------------------------------------------------------------------+\n");
+    printf("| [2] TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT                         |\n");
+    printf("+----------------------------------------------------------------------+\n");
+    printf(RESET);
+
+    top3RecordMaxFee(head);
+
+    printf(YELLOW BOLD);
+    printf("\n+----------------------------------------------------------------------+\n");
+    printf("| [3] TOP 3 TINH CO TIEN CUOC CAO NHAT                                 |\n");
+    printf("+----------------------------------------------------------------------+\n");
+    printf(RESET);
+
+    printTop3ProvinceByFee(head);
+
+    printf(CYAN BOLD);
+    printf("\n+======================================================================+\n");
+    printf("|                         HOAN TAT THONG KE                            |\n");
+    printf("+======================================================================+\n");
+    printf(RESET);
+
+    printf(YELLOW "\nNhan Enter de quay lai..." RESET);
+    getchar();
+}

@@ -1089,24 +1089,24 @@ void printTop3ProvinceByFee(Node *head) {
 
 void revenue(Node *head) {
     if(head == NULL) {
-        return ;
+        printf(RED BOLD "Danh sach rong!\n" RESET);
+        return;
     }
 
     double sumRevenue = 0;
     Node* p = head;
 
     while(p != NULL) {
-        if (p->data.status != 1) {
-            p = p->next;
-            continue;
+        if (p->data.status == 1) {
+            double fee = total_Fee(p->data);
+            sumRevenue += fee;
         }
 
-        double fee = total_Fee(p->data);
-        sumRevenue += fee;
         p = p->next;
     }
 
-    printf("Doanh thu thang nay: %.5f VND\n", sumRevenue);
+    printf("| %-35s : %20.0lf VND |\n", "Doanh thu thang nay", sumRevenue);
+    printf("+----------------------------------------------------------------------+\n");
 }
 
 int main() {
