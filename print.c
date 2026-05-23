@@ -113,6 +113,20 @@ void print_record(Node* node) {
     printf("\n");
 }
 
+void print_all_record(Node *head) {
+    if(head == NULL) {
+        return;
+    }
+
+    Node* p = head;
+    while(p != NULL) {
+        print_record(p);
+        p = p->next;
+        printf("\n");
+    }
+
+}
+
 void print_account(AccountNode *Node) {
     if(Node == NULL) return ;
 

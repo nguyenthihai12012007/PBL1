@@ -18,7 +18,9 @@ void menu_update(Node* head) {
         printSpace();
         printf("3. Sua so dien thoai\n");
         printSpace();
-        printf("4. Sua trang thai hoat dong\n");
+        printf("4. Sua tinh\n");
+        printSpace();
+        printf("5. Sua trang thai hoat dong\n");
         printSpace();
         printf("0. Thoat\n");
         printSpace();
@@ -52,18 +54,30 @@ void menu_update(Node* head) {
                 printf("Nhap so moi: ");
                 do {
                     scanf("%s", head->data.phone);
-                    if (!validatePhone(head->data.phone)) {
+                    if (!validateLastSix(head->data.phone)) {
                         printSpace();
                         printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
                     }
-                } while (!validatePhone(head->data.phone));
+                } while (!validateLastSix(head->data.phone));
                 getchar();
                 printSpace();
                 printf("Sua so thue bao thanh cong!\n");
                 pauseScreen();
                 break;
 
-            case 4: 
+            case 4:
+                printSpace();
+                printf("Nhap tinh moi: ");
+                fgets(head->data.province.tentinh,sizeof(head->data.province.tentinh),stdin);
+                head->data.province.tentinh[strcspn(head->data.province.tentinh,"\n")]='\0';
+                printSpace();
+                printf("Da sua dia chi thanh cong!\n");
+                updatePhoneAreaCode(&head->data);
+                printf("Thong tin thue bao sau khi sua: \n");
+                print_record(head);
+                pauseScreen();
+                break;
+            case 5: 
                 printSpace();
                 printf("Nhap trang thai moi: ");
                 head->data.status = inputStatus();
@@ -199,6 +213,8 @@ void menu_search(Node *head) {
         printSpace();
         printf("| " YELLOW "4." RESET " %-65s |\n", "Kiem tra trung thue bao");
         printSpace();
+        printf("| " YELLOW "5." RESET " %-65s |\n", "Tat ca thue bao");
+        printSpace();
         printf("| " RED "0." RESET " %-65s |\n", "Quay lai");
         printSystemFooter();
 
@@ -209,7 +225,7 @@ void menu_search(Node *head) {
                 printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
-            if(choice < 0 || choice > 4) {  
+            if(choice < 0 || choice > 5) {  
                 printSpace();              
                 printf(RED BOLD "   Lua chon khong hop le! Nhap lai: " RESET);                
                 continue;            
@@ -244,6 +260,9 @@ void menu_search(Node *head) {
                 break;
             case 4:
                 checkDuplicate(&head);
+                break;
+            case 5:
+                print_all_record(head);
                 break;
             case 0:
                 printf("\n");

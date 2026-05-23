@@ -9,6 +9,7 @@ void toLowerCase(char *str);
 int validatePhone(char phone[]);
 int validateLastSix(char phone[]);
 int validateInput(char str[]);
+void updatePhoneAreaCode(Record *R);
 void loadAccountsToList(const char *filename, AccountNode **head);
 int login(AccountNode *head);
 void addRecord(Node** head, Record R);

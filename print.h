@@ -10,6 +10,7 @@ void printSystemHeader(const char *title);
 void printSystemFooter();
 void printStatus(int status);
 void print_record(Node* node);
+void print_all_record(Node *head);
 void print_account(AccountNode *Node);
 void printHeader();
 void printRow(int stt, Node* p);

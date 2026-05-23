@@ -153,6 +153,16 @@ int validateInput(char str[]) {
     return 1;
 }
 
+void updatePhoneAreaCode(Record *R) {
+    char last[20];
+    char *prefix = findPrefixByProvince(R->province.tentinh);
+
+    strcpy(last, R->phone + 4);
+
+    strcpy(R->phone, prefix);
+    strcat(R->phone, last);
+}
+
 void loadAccountsToList(const char *filename, AccountNode **head) {
     FILE *f = fopen(filename, "r");
 
