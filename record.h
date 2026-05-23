@@ -47,4 +47,11 @@ typedef struct AccountNode {
     struct AccountNode *next;
 } AccountNode;
 
+typedef struct {
+    char province[50];
+    char prefix[5];
+} AreaCode;
+
+
+
 #endif

@@ -37,23 +37,103 @@ AccountNode *createAccountNode(Account A) {
     return newNode;
 }
 
+AreaCode areaCodes[] = {
+    {"an giang", "0901"},
+    {"ba ria vung tau", "0902"},
+    {"bac giang", "0903"},
+    {"bac kan", "0904"},
+    {"bac lieu", "0905"},
+    {"bac ninh", "0906"},
+    {"ben tre", "0907"},
+    {"binh dinh", "0908"},
+    {"binh duong", "0909"},
+    {"binh phuoc", "0910"},
+
+    {"binh thuan", "0911"},
+    {"ca mau", "0912"},
+    {"can tho", "0913"},
+    {"cao bang", "0914"},
+    {"da nang", "0943"},
+    {"dak lak", "0916"},
+    {"dak nong", "0917"},
+    {"dien bien", "0918"},
+    {"dong nai", "0919"},
+    {"dong thap", "0920"},
+
+    {"gia lai", "0921"},
+    {"ha giang", "0922"},
+    {"ha nam", "0923"},
+    {"ha noi", "0924"},
+    {"ha tinh", "0925"},
+    {"hai duong", "0926"},
+    {"hai phong", "0927"},
+    {"hau giang", "0928"},
+    {"hoa binh", "0929"},
+    {"hue", "0975"},
+
+    {"hung yen", "0931"},
+    {"khanh hoa", "0932"},
+    {"kien giang", "0933"},
+    {"kon tum", "0934"},
+    {"lai chau", "0935"},
+    {"lam dong", "0936"},
+    {"lang son", "0937"},
+    {"lao cai", "0938"},
+    {"long an", "0939"},
+    {"nam dinh", "0940"},
+
+    {"nghe an", "0941"},
+    {"ninh binh", "0942"},
+    {"ninh thuan", "0944"},
+    {"phu tho", "0945"},
+    {"phu yen", "0946"},
+    {"quang binh", "0947"},
+    {"quang nam", "0948"},
+    {"quang ngai", "0949"},
+    {"quang ninh", "0950"},
+    {"quang tri", "0951"},
+
+    {"soc trang", "0952"},
+    {"son la", "0953"},
+    {"tay ninh", "0954"},
+    {"thai binh", "0955"}
+};
+
 void toLowerCase(char *str) {
-    for (int i = 0; str[i]; i++) {
-        str[i] = tolower(str[i]);
+    for (int i = 0; str[i] != '\0'; i++) {
+        str[i] = tolower((unsigned char)str[i]);
     }
 }
 
 int validatePhone(char phone[]) {
     int len = strlen(phone);
-    if (len < 9 || len > 11) {
+
+    if (len != 10) {
+        return 0;
+    }
+
+    if (phone[0] != '0') {
+        return 0;
+    }
+
+    for (int i = 0; i < len; i++) {
+        if (phone[i] < '0' || phone[i] > '9') {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+int validateLastSix(char phone[]) {
+    int len = strlen(phone);
+    if (len != 6) {
         return 0;
     }
     for (int i = 0; i < len; i++) {
         if (phone[i] < '0' || phone[i] > '9') 
         return 0;
     }
-    if (phone[0] != '0')
-        return 0;
     return 1;
 }
 
@@ -461,35 +541,81 @@ void addAccount(AccountNode **head) {
     printf(GREEN BOLD "Them tai khoan thanh cong!\n" RESET);
 }
 
+int areaCodeCount = sizeof(areaCodes)/sizeof(areaCodes[0]);
+
+char* findPrefixByProvince(char tentinh[]) {
+    for(int i=0; i < areaCodeCount; i++) {
+        if (strcmp(tentinh,areaCodes[i].province) == 0) {
+            return areaCodes[i].prefix;
+        }
+    }
+    return NULL;
+}
+
 Record inputRecord() {
     Record R;
     clearInputBuffer();
+
+    char lastSix[20];
+    char* prefix = NULL;
     
     printf("\n");
     printSpace();
-    printf("Nhap so dien thoai: ");
+    printf("Nhap tinh cua thue bao: ");
     do {
-        scanf("%s", R.phone);
-        if (!validatePhone(R.phone)) {
+        fgets(R.province.tentinh, sizeof(R.province.tentinh), stdin);
+        R.province.tentinh[strcspn(R.province.tentinh, "\n")] = '\0';
+
+        toLowerCase(R.province.tentinh);
+
+        if(!validateInput(R.province.tentinh)) {
             printSpace();
-            printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
+            printf(RED BOLD "Tinh khong hop le! Vui long nhap lai: " RESET);
+            continue;
         }
-    } while(!validatePhone(R.phone));
+
+        prefix = findPrefixByProvince(R.province.tentinh);
+
+        if(prefix == NULL) {
+            printSpace();
+            printf(RED BOLD "Tinh khong co trong danh sach ma vung! Nhap lai: " RESET);
+        }
+    } while(!validateInput(R.province.tentinh) || prefix == NULL);
+
+    printSpace();
+    printf("Nhap so dien thoai thue bao:");
+    do {
+        scanf("%s", lastSix);
+
+        if(!validateLastSix(lastSix)) {
+            printSpace();
+            printf(RED BOLD "So dien thoai khong hop le! Vui long nhap lai: " RESET);
+        }
+    } while(!validateLastSix(lastSix));
+
+    strcpy(R.phone, prefix);
+    strcat(R.phone, lastSix);
+
+    printSpace();
+    printf(GREEN BOLD "So dien thoai duoc tao: %s\n" RESET, R.phone);
     getchar();
 
     printSpace();
     printf("Nhap ten don vi: ");
+
     do {
-        fgets(R.name,sizeof(R.name),stdin);
-        R.name[strcspn(R.name,"\n")]='\0';
-        if (!validateInput(R.name)) {
+        fgets(R.name, sizeof(R.name), stdin);
+        R.name[strcspn(R.name, "\n")] = '\0';
+
+        if(!validateInput(R.name)) {
             printSpace();
-            printf(RED BOLD "Ten khong hop le!\n" RESET);
+            printf(RED BOLD "Ten khong hop le! Vui long nhap lai: " RESET);
         }
+
     } while(!validateInput(R.name));
 
     printSpace();
-    printf("Nhap dia chi: ");
+    printf("Nhap dia chi thue bao: ");
     do {
         fgets(R.address,sizeof(R.address),stdin);
         R.address[strcspn(R.address,"\n")]='\0';
@@ -498,17 +624,6 @@ Record inputRecord() {
             printf(RED BOLD "Dia chi khong hop le! Vui long nhap lai.\n" RESET);
         }
     } while(!validateInput(R.address));
-
-    printSpace();
-    printf("Nhap tinh: ");
-    do {
-        fgets(R.province.tentinh,sizeof(R.province.tentinh),stdin);
-        R.province.tentinh[strcspn(R.province.tentinh,"\n")]='\0';
-        if(!validateInput(R.province.tentinh)) {
-            printSpace();
-            printf(RED BOLD "Tinh khong hop le! Vui long nhap lai.\n" RESET);
-        }
-    } while(!validateInput(R.province.tentinh));
 
     R.status = inputStatus();
 
