@@ -14,6 +14,8 @@ typedef struct Record {
 
     int onNetMinutes; // noi mang
     int offNetMinutes;
+    int month;
+    int year;
 } Record;
 
 typedef struct Node {
@@ -51,7 +53,5 @@ typedef struct {
     char province[50];
     char prefix[5];
 } AreaCode;
-
-
 
 #endif
