@@ -41,9 +41,9 @@ void exportBill(Node *p);
 void calculateFee(Node *head);
 int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]);
 void pronvinceMaxRecord (Node *head);
-void top3RecordMaxFee (Node *head);
-void printTop3ProvinceByFee(Node *head);
-void revenue(Node *head);
+void top3RecordMaxFee (Node *head, int month, int year);
+void top3ProvinceByFee(Node *head, int month, int year);
+int revenue(Node *head, int month, int year);
 void revenueStatistics(Node *head);
 
 #endif
