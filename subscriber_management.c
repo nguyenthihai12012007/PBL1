@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "function.h"
 #include "menu.h"
@@ -13,7 +14,7 @@
 Node* createNode(Record R) {
     Node* newNode = (Node*)malloc (sizeof(Node));
     if(newNode == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong du bo nho!\n" RESET);
         exit(1);
     }
@@ -26,7 +27,7 @@ AccountNode *createAccountNode(Account A) {
     AccountNode *newNode = (AccountNode *)malloc(sizeof(AccountNode));
 
     if (newNode == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong du bo nho!\n" RESET);
         return NULL;
     }
@@ -153,6 +154,17 @@ int validateInput(char str[]) {
     return 1;
 }
 
+int areaCodeCount = sizeof(areaCodes)/sizeof(areaCodes[0]);
+
+char* findPrefixByProvince(char tentinh[]) {
+    for(int i=0; i < areaCodeCount; i++) {
+        if (strcmp(tentinh,areaCodes[i].province) == 0) {
+            return areaCodes[i].prefix;
+        }
+    }
+    return NULL;
+}
+
 void updatePhoneAreaCode(Record *R) {
     char last[20];
     char *prefix = findPrefixByProvince(R->province.tentinh);
@@ -167,7 +179,7 @@ void loadAccountsToList(const char *filename, AccountNode **head) {
     FILE *f = fopen(filename, "r");
 
     if (f == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file account.txt!\n" RESET);
         return;
     }
@@ -224,12 +236,12 @@ int login(AccountNode *head) {
         printMiddle("+----------------------------------+");
         printf(RESET);
 
-        printSpace();
+        printSpace(65);
         printf("                    Ten dang nhap : ");
         fgets(username, sizeof(username), stdin);
         username[strcspn(username, "\n")] = '\0';
 
-        printSpace();
+        printSpace(65);
         printf("                    Mat khau      : ");
         fgets(password, sizeof(password), stdin);
         password[strcspn(password, "\n")] = '\0';
@@ -246,16 +258,16 @@ int login(AccountNode *head) {
 
                 if (p->A.role == ROLE_ADMIN) {
                     printf("\n");
-                    printSpace();
+                    printSpace(65);
                     printf(GREEN BOLD "   Dang nhap thanh cong!\n");
-                    printSpace();
+                    printSpace(65);
                     printf(GREEN BOLD "   Xin chao admin : %s\n\n" RESET, username);
                     return ROLE_ADMIN;
                 } else if (p->A.role == ROLE_STAFF) {
                     printf("\n");
                     printSpace();
                     printf(GREEN BOLD "   Dang nhap thanh cong!\n");
-                    printSpace();
+                    printSpace(65);
                     printf(GREEN BOLD "   Xin chao nhan vien : %s\n\n" RESET, username);
                     return ROLE_STAFF;
                 }
@@ -265,7 +277,7 @@ int login(AccountNode *head) {
         }
 
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "   Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n\n" RESET);
         pauseScreen();
 
@@ -290,7 +302,7 @@ void addRecord(Node** head, Record R) {
 void readFile(const char *filename, Node **head) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
@@ -372,16 +384,43 @@ void readFile(const char *filename, Node **head) {
             continue;
         }
 
+        token = strtok(NULL, "|");
+        if (token == NULL) {
+            invalid++;
+            continue;
+        }
+        temp.month = atoi(token);
+
+        if (temp.month < 1 || temp.month > 12) {
+            invalid++;
+            continue;
+        }
+        
+        token = strtok(NULL, "|");
+        if (token == NULL) {
+            invalid++;
+            continue;
+        }
+        temp.year = atoi(token);
+
+        if (temp.year < 2000) {
+            invalid++;
+            continue;
+        }
+
         addRecord(head, temp);
         valid++;
     }
 
     fclose(f);
-    printSpace();
+    printf("\n");
+    printSpace(65);
     printf("Doc du lieu thanh cong!\n");
-    printSpace();
+    printSpace(65);
+    printf("So thue bao doc vao: %d dong\n", valid + invalid);
+    printSpace(65);
     printf("Hop le: %d dong\n", valid);
-    printSpace();
+    printSpace(65);
     printf("Khong hop le: %d dong\n", invalid);
 }
 
@@ -389,7 +428,7 @@ void saveAccountToFile(const char *filename,AccountNode *head) {
     FILE *f = fopen(filename, "w");
 
     if (f == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file de ghi!\n" RESET);
         return;
     }
@@ -408,6 +447,7 @@ void saveRecordToFile(const char *filename, Node *head) {
     FILE *f = fopen(filename, "w");
 
     if (f == NULL) {
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file de ghi!\n" RESET);
         return;
     }
@@ -415,14 +455,16 @@ void saveRecordToFile(const char *filename, Node *head) {
     Node *p = head;
 
     while (p != NULL) {
-        fprintf(f, "%s|%s|%s|%s|%d|%d|%d\n",
+        fprintf(f, "%s|%s|%s|%s|%d|%d|%d|%d|%d\n",
                 p->data.province.tentinh,
                 p->data.name,
                 p->data.address,
                 p->data.phone,
                 p->data.status,
                 p->data.onNetMinutes,
-                p->data.offNetMinutes);
+                p->data.offNetMinutes,
+                p->data.month,
+                p->data.year);
 
         p = p->next;
     }
@@ -437,7 +479,7 @@ void clearInputBuffer() {
 
 void pauseScreen() {
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhan Enter de tiep tuc...");
     clearInputBuffer();
     getchar(); 
@@ -459,21 +501,21 @@ void endScreen() {
 int inputStatus() {
     int choice;
     do {
-        printSpace();
+        printSpace(65);
         printf("Chon trang thai thue bao:\n");
-        printSpace();
+        printSpace(65);
         printf("1. Dang hoat dong\n");
-        printSpace();
+        printSpace(65);
         printf("2. Tam khoa\n");
-        printSpace();
+        printSpace(65);
         printf("3. Da huy\n");
-        printSpace();
+        printSpace(65);
         printf("Nhap lua chon: ");
         scanf("%d", &choice);
         clearInputBuffer();
 
         if (choice < 1 || choice > 3) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Lua chon khong hop le! Vui long nhap lai: \n" RESET);
         }
     } while (choice < 1 || choice > 3);
@@ -486,26 +528,26 @@ Account inputAccount() {
     clearInputBuffer();
 
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap ten dang nhap: ");
     scanf("%s", A.username);
     getchar();
 
-    printSpace();
+    printSpace(65);
     printf("Nhap mat khau: ");
     scanf("%s", A.password);
     getchar();
 
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("  Chon chuc vu\n");
-    printSpace();
+    printSpace(65);
     printf("----------------\n");
-    printSpace();
+    printSpace(65);
     printf("| 1. Admin     |\n");
-    printSpace();
+    printSpace(65);
     printf("| 2. Nhan vien |\n");
-    printSpace();
+    printSpace(65);
     printf("----------------\n");
     int role;
     do {
@@ -547,19 +589,8 @@ void addAccount(AccountNode **head) {
 
     saveAccountToFile("account.txt", *head);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf(GREEN BOLD "Them tai khoan thanh cong!\n" RESET);
-}
-
-int areaCodeCount = sizeof(areaCodes)/sizeof(areaCodes[0]);
-
-char* findPrefixByProvince(char tentinh[]) {
-    for(int i=0; i < areaCodeCount; i++) {
-        if (strcmp(tentinh,areaCodes[i].province) == 0) {
-            return areaCodes[i].prefix;
-        }
-    }
-    return NULL;
 }
 
 Record inputRecord() {
@@ -570,7 +601,7 @@ Record inputRecord() {
     char* prefix = NULL;
     
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap tinh cua thue bao: ");
     do {
         fgets(R.province.tentinh, sizeof(R.province.tentinh), stdin);
@@ -579,7 +610,7 @@ Record inputRecord() {
         toLowerCase(R.province.tentinh);
 
         if(!validateInput(R.province.tentinh)) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Tinh khong hop le! Vui long nhap lai: " RESET);
             continue;
         }
@@ -587,12 +618,12 @@ Record inputRecord() {
         prefix = findPrefixByProvince(R.province.tentinh);
 
         if(prefix == NULL) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Tinh khong co trong danh sach ma vung! Nhap lai: " RESET);
         }
     } while(!validateInput(R.province.tentinh) || prefix == NULL);
 
-    printSpace();
+    printSpace(65);
     printf("Nhap so dien thoai thue bao:");
     do {
         scanf("%s", lastSix);
@@ -606,11 +637,11 @@ Record inputRecord() {
     strcpy(R.phone, prefix);
     strcat(R.phone, lastSix);
 
-    printSpace();
+    printSpace(65);
     printf(GREEN BOLD "So dien thoai duoc tao: %s\n" RESET, R.phone);
     getchar();
 
-    printSpace();
+    printSpace(65);
     printf("Nhap ten don vi: ");
 
     do {
@@ -624,7 +655,7 @@ Record inputRecord() {
 
     } while(!validateInput(R.name));
 
-    printSpace();
+    printSpace(65);
     printf("Nhap dia chi thue bao: ");
     do {
         fgets(R.address,sizeof(R.address),stdin);
@@ -637,7 +668,7 @@ Record inputRecord() {
 
     R.status = inputStatus();
 
-    printSpace();
+    printSpace(65);
     printf("Nhap so phut noi mang: ");
     do {
         scanf("%d", &R.onNetMinutes);
@@ -647,7 +678,7 @@ Record inputRecord() {
         }
     } while (R.onNetMinutes < 0);
 
-    printSpace();
+    printSpace(65);
     printf("Nhap so phut ngoai mang: ");
     do {
         scanf("%d", &R.offNetMinutes);
@@ -657,13 +688,33 @@ Record inputRecord() {
         }
     } while (R.offNetMinutes < 0);
 
+    printSpace(65);
+    printf("Nhap thang: ");
+    do {
+        scanf("%d", &R.month);
+        if (R.month < 1 || R.month > 12) {
+            printSpace();
+            printf(RED BOLD "Thang khong hop le! Nhap lai: " RESET);
+        }
+    } while (R.month < 1 || R.month > 12);
+
+    printSpace(65);
+    printf("Nhap nam: ");
+    do {
+        scanf("%d", &R.year);
+        if (R.year < 2000) {
+            printSpace();
+            printf(RED BOLD "Nam khong hop le! Nhap lai: " RESET);
+        }
+    } while (R.year < 2000);
+
     return R;
 }
 
 Node* search_record(Node* head,char phone[15]) {
     if(head == NULL) {
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return NULL;
     }
@@ -672,13 +723,13 @@ Node* search_record(Node* head,char phone[15]) {
 
     while(cur!=NULL) {
         if(strcmp(cur->data.phone,phone)==0){
-            printSpace();
+            printSpace(65);
             printf("Da tim thay thue bao!\n\n");
             return cur;
         }
         cur=cur->next;
     }
-    printSpace();
+    printSpace(65);
     printf(RED BOLD "Khong tim thay thue bao!\n" RESET);
     return NULL;
 }
@@ -702,7 +753,7 @@ AccountNode* search_account(AccountNode *head,char userName[30]) {
 void updateAccount(AccountNode *head) {
     if(head == NULL) {
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return ;
     }
@@ -712,13 +763,13 @@ void updateAccount(AccountNode *head) {
 
     while(found == NULL) {
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf("Nhap tai khoan can sua: ");
         scanf("%s",userName);
 
         found = search_account(head,userName);
         if(found == NULL) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Khong tim thay tai khoan!\n" RESET);
         }
     }
@@ -728,7 +779,7 @@ void updateAccount(AccountNode *head) {
 void updateRecord(Node* head) {
     if(head == NULL) {
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong.\n" RESET);
         return ;
     }
@@ -738,17 +789,17 @@ void updateRecord(Node* head) {
 
     while(found==NULL) {
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf("Nhap so dien thoai thue bao can sua: ");
         scanf("%s",phone);
         if (!validatePhone(phone)) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "So dien thoai khong hop le!\n" RESET);
             return;
         }
         found=search_record(head,phone);
         if(found==NULL) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Khong tim thay thue bao! Vui long nhap lai: \n" RESET);
         }
     }
@@ -756,7 +807,7 @@ void updateRecord(Node* head) {
     menu_update(found);
     saveRecordToFile(RECORD_FILE,head);
 
-    printSpace();
+    printSpace(65);
     printf("Cap nhat thanh cong!\n");
 
 }
@@ -764,7 +815,7 @@ void updateRecord(Node* head) {
 void deleteAccount(AccountNode **head) {
     char userName[30];
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap tai khoan can xoa: ");
     scanf("%s", userName);
     printf("\n");
@@ -778,7 +829,7 @@ void deleteAccount(AccountNode **head) {
     }
 
     if(p == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong tim thay tai khoan can xoa!\n" RESET);
         return ;
     }
@@ -786,11 +837,11 @@ void deleteAccount(AccountNode **head) {
     print_account(p);
 
     char confirm;
-    printSpace();
+    printSpace(65);
     printf("Xac nhan xoa lien he nay? (y/n): ");
     scanf(" %c", &confirm);
     if (confirm != 'y' && confirm != 'Y') {
-        printSpace();
+        printSpace(65);
         printf("Da huy xoa!\n");
         return;
     }
@@ -802,14 +853,14 @@ void deleteAccount(AccountNode **head) {
     }
     free(p);
     saveAccountToFile("account.txt", *head);
-    printSpace();
+    printSpace(65);
     printf("Xoa thanh cong!\n");
 }
 
 void deleteRecord(Node **head) {
     char phone[15];
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap so dien thoai can xoa: ");
     scanf("%s", phone);
 
@@ -822,7 +873,7 @@ void deleteRecord(Node **head) {
     }
 
     if (p == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong tim thay so dien thoai!\n" RESET);
         return;
     }
@@ -830,11 +881,11 @@ void deleteRecord(Node **head) {
     print_record(p);
 
     char confirm;
-    printSpace();
+    printSpace(65);
     printf("Xac nhan xoa lien he nay? (y/n): ");
     scanf(" %c", &confirm);
     if (confirm != 'y' && confirm != 'Y') {
-        printSpace();
+        printSpace(65);
         printf("Da huy xoa!\n");
         return;
     }
@@ -847,14 +898,14 @@ void deleteRecord(Node **head) {
 
     free(p);
     saveRecordToFile(RECORD_FILE, *head);
-    printSpace();
+    printSpace(65);
     printf("Xoa thanh cong!\n");
 }
 
 void listByProvince(Node* head) {
     if (head == NULL) { 
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET); 
         return; 
     } 
@@ -865,7 +916,7 @@ void listByProvince(Node* head) {
     int stt = 1;
 
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap tinh can tim: ");
     clearInputBuffer();
 
@@ -886,13 +937,13 @@ void listByProvince(Node* head) {
         p = p->next;
     }
     if (!found) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong tim thay tinh nay!\n" RESET);
         return;
     }
     printf("\n");
-    printSpace();
-    printf("                                     DANH SACH THEO TINH: %s\n", province);
+    printSpace(46);
+    printf("                                         DANH SACH THEO TINH: %s\n", province);
     p = head;
     printHeader();
     while (p != NULL) {
@@ -928,13 +979,13 @@ double total_Fee(Record R) {
 
 void exportReport(Node *head) {
     if (head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
     FILE *f = fopen("report.txt", "w");
     if (f == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
@@ -986,24 +1037,24 @@ void exportReport(Node *head) {
     }
     fprintf(f, "+==================================================+\n");
     fclose(f);
-    printSpace();
+    printSpace(65);
     printf("   Da xuat bao cao ra file report.txt!\n");
 }
 
 void statisticsByProvince(Node* head) {
     if (head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
     printf("\n");
-    printSpace();
+    printSpace(77);
     printf("        THONG KE SO THUE BAO THEO TINH\n");
-    printSpace();
+    printSpace(77);
     printf("+-----+----------------------+----------------+\n");
-    printSpace();
+    printSpace(77);
     printf("| %-3s | %-20s | %-14s |\n", "STT", "Tinh", "So thue bao");
-    printSpace();
+    printSpace(77);
     printf("+-----+----------------------+----------------+\n");
     int total = 0;
     int stt = 1;
@@ -1029,15 +1080,15 @@ void statisticsByProvince(Node* head) {
                 q = q->next;
             }
 
-            printSpace();
+            printSpace(77);
             printf("| %-3d | %-20.20s | %-14d |\n", stt, p->data.province.tentinh, count);
             stt++;
         }
         p = p->next;
     }
-    printSpace();
+    printSpace(77);
     printf("+-----+----------------------+----------------+\n");
-    printSpace();
+    printSpace(77);
     printf("Tong so thue bao: %d\n", total);
 }
 
@@ -1053,18 +1104,18 @@ void checkDuplicate(Node** head) {
         while(q != NULL) {
             if(strcmp(p->data.province.tentinh,q->data.province.tentinh) == 0 &&
                 strcmp(p->data.phone,q->data.phone) == 0) {
-                    printSpace();
+                    printSpace(65);
                     printf("Phat hien thue bao trung so dien thoai trong tinh %s:\n",p->data.province.tentinh);
                     found = 1;
-                    printSpace();
+                    printSpace(65);
                     printf("Thue bao 1:\n");
                     print_record(q);
                     printf("\n");
-                    printSpace();
+                    printSpace(65);
                     printf("Thue bao 2:\n");
                     print_record(p);
                     printf("\n");
-                    printSpace();
+                    printSpace(65);
                     printf("Xoa thanh cong thue bao 2\n");
                     printf("\n");
 
@@ -1080,14 +1131,14 @@ void checkDuplicate(Node** head) {
         p = p->next;
     }
     if(found == 0) {
-        printSpace();
+        printSpace(65);
         printf("Khong tim thay thue bao trung!");
     }
 }
 
 void filterByStatus(Node *head) {
     if (head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
@@ -1097,8 +1148,8 @@ void filterByStatus(Node *head) {
     int stt = 1;
     int found = 0;
     printf("\n");
-    printSpace();
-    printf("                                   DANH SACH THUE BAO THEO TRANG THAI\n");
+    printSpace(46);
+    printf("                                       DANH SACH THUE BAO THEO TRANG THAI\n");
     printHeader();
     while (p != NULL) {
         if (p->data.status == status) {
@@ -1110,7 +1161,7 @@ void filterByStatus(Node *head) {
     }
     printFooter();
     if (!found) {
-        printSpace();
+        printSpace(65);
         printf("Khong tim thay thue bao nao phu hop!\n");
     }
 }
@@ -1119,7 +1170,7 @@ void readFileByUser(Node **head) {
     char filename[100];
 
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap ten file muon doc: ");
     scanf("%s", filename);
 
@@ -1128,7 +1179,7 @@ void readFileByUser(Node **head) {
 
 void exportBill(Node *p) {
     if (p == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong ton tai thue bao!\n" RESET);
         return;
     }
@@ -1136,7 +1187,7 @@ void exportBill(Node *p) {
     sprintf(filename, "bill_%s.txt", p->data.phone);
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
@@ -1161,20 +1212,20 @@ void exportBill(Node *p) {
     fprintf(f, "TONG THANH TOAN : %.0lf VND\n", total);
     fprintf(f, "=====================================================\n");
     fclose(f);
-    printSpace();
+    printSpace(65);
     printf("Da xuat bill ra file %s\n", filename);
 }
 
 void calculateFee(Node *head) {
     if (head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
 
     char phone[15];
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Nhap so dien thoai can tinh cuoc: ");
     scanf("%14s", phone);
 
@@ -1184,59 +1235,59 @@ void calculateFee(Node *head) {
     }
 
     if (found->data.status == 2) {
-        printSpace();
+        printSpace(65);
         printf("=====================================\n");
-        printSpace();
+        printSpace(65);
         printf("         THUE BAO TAM KHOA\n");
-        printSpace();
+        printSpace(65);
         printf("Tong cuoc : 0 VND\n");
-        printSpace();
+        printSpace(65);
         printf("Ly do     : Thue bao dang tam khoa\n");
-        printSpace();
+        printSpace(65);
         printf("=====================================\n");
 
         return;
     }
 
     if (found->data.status == 3) {
-        printSpace();
+        printSpace(65);
         printf("=====================================\n");
-        printSpace();
+        printSpace(65);
         printf("         THUE BAO DA HUY\n");
-        printSpace();
+        printSpace(65);
         printf("Tong cuoc : 0 VND\n");
-        printSpace();
+        printSpace(65);
         printf("Ly do     : Thue bao da huy\n");
-        printSpace();
+        printSpace(65);
         printf("=====================================\n");
 
         return;
     }
 
     double total = total_Fee(found->data);
-    printSpace();
-    printf("=====================================\n");
-    printSpace();
+    printSpace(65);
+    printf("=======================================\n");
+    printSpace(65);
     printf("           THONG TIN CUOC\n");
-    printSpace();
-    printf("=====================================\n");
-    printSpace();
+    printSpace(65);
+    printf("=======================================\n");
+    printSpace(65);
     printf("So dien thoai : %s\n", found->data.phone);
-    printSpace();
+    printSpace(65);
     printf("Ten don vi    : %s\n", found->data.name);
-    printSpace();
+    printSpace(65);
     printf("Tong cuoc     : %.0lf VND\n", total);
-    printSpace();
-    printf("=====================================\n");
+    printSpace(65);
+    printf("=======================================\n");
     char choice;
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("Ban co muon in bill khong? (y/n): ");
     scanf(" %c", &choice);
     if (choice == 'y' || choice == 'Y') {
         printBill(found);
         printf("\n");
-        printSpace();
+        printSpace(65);
         printf("Ban co muon xuat bill ra file khong? (y/n): ");
         scanf(" %c", &choice);
         if (choice == 'y' || choice == 'Y') {
@@ -1294,9 +1345,9 @@ void pronvinceMaxRecord (Node *head) {
     printProvinceMaxRecord(stats, count, maxIndex);
 }
 
-void top3RecordMaxFee (Node *head) {
+void top3RecordMaxFee (Node *head, int month, int year) {
     if(head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
         return;
     }
@@ -1307,6 +1358,10 @@ void top3RecordMaxFee (Node *head) {
     Node *p = head;
     
     while (p != NULL) {
+        if (p->data.status != 1 || p->data.month != month || p->data.year != year) {
+            p = p->next;
+            continue;
+        }
         strcpy(stats[count].companyName, p->data.name);
         stats[count].totalFee = total_Fee(p->data);
         count++;
@@ -1326,7 +1381,7 @@ void top3RecordMaxFee (Node *head) {
     printTop3RecordMaxFee(stats, limit);
 }
 
-void printTop3ProvinceByFee(Node *head) {
+void top3ProvinceByFee(Node *head, int month, int year) {
     if (head == NULL) {
         return ;
     }
@@ -1337,7 +1392,7 @@ void printTop3ProvinceByFee(Node *head) {
     Node* p = head;
 
     while(p!=NULL) {
-        if (p->data.status != 1) {
+        if (p->data.status != 1 || p->data.month != month || p->data.year != year) {
             p = p->next;
             continue;
         }
@@ -1358,34 +1413,53 @@ void printTop3ProvinceByFee(Node *head) {
         p=p->next;
     }
 
-    printTop3ProvinceFee(stats,count);
+    printTop3ProvinceFee(stats, count);
 }
 
-void revenue(Node *head) {
+int revenue(Node *head, int month, int year) {
     if(head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
-        return;
+        return 0;
     }
 
     double sumRevenue = 0;
+    int totalOnNet = 0;
+    int totalOffNet = 0;
+    int found = 0;
+
     Node* p = head;
 
     while(p != NULL) {
-        if (p->data.status == 1) {
+        if (p->data.status == 1 && p->data.month == month && p->data.year == year) {
+            found = 1;
             double fee = total_Fee(p->data);
             sumRevenue += fee;
+            totalOnNet += p->data.onNetMinutes;
+            totalOffNet += p->data.offNetMinutes;
         }
 
         p = p->next;
     }
 
-    printSpace();
-    printf("| %-35s : %20.0lf VND       |\n", "Doanh thu thang nay", sumRevenue);
-    printSpace();
+    if (!found) {
+        printSpace(65);
+        printf(RED BOLD "   Khong co du lieu doanh thu trong thang %d/%d!\n" RESET, month, year);
+        return 0;
+    }
+
+    printSpace(65);
+    printf("| %-45s | %16.0lf VND |\n", "Doanh thu thang nay", sumRevenue);
+    printSpace(65);
+    printf("| %-45s | %15d phut |\n", "Tong phut noi mang", totalOnNet);
+    printSpace(65);
+    printf("| %-45s | %15d phut |\n", "Tong phut ngoai mang", totalOffNet);
+    printSpace(65);
     printf(YELLOW);
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
+
+    return 1;
 }
 
 int main() {
@@ -1408,7 +1482,7 @@ int main() {
                 menu_admin();
 
                 if (scanf("%d", &choice) != 1) { 
-                    printSpace();  
+                    printSpace(65);  
                     printf("Loi: Vui long chi nhap chu so!\n");
                     while(getchar() != '\n');
                     continue;
@@ -1432,14 +1506,14 @@ int main() {
                         break;
 
                     case 0:
-                        printSpace();
+                        printSpace(65);
                         printf(RED BOLD "   Da dang xuat!\n" RESET);
                         endScreen();
                         break;
 
                     default:
                         printf("\n");
-                        printSpace();
+                        printSpace(65);
                         printf(RED BOLD "   Lua chon khong hop le!" RESET);
                 }
 
@@ -1452,7 +1526,7 @@ int main() {
                 menu_staff();
 
                 if (scanf("%d", &choice) != 1) {  
-                    printSpace(); 
+                    printSpace(65); 
                     printf("Loi: Vui long chi nhap chu so!\n");
                     while(getchar() != '\n');
                     continue;
@@ -1462,13 +1536,13 @@ int main() {
                     case 1: {
                         char phone[15];
                         printf("\n");
-                        printSpace();
+                        printSpace(65);
                         printf("Nhap so dien thoai thue bao can tim: ");
 
                         do {
                             scanf("%s", phone);
                             if (!validatePhone(phone)) {
-                                printSpace();
+                                printSpace(65);
                                 printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
                             }
                         } while (!validatePhone(phone));
@@ -1499,14 +1573,14 @@ int main() {
                         break;
 
                     case 0:
-                        printSpace();
+                        printSpace(65);
                         printf(RED BOLD "   Da dang xuat!\n" RESET);
                         endScreen();
                         break;
 
                     default:
                         printf("\n");
-                        printSpace();
+                        printSpace(65);
                         printf(RED BOLD "   Lua chon khong hop le!" RESET);
                 }
 
