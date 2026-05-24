@@ -8,8 +8,8 @@
 #include "function.h"
 #include "constants.h"
 
-void printSpace() {
-    for(int i = 0; i < 65; i++) {
+void printSpace(int n) {
+    for(int i = 0; i < n; i++) {
         printf(" ");
     }
 }
@@ -39,6 +39,45 @@ void printMiddle(const char *text) {
     printf("%s\n", text);
 }
 
+void showScreen() {
+    printf(YELLOW);
+    printSpace(65);
+    printf("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
+    printSpace(65);
+    printf("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
+    printSpace(65);
+    printf("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
+    printSpace(65);
+    printf("██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
+    printSpace(65);
+    printf("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
+    printSpace(65);
+    printf(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
+    printf(RESET);
+    printf("\n");
+    printf(BRIGHT_GREEN);
+    printSpace(65);
+    printf("                  Loading...\n");
+    for(int i = 0; i <= 20; i++) {
+        printf("\r                                                                                   [");
+        for(int j = 0; j < i; j++) {
+            printf("█");
+        }
+        for(int j = i; j < 20; j++) {
+            printf(" ");
+        }
+        printf("] %d%%", i * 5);
+        fflush(stdout);
+        usleep(150000);
+    }
+    printf(RESET);
+    printf("\n\n");
+    printSpace(65);
+    printf("                  Nhan Enter de tiep tuc...");
+    clearInputBuffer();
+    //getchar();
+}
+
 void printSystemHeader(const char *title) {
     clearScreen();
     printf(BLUE BOLD);
@@ -53,7 +92,7 @@ void printSystemHeader(const char *title) {
     struct tm *local = localtime(&t);
     printf(YELLOW);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("   Thoi gian: %02d:%02d:%02d\n",
            local->tm_hour,
            local->tm_min,
@@ -63,7 +102,7 @@ void printSystemHeader(const char *title) {
     printf(CYAN BOLD);
     printf("\n");
     printMiddle("+======================================================================+");
-    printSpace();
+    printSpace(65);
     printCenter(title, 70);
     printMiddle("+======================================================================+");
     printf(RESET);
@@ -75,7 +114,7 @@ void printSystemFooter() {
     printf(RESET);
     printf(GREEN BOLD);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("   Nhap lua chon cua ban: ");
     printf(RESET);
 }
@@ -99,53 +138,37 @@ void printStatus(int status) {
 void print_record(Node* node) {
     if (node == NULL) return;
 
-    printSpace();
+    printSpace(65);
     printf("Ten: %s\n", node->data.name);
-    printSpace();
+    printSpace(65);
     printf("So dien thoai: %s\n", node->data.phone);
-    printSpace();
+    printSpace(65);
     printf("Dia chi: %s\n", node->data.address);
-    printSpace();
+    printSpace(65);
     printf("Tinh: %s\n", node->data.province.tentinh);
-    printSpace();
+    printSpace(65);
     printf("Trang thai: ");
     printStatus(node->data.status);
     printf("\n");
 }
 
-void print_all_record(Node *head) {
-    if(head == NULL) {
-        return;
-    }
-
-    Node* p = head;
-    while(p != NULL) {
-        print_record(p);
-        p = p->next;
-        printf("\n");
-    }
-
-}
-
 void print_account(AccountNode *Node) {
     if(Node == NULL) return ;
 
-    printSpace();
+    printSpace(65);
     printf("Ten dang nhap: %s\n",Node->A.username);
-    printSpace();
+    printSpace(65);
     printf("Mat khau: %s\n",Node->A.username);
-    printSpace();
+    printSpace(65);
     printf("Chuc vu: %d\n",Node->A.role);
     printf("\n");
 }
 
 void printHeader() {
-    printSpace();
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
-    printSpace();
+    printMiddle("+-----+-------------------------------------+--------------+----------------------+------------+------------+");
+    printSpace(46);
     printf("| %-3s | %-35s | %-12s | %-20s | %-10s | %-10s |\n", "STT", "Ten", "Dien thoai", "Dia chi", "Tinh", "Trang thai");
-    printSpace();
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
+    printMiddle("+-----+-------------------------------------+--------------+----------------------+------------+------------+");
 }
 
 void printRow(int stt, Node* p) {
@@ -158,23 +181,24 @@ void printRow(int stt, Node* p) {
         default: strcpy(status, "Khong ro");
     }
 
-    printSpace();
+    printSpace(46);
     printf("| %-3d | %-35.35s | %-12s | %-20.20s | %-10.10s | %-10s |\n", stt, p->data.name, p->data.phone, p->data.address, p->data.province.tentinh, status);
 }
 
 void printFooter() {
-    printSpace();
-    printf("+-----+-------------------------------------+--------------+----------------------+------------+------------+\n");
+    printMiddle("+-----+-------------------------------------+--------------+----------------------+------------+------------+");
 }
 
-void displayAll(Node* head) {
+void print_all_record(Node *head) {
     if (head == NULL) {
-        printf("Danh sach rong!\n");
+        printSpace(65);
+        printf(RED BOLD "   Danh sach rong!\n" RESET);
         return;
     }
 
-    printSpace();
-    printf("\n                                          DANH SACH DANH BA\n");
+    printf("\n");
+    printSpace(46);
+    printf("                                             DANH SACH DANH BA\n");
     printHeader();
 
     Node *p = head;
@@ -185,6 +209,7 @@ void displayAll(Node* head) {
         p = p->next;
         stt++;
     }
+
     printFooter();
 }
 
@@ -209,83 +234,83 @@ void printTop3ProvinceFee(ProvinceFee stats[], int count) {
     }
 
     printf("\n");
-    printSpace();
-    printf("+======================================================+\n");
-    printSpace();
-    printf("|             TOP 3 TINH CO CUOC CAO NHAT              |\n");
-    printSpace();
-    printf("+=====+==========================+=====================+\n");
-    printSpace();
-    printf("| STT | Tinh/Thanh               | Tong cuoc (VND)     |\n");
-    printSpace();
-    printf("+=====+==========================+=====================+\n");
+    printSpace(65);
+    printf("+======================================================================+\n");
+    printSpace(65);
+    printf("|                     TOP 3 TINH CO CUOC CAO NHAT                      |\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
+    printSpace(65);
+    printf("| STT | Tinh/Thanh                              |    Tong cuoc (VND)   |\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
 
     if (first != -1) {
-        printSpace();
-        printf("| %-3d | %-24s | %-19.0lf |\n",
+        printSpace(65);
+        printf("| %-3d | %-39s | %-20.0lf |\n",
                1,
                stats[first].provinceName,
                stats[first].totalFee);
     }
 
     if (second != -1) {
-        printSpace();
-        printf("| %-3d | %-24s | %-19.0lf |\n",
+        printSpace(65);
+        printf("| %-3d | %-39s | %-20.0lf |\n",
                2,
                stats[second].provinceName,
                stats[second].totalFee);
     }
 
     if (third != -1) {
-        printSpace();
-        printf("| %-3d | %-24s | %-19.0lf |\n",
+        printSpace(65);
+        printf("| %-3d | %-39s | %-20.0lf |\n",
                3,
                stats[third].provinceName,
                stats[third].totalFee);
     }
-    printSpace();
-    printf("+=====+==========================+=====================+\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
 }
 
 void printProvinceMaxRecord(ProvinceStat stats[], int count, int maxIndex) {
     printf("\n");
-    printSpace();
+    printSpace(79);
     printf("+===========================================+\n");
-    printSpace();
+    printSpace(79);
     printf("|        TINH CO NHIEU THUE BAO NHAT        |\n");
-    printSpace();
+    printSpace(79);
     printf("+===========================================+\n");
-    printSpace();
+    printSpace(79);
     printf("| Tinh thanh  : %-27s |\n", stats[maxIndex].province_name);
-    printSpace();
+    printSpace(79);
     printf("| So thue bao : %-27d |\n", stats[maxIndex].total);
-    printSpace();
+    printSpace(79);
     printf("+===========================================+\n");
 }
 
 void printTop3RecordMaxFee(CompanyFee stats[], int limit) {
     printf("\n");
-    printSpace();
-    printf("+=============================================================+\n");
-    printSpace();
-    printf("|          TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT           |\n");
-    printSpace();
-    printf("+=====+=====================================+=================+\n");
-    printSpace();
-    printf("| STT |          Ten doanh nghiep           | Tong cuoc (VND) |\n");
-    printSpace();
-    printf("+=====+=====================================+=================+\n");
+    printSpace(65);
+    printf("+======================================================================+\n");
+    printSpace(65);
+    printf("|              TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT                |\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
+    printSpace(65);
+    printf("| STT |            Ten doanh nghiep             |    Tong cuoc (VND)   |\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
     for (int i = 0; i < limit; i++) {
-        printSpace();
-        printf("| %-3d | %-35s | %-15.0lf |\n", i+1, stats[i].companyName, stats[i].totalFee);
+        printSpace(65);
+        printf("| %-3d | %-39s | %-20.0lf |\n", i+1, stats[i].companyName, stats[i].totalFee);
     }
-    printSpace();
-    printf("+=====+=====================================+=================+\n");
+    printSpace(65);
+    printf("+=====+=========================================+======================+\n");
 }
 
 void printBill(Node *p) {
     if (p == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "Khong ton tai thue bao!\n" RESET);
         return;
     }
@@ -295,146 +320,118 @@ void printBill(Node *p) {
     double vat = subtotal * VAT;
     double total = total_Fee(p->data);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("=====================================================\n");
-    printSpace();
+    printSpace(65);
     printf("                 HOA DON CUOC DIEN THOAI\n");
-    printSpace();
+    printSpace(65);
     printf("=====================================================\n");
-    printSpace();
+    printSpace(65);
     printf("Ten don vi      : %s\n", p->data.name);
-    printSpace();
+    printSpace(65);
     printf("So dien thoai   : %s\n", p->data.phone);
-    printSpace();
+    printSpace(65);
     printf("Tinh/Thanh      : %s\n", p->data.province.tentinh);
-    printSpace();
+    printSpace(65);
     printf("-----------------------------------------------------\n");
-    printSpace();
+    printSpace(65);
     printf("Noi mang        : %4d phut x %d = %.0lf VND\n", p->data.onNetMinutes, On_net_rate, onNetFee);
-    printSpace();
+    printSpace(65);
     printf("Ngoai mang      : %4d phut x %d = %.0lf VND\n", p->data.offNetMinutes, Off_net_rate, offNetFee);
-    printSpace();
+    printSpace(65);
     printf("-----------------------------------------------------\n");
-    printSpace();
+    printSpace(65);
     printf("Tam tinh        : %.0lf VND\n", subtotal);
-    printSpace();
+    printSpace(65);
     printf("VAT (10%%)       : %.0lf VND\n", vat);
-    printSpace();
+    printSpace(65);
     printf("=====================================================\n");
-    printSpace();
+    printSpace(65);
     printf("TONG THANH TOAN : %.0lf VND\n", total);
-    printSpace();
+    printSpace(65);
     printf("=====================================================\n");
-}
-
-
-void showScreen() {
-    printf(YELLOW);
-    printSpace();
-    printf("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
-    printSpace();
-    printf("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
-    printSpace();
-    printf("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
-    printSpace();
-    printf("██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝\n");
-    printSpace();
-    printf("╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗\n");
-    printSpace();
-    printf(" ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝\n");
-    printf(RESET);
-    printf("\n");
-    printf(BRIGHT_GREEN);
-    printSpace();
-    printf("                   Loading...\n");
-    for(int i = 0; i <= 20; i++) {
-        printf("\r                                                                                    [");
-        for(int j = 0; j < i; j++) {
-            printf("█");
-        }
-        for(int j = i; j < 20; j++) {
-            printf(" ");
-        }
-        printf("] %d%%", i * 5);
-        fflush(stdout);
-        usleep(150000);
-    }
-    printf(RESET);
-    printf("\n\n");
-    printSpace();
-    printf("                   Nhan Enter de tiep tuc...");
-    clearInputBuffer();
-    //getchar();
 }
 
 void revenueStatistics(Node *head) {
     if (head == NULL) {
-        printSpace();
+        printSpace(65);
         printf(RED BOLD "\nDanh sach thue bao rong!\n" RESET);
         return;
     }
 
+    int month, year;
+
+    printf("\n");
+    printSpace(65);
+    printf("Nhap thang: ");
+    scanf("%d", &month);
+
+    printSpace(65);
+    printf("Nhap nam: ");
+    scanf("%d", &year);
+
     clearScreen();
 
     printf(CYAN BOLD);
-    printSpace();
+    printSpace(65);
     printf("+======================================================================+\n");
-    printSpace();
+    printSpace(65);
     printf("|                                                                      |\n");
-    printSpace();
+    printSpace(65);
     printf("|                         THONG KE DOANH THU                           |\n");
-    printSpace();
+    printSpace(65);
     printf("|                                                                      |\n");
-    printSpace();
+    printSpace(65);
     printf("+======================================================================+\n");
     printf(RESET);
 
+    int ok = revenue(head, month, year);
+    
+    if (!ok) {
+        return;
+    }
+
     printf(YELLOW BOLD);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
-    printSpace();
+    printSpace(65);
     printf("| [1] DOANH THU CUA THANG                                              |\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
-    printf(RESET);
-
-    printf(GREEN);
-    revenue(head);
     printf(RESET);
 
     printf(YELLOW BOLD);
-
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
-    printSpace();
+    printSpace(65);
     printf("| [2] TOP 3 DOANH NGHIEP CO TIEN CUOC CAO NHAT                         |\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
-    top3RecordMaxFee(head);
+    top3RecordMaxFee(head, month, year);
 
     printf(YELLOW BOLD);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
-    printSpace();
+    printSpace(65);
     printf("| [3] TOP 3 TINH CO TIEN CUOC CAO NHAT                                 |\n");
-    printSpace();
+    printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
-    printTop3ProvinceByFee(head);
+    top3ProvinceByFee(head, month, year);
 
     printf(CYAN BOLD);
     printf("\n");
-    printSpace();
+    printSpace(65);
     printf("+======================================================================+\n");
-    printSpace();
+    printSpace(65);
     printf("|                         HOAN TAT THONG KE                            |\n");
-    printSpace();
+    printSpace(65);
     printf("+======================================================================+\n");
     printf(RESET);
 
