@@ -437,3 +437,37 @@ void revenueStatistics(Node *head) {
 
     getchar();
 }
+
+void showHistory() {
+    FILE *f = fopen("history.txt", "r");
+
+    if (f == NULL) {
+        printSpace(65);
+        printf(RED BOLD "Chua co lich su thao tac!\n" RESET);
+        return;
+    }
+
+    char line[300];
+    int found = 0;
+
+    printf("\n");
+    printSpace(65);
+    printf(BLUE BOLD "====================== LICH SU THAO TAC ======================\n" RESET);
+
+    while (fgets(line, sizeof(line), f) != NULL) {
+        printSpace(65);
+        printf("%s", line);
+        found = 1;
+    }
+
+    if (found == 0) {
+        printSpace(65);
+        printf("Chua co lich su thao tac!\n");
+    }
+
+    printSpace(65);
+    printf(BLUE BOLD "===============================================================\n" RESET);
+    endScreen();
+
+    fclose(f);
+}

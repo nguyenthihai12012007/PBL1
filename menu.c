@@ -6,7 +6,7 @@
 #include "constants.h"
 #include "function.h"
 
-void menu_update(Node* head) {
+void menu_update(Node* head,char currentUsername[]) {
     int choice;
 
     do {
@@ -29,28 +29,57 @@ void menu_update(Node* head) {
         getchar();
 
         switch (choice) {
-            case 1:
+            case 1:{
                 printSpace(65);
+                char oldName[50];
+                char detail[200];
+
+                strcpy(oldName,head->data.name);
+
                 printf("Nhap ten moi: ");
                 fgets(head->data.name, sizeof(head->data.name), stdin);
                 head->data.name[strcspn(head->data.name, "\n")] = '\0';
                 printSpace(65);
                 printf("Sua ten thanh cong!\n");
+
+                snprintf(detail, sizeof(detail),
+                        "Sua ten thue bao tu \"%s\" thanh \"%s\"",
+                        oldName,
+                        head->data.name);
+
+                writeHistory(currentUsername,"Sua thue bao",head->data.phone,detail);
                 pauseScreen();
                 break;
-
-            case 2:
+            }
+            case 2:{
                 printSpace(65);
+
+                char oldAddress[50];
+                char detail[200];
+
+                strcpy(oldAddress,head->data.address);
+
                 printf("Nhap dia chi moi: ");
                 fgets(head->data.address,sizeof(head->data.address),stdin);
                 head->data.address[strcspn(head->data.address,"\n")]='\0';
                 printSpace(65);
                 printf("Sua dia chi thanh cong!\n");
+
+                snprintf(detail,sizeof(detail),
+                        "Sua dia chi thue bao tu \"%s\" thanh \"%s\""
+                        ,oldAddress,head->data.address);
+
+                writeHistory(currentUsername,"Sua dia chi",head->data.phone,detail);
                 pauseScreen();
                 break;
-
-            case 3:
+            }
+            case 3:{
                 printSpace(65);
+
+                char oldPhone[50];
+                char detail[200];
+                strcpy(oldPhone,head->data.phone);
+
                 printf("Nhap so moi: ");
                 do {
                     scanf("%s", head->data.phone);
@@ -62,11 +91,23 @@ void menu_update(Node* head) {
                 getchar();
                 printSpace(65);
                 printf("Sua so thue bao thanh cong!\n");
+
+                snprintf(detail,sizeof(detail),
+                        "Sua dia chi thue bao tu \"%s\" thanh \"%s\""
+                        ,oldPhone,head->data.phone);
+
+                writeHistory(currentUsername,"Sua so thue bao",head->data.phone,detail);
                 pauseScreen();
                 break;
-
-            case 4:
+            }
+            case 4:{
                 printSpace(65);
+
+                char oldProvince[50];
+                char detail[200];
+
+                strcpy(oldProvince,head->data.province.tentinh);
+
                 printf("Nhap tinh moi: ");
                 fgets(head->data.province.tentinh,sizeof(head->data.province.tentinh),stdin);
                 head->data.province.tentinh[strcspn(head->data.province.tentinh,"\n")]='\0';
@@ -76,17 +117,38 @@ void menu_update(Node* head) {
                 printSpace(65);
                 printf("Thong tin thue bao sau khi sua: \n");
                 print_record(head);
+
+                snprintf(detail,sizeof(detail),
+                        "Sua tinh thue bao tu \"%s\" thanh \"%s\""
+                        ,oldProvince,head->data.province.tentinh);
+
+                writeHistory(currentUsername,"Sua tinh",head->data.phone,detail);               
                 pauseScreen();
                 break;
-            case 5: 
+            }
+            case 5:{
+                int oldStatus = head->data.status;
+                char detail[150];
+
                 printSpace(65);
                 printf("Nhap trang thai moi: ");
                 head->data.status = inputStatus();
+
+                snprintf(detail, sizeof(detail),
+                        "Sua trang thai thue bao tu %d thanh %d",
+                        oldStatus,
+                        head->data.status);
+
+                writeHistory(currentUsername,
+                            "Sua thue bao",
+                            head->data.phone,
+                            detail);
+
                 printSpace(65);
                 printf("Sua trang thai thanh cong!\n");
                 pauseScreen();
                 break;
-
+            }
             case 0:
                 printSpace(65);
                 printf("Thoat!\n");
@@ -113,6 +175,8 @@ void menu_admin() {
     printSpace(65);
     printf("| [4] %-64s |\n", "Quan ly tai khoan");
     printSpace(65);
+    printf("| [5] %-64s |\n", "Xem lich su thay doi");
+    printSpace(65);
     printf("| [0] %-64s |\n", "Dang xuat");
     printSystemFooter();
 }
@@ -133,7 +197,7 @@ void menu_staff() {
     printSystemFooter();
 }
 
-void menu_manage(Node **head) {
+void menu_manage(Node **head,char currentUsername[]) {
     printf("\n");
     int choice;
     do {
@@ -169,20 +233,20 @@ void menu_manage(Node **head) {
         switch(choice) {
             case 1: {
                 Record newR = inputRecord();
-                addRecord(head,newR);
+                addRecordByUser(head,newR,currentUsername);
                 saveRecordToFile("data1.txt", *head);
                 printSpace(65);
                 printf("Da them thue bao va luu vao file thanh cong!\n");
                 break;
             }
             case 2: 
-                updateRecord(*head);
+                updateRecord(*head, currentUsername);
                 break;
             case 3:
-                deleteRecord(head);
+                deleteRecord(head, currentUsername);
                 break;
             case 4:
-                readFileByUser(head);
+                readFileByUser(head, currentUsername);
                 break;
             case 0:
                 printf("\n");
@@ -420,7 +484,7 @@ void menu_statistical(Node *head) {
     } while(choice != 0);
 }
 
-void menu_account(AccountNode **head) {
+void menu_account(AccountNode **head,char currentUsername[]) {
     printf("\n");
     int choice;
     do{
@@ -453,13 +517,13 @@ void menu_account(AccountNode **head) {
 
         switch(choice) {
             case 1: 
-                addAccount(head);
+                addAccount(head, currentUsername);
                 break;
             case 2: 
-                deleteAccount(head);
+                deleteAccount(head, currentUsername);
                 break;
             case 3:
-                updateAccount(*head);
+                updateAccount(*head, currentUsername);
                 break;
             case 0:
                 printf("\n");

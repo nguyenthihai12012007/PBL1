@@ -3,11 +3,11 @@
 
 #include "record.h"
 
-void menu_update(Node* head);
+void menu_update(Node* head,char currentUsername[]);
 void menu_admin();
 void menu_staff();
 void statisticsMenu();
-void menu_manage();
+void menu_manage(Node **head,char currentUsername[]);
 void menu_search();
 void menu_statistical();
 void menu_account();

@@ -214,7 +214,7 @@ void loadAccountsToList(const char *filename, AccountNode **head) {
     fclose(f);
 }
 
-int login(AccountNode *head) {
+int login(AccountNode *head,char currentUsername[]) {
     char username[30];
     char password[50];
 
@@ -256,19 +256,21 @@ int login(AccountNode *head) {
             if (strcmp(username, p->A.username) == 0 &&
                 strcmp(password, p->A.password) == 0) {
 
+                strcpy(currentUsername, p->A.username);
+
                 if (p->A.role == ROLE_ADMIN) {
                     printf("\n");
                     printSpace(65);
                     printf(GREEN BOLD "   Dang nhap thanh cong!\n");
                     printSpace(65);
-                    printf(GREEN BOLD "   Xin chao admin : %s\n\n" RESET, username);
+                    printf(GREEN BOLD "   Xin chao admin : %s\n\n" RESET, currentUsername);
                     return ROLE_ADMIN;
                 } else if (p->A.role == ROLE_STAFF) {
                     printf("\n");
                     printSpace();
                     printf(GREEN BOLD "   Dang nhap thanh cong!\n");
                     printSpace(65);
-                    printf(GREEN BOLD "   Xin chao nhan vien : %s\n\n" RESET, username);
+                    printf(GREEN BOLD "   Xin chao nhan vien : %s\n\n" RESET, currentUsername);
                     return ROLE_STAFF;
                 }
             }
@@ -284,7 +286,34 @@ int login(AccountNode *head) {
     } while (1);
 }
 
-void addRecord(Node** head, Record R) {
+void addRecordByUser(Node** head, Record R, char currentUsername[]) {
+    Node* newNode = createNode(R);
+
+    if (newNode == NULL) {
+        printSpace(65);
+        printf(RED BOLD "Khong du bo nho de them thue bao!\n" RESET);
+        return;
+    }
+
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* p = *head;
+
+        while (p->next != NULL) {
+            p = p->next;
+        }
+
+        p->next = newNode;
+    }
+
+    writeHistory(currentUsername,
+                 "Them thue bao",
+                 newNode->data.phone,
+                 "Them thue bao moi vao he thong");
+}
+
+void addRecordByFile(Node** head, Record R) {
     Node* newNode = createNode(R);
 
     if (*head == NULL) {
@@ -293,13 +322,42 @@ void addRecord(Node** head, Record R) {
     }
 
     Node* p = *head;
-    while (p->next != NULL)
+    while (p->next != NULL) {
         p = p->next;
-
+    }
     p->next = newNode;
+    
 }
 
-void readFile(const char *filename, Node **head) {
+void writeHistory(char username[], char action[], char target[], char detail[]) {
+    FILE *f = fopen("history.txt", "a");
+
+    if (f == NULL) {
+        printf("Khong the mo file history.txt!\n");
+        return;
+    }
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+
+    fprintf(f, "[%02d/%02d/%04d %02d:%02d:%02d] ",
+            t->tm_mday,
+            t->tm_mon + 1,
+            t->tm_year + 1900,
+            t->tm_hour,
+            t->tm_min,
+            t->tm_sec);
+
+    fprintf(f, "Tai khoan: %s | Hanh dong: %s | Doi tuong: %s | Chi tiet: %s\n",
+            username,
+            action,
+            target,
+            detail);
+
+    fclose(f);
+}
+
+void readFile(const char *filename, Node **head,char currentUsername[]) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
         printSpace(65);
@@ -383,7 +441,7 @@ void readFile(const char *filename, Node **head) {
             invalid++;
             continue;
         }
-        addRecord(head, temp);
+        addRecordByFile(head, temp);
         valid++;
     }
 
@@ -538,7 +596,7 @@ Account inputAccount() {
     return A;
 }
 
-void addAccount(AccountNode **head) {
+void addAccount(AccountNode **head,char currentUsername[]) {
     Account A = inputAccount();
 
     AccountNode *newNode = createAccountNode(A);
@@ -738,7 +796,7 @@ AccountNode* search_account(AccountNode *head,char userName[30]) {
     return NULL;
 }
 
-void updateAccount(AccountNode *head) {
+void updateAccount(AccountNode *head,char currentUsername[]) {
     if(head == NULL) {
         printf("\n");
         printSpace(65);
@@ -764,7 +822,7 @@ void updateAccount(AccountNode *head) {
 
 }
 
-void updateRecord(Node* head) {
+void updateRecord(Node* head,char currentUsername[]) {
     if(head == NULL) {
         printf("\n");
         printSpace(65);
@@ -792,7 +850,7 @@ void updateRecord(Node* head) {
         }
     }
     print_record(found);
-    menu_update(found);
+    menu_update(found, currentUsername);
     saveRecordToFile(RECORD_FILE,head);
 
     printSpace(65);
@@ -800,7 +858,7 @@ void updateRecord(Node* head) {
 
 }
 
-void deleteAccount(AccountNode **head) {
+void deleteAccount(AccountNode **head,char currentUsername[]) {
     char userName[30];
     printf("\n");
     printSpace(65);
@@ -845,7 +903,7 @@ void deleteAccount(AccountNode **head) {
     printf("Xoa thanh cong!\n");
 }
 
-void deleteRecord(Node **head) {
+void deleteRecord(Node **head,char currentUsername[]) {
     char phone[15];
     printf("\n");
     printSpace(65);
@@ -1154,7 +1212,7 @@ void filterByStatus(Node *head) {
     }
 }
 
-void readFileByUser(Node **head) {
+void readFileByUser(Node **head,char currentUsername[]) {
     char filename[100];
 
     printf("\n");
@@ -1162,7 +1220,7 @@ void readFileByUser(Node **head) {
     printf("Nhap ten file muon doc: ");
     scanf("%s", filename);
 
-    readFile(filename,head);
+    readFile(filename,head,currentUsername);
 }
 
 void exportBill(Node *p) {
@@ -1453,16 +1511,17 @@ int revenue(Node *head, int month, int year) {
 int main() {
     Node* head = NULL;
     AccountNode *headAccount = NULL;
+    char currentUsername[30];
     int role;
 
     clearScreen();
     showScreen();
 
-    readFile(RECORD_FILE, &head);
+    readFile(RECORD_FILE, &head,currentUsername);
     loadAccountsToList("account.txt", &headAccount);
 
     while(1) {
-        role = login(headAccount);
+        role = login(headAccount, currentUsername);
 
         if (role == ROLE_ADMIN) {
             int choice;
@@ -1478,7 +1537,7 @@ int main() {
 
                 switch(choice) {
                     case 1: 
-                        menu_manage(&head);
+                        menu_manage(&head,currentUsername);
                         break;
 
                     case 2:
@@ -1490,7 +1549,11 @@ int main() {
                         break;
 
                     case 4:
-                        menu_account(&headAccount);
+                        menu_account(&headAccount,currentUsername);
+                        break;
+
+                    case 5:
+                        showHistory();
                         break;
 
                     case 0:
