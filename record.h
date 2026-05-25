@@ -14,8 +14,6 @@ typedef struct Record {
 
     int onNetMinutes; // noi mang
     int offNetMinutes;
-    int month;
-    int year;
 } Record;
 
 typedef struct Node {

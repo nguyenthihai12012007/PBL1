@@ -383,31 +383,6 @@ void readFile(const char *filename, Node **head) {
             invalid++;
             continue;
         }
-
-        token = strtok(NULL, "|");
-        if (token == NULL) {
-            invalid++;
-            continue;
-        }
-        temp.month = atoi(token);
-
-        if (temp.month < 1 || temp.month > 12) {
-            invalid++;
-            continue;
-        }
-        
-        token = strtok(NULL, "|");
-        if (token == NULL) {
-            invalid++;
-            continue;
-        }
-        temp.year = atoi(token);
-
-        if (temp.year < 2000) {
-            invalid++;
-            continue;
-        }
-
         addRecord(head, temp);
         valid++;
     }
@@ -462,10 +437,7 @@ void saveRecordToFile(const char *filename, Node *head) {
                 p->data.phone,
                 p->data.status,
                 p->data.onNetMinutes,
-                p->data.offNetMinutes,
-                p->data.month,
-                p->data.year);
-
+                p->data.offNetMinutes);
         p = p->next;
     }
 
@@ -688,27 +660,45 @@ Record inputRecord() {
         }
     } while (R.offNetMinutes < 0);
 
-    printSpace(65);
-    printf("Nhap thang: ");
-    do {
-        scanf("%d", &R.month);
-        if (R.month < 1 || R.month > 12) {
-            printSpace();
-            printf(RED BOLD "Thang khong hop le! Nhap lai: " RESET);
-        }
-    } while (R.month < 1 || R.month > 12);
-
-    printSpace(65);
-    printf("Nhap nam: ");
-    do {
-        scanf("%d", &R.year);
-        if (R.year < 2000) {
-            printSpace();
-            printf(RED BOLD "Nam khong hop le! Nhap lai: " RESET);
-        }
-    } while (R.year < 2000);
-
     return R;
+}
+
+int isSimilarPhone(char inputPhone[],char phone[]) {
+    if(strlen(phone) != strlen(inputPhone)) {
+        return 0;
+    }
+
+    int diff = 0;
+
+    for(int i=0; i<strlen(phone); i++) {
+        if(inputPhone[i] != phone[i]) {
+            diff++;
+        }
+
+        if(diff > 1) {
+            return 0;
+        }
+    }
+    return diff == 1;
+}
+
+void suggestSimilarPhone(Node *head, char inputPhone[]) {
+    Node* p = head;
+    int found = 0;
+
+    while(p != NULL) {
+        if (isSimilarPhone(p->data.phone,inputPhone) == 1) {
+            printSpace(65);
+            print_record(p);
+            printf("\n");
+            found = 1;
+        }
+        p = p->next;
+    }
+
+    if(found == 0) {
+        printf("Khong co goi y phu hop!\n");
+    }
 }
 
 Node* search_record(Node* head,char phone[15]) {
@@ -729,8 +719,6 @@ Node* search_record(Node* head,char phone[15]) {
         }
         cur=cur->next;
     }
-    printSpace(65);
-    printf(RED BOLD "Khong tim thay thue bao!\n" RESET);
     return NULL;
 }
 
@@ -1358,7 +1346,7 @@ void top3RecordMaxFee (Node *head, int month, int year) {
     Node *p = head;
     
     while (p != NULL) {
-        if (p->data.status != 1 || p->data.month != month || p->data.year != year) {
+        if (p->data.status ) {
             p = p->next;
             continue;
         }
@@ -1392,7 +1380,7 @@ void top3ProvinceByFee(Node *head, int month, int year) {
     Node* p = head;
 
     while(p!=NULL) {
-        if (p->data.status != 1 || p->data.month != month || p->data.year != year) {
+        if (p->data.status != 1 ) {
             p = p->next;
             continue;
         }
@@ -1431,7 +1419,7 @@ int revenue(Node *head, int month, int year) {
     Node* p = head;
 
     while(p != NULL) {
-        if (p->data.status == 1 && p->data.month == month && p->data.year == year) {
+        if (p->data.status == 1 ) {
             found = 1;
             double fee = total_Fee(p->data);
             sumRevenue += fee;
@@ -1535,28 +1523,36 @@ int main() {
                 switch(choice) {
                     case 1: {
                         char phone[15];
+
                         printf("\n");
                         printSpace(65);
                         printf("Nhap so dien thoai thue bao can tim: ");
 
                         do {
                             scanf("%s", phone);
+
                             if (!validatePhone(phone)) {
                                 printSpace(65);
                                 printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
                             }
+
                         } while (!validatePhone(phone));
 
                         Node* cur = search_record(head, phone);
 
                         if (cur != NULL) {
                             print_record(cur);
+                        } else {
+                            printSpace(65);
+                            printf(RED BOLD "Khong tim thay so dien thoai nay!\n" RESET);
+                            printSpace(65);
+                            printf("Goi y cac so thue bao gan dung:\n");
+                            printSpace(65);            
+                            suggestSimilarPhone(head, phone);
                         }
 
-                        endScreen();
                         break;
                     }
-
                     case 2:
                         filterByStatus(head);
                         endScreen();

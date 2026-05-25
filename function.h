@@ -25,6 +25,8 @@ Account inputAccount();
 void addAccount(AccountNode **head);
 char* findPrefixByProvince(char tentinh[]);
 Record inputRecord();
+int isSimilarPhone(char inputPhone[],char phone[]);
+void suggestSimilarPhone(Node *head, char inputPhone[]);
 Node* search_record(Node* head,char phone[15]);
 void updateAccount(AccountNode *head);
 void updateRecord(Node* head);

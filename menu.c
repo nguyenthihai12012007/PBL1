@@ -238,20 +238,34 @@ void menu_search(Node *head) {
         switch(choice) {
             case 1: {
                 char phone[15];
+
                 printf("\n");
                 printSpace(65);
                 printf("Nhap so dien thoai thue bao can tim: ");
+
                 do {
-                    scanf("%s",phone);
+                    scanf("%s", phone);
+
                     if (!validatePhone(phone)) {
                         printSpace(65);
                         printf(RED BOLD "So dien thoai khong hop le! Nhap lai: " RESET);
                     }
+
                 } while (!validatePhone(phone));
 
-                Node* cur=search_record(head,phone);
-                if (cur != NULL) 
+                Node* cur = search_record(head, phone);
+
+                if (cur != NULL) {
                     print_record(cur);
+                } else {
+                    printSpace(65);
+                    printf(RED BOLD "Khong tim thay so dien thoai nay!\n" RESET);
+                    printSpace(65);
+                    printf("Goi y cac so thue bao gan dung:\n");
+                    printSpace(65);            
+                    suggestSimilarPhone(head, phone);
+                }
+
                 break;
             }
             case 2: 
