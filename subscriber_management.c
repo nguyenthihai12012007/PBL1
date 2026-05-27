@@ -286,6 +286,47 @@ int login(AccountNode *head,char currentUsername[]) {
     } while (1);
 }
 
+void writeHistory(char username[], char action[], char target[], char detail[]) {
+    FILE *f = fopen("history.txt", "a+");
+
+    if (f == NULL) {
+        printSpace(65);
+        printf(RED BOLD "Khong the mo file history.txt!\n" RESET);
+        return;
+    }
+
+    rewind(f);
+
+    if (fgetc(f) == EOF) {
+        fprintf(f,
+        "======================================================================================================================================================================\n");
+        fprintf(f, "| %-19s | %-9s | %-13s | %-10s | %-99s |\n", "Thoi gian", "Tai khoan", "Hanh dong", "Doi tuong", "Chi tiet");
+        fprintf(f,
+        "======================================================================================================================================================================\n");
+    }
+
+    fseek(f, 0, SEEK_END);
+
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+
+    fprintf(f, "| %02d/%02d/%04d %02d:%02d:%02d |",
+            t->tm_mday,
+            t->tm_mon + 1,
+            t->tm_year + 1900,
+            t->tm_hour,
+            t->tm_min,
+            t->tm_sec);
+
+    fprintf(f, " %-9.9s | %-13.13s | %-10.10s | %-99.99s |\n",
+            username,
+            action,
+            target,
+            detail);
+
+    fclose(f);
+}
+
 void addRecordByUser(Node** head, Record R, char currentUsername[]) {
     Node* newNode = createNode(R);
 
@@ -329,37 +370,10 @@ void addRecordByFile(Node** head, Record R) {
     
 }
 
-void writeHistory(char username[], char action[], char target[], char detail[]) {
-    FILE *f = fopen("history.txt", "a");
-
-    if (f == NULL) {
-        printf("Khong the mo file history.txt!\n");
-        return;
-    }
-
-    time_t now = time(NULL);
-    struct tm *t = localtime(&now);
-
-    fprintf(f, "[%02d/%02d/%04d %02d:%02d:%02d] ",
-            t->tm_mday,
-            t->tm_mon + 1,
-            t->tm_year + 1900,
-            t->tm_hour,
-            t->tm_min,
-            t->tm_sec);
-
-    fprintf(f, "Tai khoan: %s | Hanh dong: %s | Doi tuong: %s | Chi tiet: %s\n",
-            username,
-            action,
-            target,
-            detail);
-
-    fclose(f);
-}
-
 void readFile(const char *filename, Node **head,char currentUsername[]) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
+        printf("\n");
         printSpace(65);
         printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
@@ -488,7 +502,7 @@ void saveRecordToFile(const char *filename, Node *head) {
     Node *p = head;
 
     while (p != NULL) {
-        fprintf(f, "%s|%s|%s|%s|%d|%d|%d|%d|%d\n",
+        fprintf(f, "%s|%s|%s|%s|%d|%d|%d\n",
                 p->data.province.tentinh,
                 p->data.name,
                 p->data.address,
@@ -581,7 +595,7 @@ Account inputAccount() {
     printf("----------------\n");
     int role;
     do {
-        printSpace();
+        printSpace(65);
         printf("Nhap lua chon: ");
         scanf("%d", &role);
 
@@ -654,12 +668,12 @@ Record inputRecord() {
     } while(!validateInput(R.province.tentinh) || prefix == NULL);
 
     printSpace(65);
-    printf("Nhap so dien thoai thue bao:");
+    printf("Nhap 6 so cuoi cua thue bao: ");
     do {
         scanf("%s", lastSix);
 
         if(!validateLastSix(lastSix)) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "So dien thoai khong hop le! Vui long nhap lai: " RESET);
         }
     } while(!validateLastSix(lastSix));
@@ -667,6 +681,7 @@ Record inputRecord() {
     strcpy(R.phone, prefix);
     strcat(R.phone, lastSix);
 
+    printf("\n");
     printSpace(65);
     printf(GREEN BOLD "So dien thoai duoc tao: %s\n" RESET, R.phone);
     getchar();
@@ -679,7 +694,7 @@ Record inputRecord() {
         R.name[strcspn(R.name, "\n")] = '\0';
 
         if(!validateInput(R.name)) {
-            printSpace();
+            printSpace(65);
             printf(RED BOLD "Ten khong hop le! Vui long nhap lai: " RESET);
         }
 
@@ -746,15 +761,15 @@ void suggestSimilarPhone(Node *head, char inputPhone[]) {
 
     while(p != NULL) {
         if (isSimilarPhone(p->data.phone,inputPhone) == 1) {
-            printSpace(65);
-            print_record(p);
             printf("\n");
+            print_record(p);
             found = 1;
         }
         p = p->next;
     }
 
     if(found == 0) {
+        printSpace(65);
         printf("Khong co goi y phu hop!\n");
     }
 }
@@ -807,19 +822,76 @@ void updateAccount(AccountNode *head,char currentUsername[]) {
     char userName[30];
     AccountNode* found = NULL;
 
-    while(found == NULL) {
+    do {
         printf("\n");
         printSpace(65);
         printf("Nhap tai khoan can sua: ");
         scanf("%s",userName);
-
         found = search_account(head,userName);
         if(found == NULL) {
             printSpace(65);
             printf(RED BOLD "Khong tim thay tai khoan!\n" RESET);
         }
-    }
+    } while(found == NULL);
 
+    int choice;
+    do {
+        printf("\n");
+        printSpace(65);
+        printf("1. Sua mat khau\n");
+        printSpace(65);
+        printf("2. Sua vai tro\n");
+        printSpace(65);
+        printf("0. Thoat\n");
+        printSpace(65);
+        printf("Chon: ");
+        scanf("%d", &choice);
+        getchar();
+
+        switch(choice) {
+            case 1: {
+                char newPassword[50];
+                printf("\n");
+                printSpace(65);
+                printf("Nhap mat khau moi: ");
+                fgets(newPassword, sizeof(newPassword), stdin);
+                newPassword[strcspn(newPassword, "\n")] = '\0';
+                strcpy(found->A.password, newPassword);
+                printSpace(65);
+                printf(GREEN BOLD "Sua mat khau thanh cong!\n" RESET);
+                pauseScreen();
+                break;
+            }
+            case 2: {
+                int newRole;
+                printf("\n");
+                printSpace(65);
+                printf("1. Admin\n");
+                printSpace(65);
+                printf("2. Staff\n");
+                printSpace(65);
+                printf("Nhap vai tro moi: ");
+                scanf("%d", &newRole);
+                if(newRole == ROLE_ADMIN || newRole == ROLE_STAFF) {
+                    found->A.role = newRole;
+                    printSpace(65);
+                    printf(GREEN BOLD "Sua vai tro thanh cong!\n" RESET);
+                }
+                pauseScreen();
+                break;
+            }
+            case 0:
+                printf("\n");
+                printSpace(65);
+                printf("Thoat!\n");
+                break;
+
+            default:
+                printSpace(65);
+                printf(RED BOLD "Lua chon khong hop le!\n" RESET);
+                pauseScreen();
+        }
+    } while(choice != 0);
 }
 
 void updateRecord(Node* head,char currentUsername[]) {
@@ -841,12 +913,12 @@ void updateRecord(Node* head,char currentUsername[]) {
         if (!validatePhone(phone)) {
             printSpace(65);
             printf(RED BOLD "So dien thoai khong hop le!\n" RESET);
-            return;
+            continue;
         }
         found=search_record(head,phone);
         if(found==NULL) {
             printSpace(65);
-            printf(RED BOLD "Khong tim thay thue bao! Vui long nhap lai: \n" RESET);
+            printf(RED BOLD "Khong tim thay thue bao! Vui long nhap lai! \n" RESET);
         }
     }
     print_record(found);
@@ -884,7 +956,7 @@ void deleteAccount(AccountNode **head,char currentUsername[]) {
 
     char confirm;
     printSpace(65);
-    printf("Xac nhan xoa lien he nay? (y/n): ");
+    printf("Xac nhan xoa tai khoan nay? (y/n): ");
     scanf(" %c", &confirm);
     if (confirm != 'y' && confirm != 'Y') {
         printSpace(65);
@@ -927,6 +999,7 @@ void deleteRecord(Node **head,char currentUsername[]) {
     print_record(p);
 
     char confirm;
+    printf("\n");
     printSpace(65);
     printf("Xac nhan xoa lien he nay? (y/n): ");
     scanf(" %c", &confirm);
@@ -1270,15 +1343,27 @@ void calculateFee(Node *head) {
     }
 
     char phone[15];
-    printf("\n");
-    printSpace(65);
-    printf("Nhap so dien thoai can tinh cuoc: ");
-    scanf("%14s", phone);
-
-    Node *found = search_record(head, phone);
-    if (found == NULL) {
-        return;
-    }
+    Node *found = NULL;
+    do {
+        printf("\n");
+        printSpace(65);
+        printf("Nhap so dien thoai can tinh cuoc: ");
+        scanf("%14s", phone);
+        if(!validatePhone(phone)) {
+            printSpace(65);
+            printf(RED BOLD "So dien thoai khong hop le!\n" RESET);
+            continue;
+        }
+        found = search_record(head, phone);
+        if(found == NULL) {
+            printSpace(65);
+            printf(RED BOLD "Khong tim thay thue bao!\n" RESET);
+            printf("\n");
+            printSpace(65);
+            printf("Goi y cac so gan dung:\n");
+            suggestSimilarPhone(head, phone);
+        }
+    } while(found == NULL);
 
     if (found->data.status == 2) {
         printSpace(65);
@@ -1391,7 +1476,7 @@ void pronvinceMaxRecord (Node *head) {
     printProvinceMaxRecord(stats, count, maxIndex);
 }
 
-void top3RecordMaxFee (Node *head, int month, int year) {
+void top3RecordMaxFee (Node *head) {
     if(head == NULL) {
         printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
@@ -1404,7 +1489,7 @@ void top3RecordMaxFee (Node *head, int month, int year) {
     Node *p = head;
     
     while (p != NULL) {
-        if (p->data.status ) {
+        if (p->data.status != 1) {
             p = p->next;
             continue;
         }
@@ -1427,7 +1512,7 @@ void top3RecordMaxFee (Node *head, int month, int year) {
     printTop3RecordMaxFee(stats, limit);
 }
 
-void top3ProvinceByFee(Node *head, int month, int year) {
+void top3ProvinceByFee(Node *head) {
     if (head == NULL) {
         return ;
     }
@@ -1462,7 +1547,7 @@ void top3ProvinceByFee(Node *head, int month, int year) {
     printTop3ProvinceFee(stats, count);
 }
 
-int revenue(Node *head, int month, int year) {
+int revenue(Node *head) {
     if(head == NULL) {
         printSpace(65);
         printf(RED BOLD "Danh sach rong!\n" RESET);
@@ -1477,7 +1562,7 @@ int revenue(Node *head, int month, int year) {
     Node* p = head;
 
     while(p != NULL) {
-        if (p->data.status == 1 ) {
+        if (p->data.status == 1) {
             found = 1;
             double fee = total_Fee(p->data);
             sumRevenue += fee;
@@ -1490,7 +1575,7 @@ int revenue(Node *head, int month, int year) {
 
     if (!found) {
         printSpace(65);
-        printf(RED BOLD "   Khong co du lieu doanh thu trong thang %d/%d!\n" RESET, month, year);
+        printf(RED BOLD "   Khong co du lieu thong ke doanh thu!\n" RESET);
         return 0;
     }
 
