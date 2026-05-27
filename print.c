@@ -119,6 +119,16 @@ void printSystemFooter() {
     printf(RESET);
 }
 
+void showUpdateResult(Node *head, const char text[]) {
+    printSpace(65);
+    printf(GREEN BOLD "%s\n\n" RESET, text);
+    printSpace(65);
+    printf("Thong tin thue bao sau khi sua\n");
+    printSpace(65);
+    printf("--------------------------------\n");
+    print_record(head);
+}
+
 void printStatus(int status) {
     switch (status) {
         case 1:
@@ -359,17 +369,6 @@ void revenueStatistics(Node *head) {
         return;
     }
 
-    int month, year;
-
-    printf("\n");
-    printSpace(65);
-    printf("Nhap thang: ");
-    scanf("%d", &month);
-
-    printSpace(65);
-    printf("Nhap nam: ");
-    scanf("%d", &year);
-
     clearScreen();
 
     printf(CYAN BOLD);
@@ -385,12 +384,6 @@ void revenueStatistics(Node *head) {
     printf("+======================================================================+\n");
     printf(RESET);
 
-    int ok = revenue(head, month, year);
-    
-    if (!ok) {
-        return;
-    }
-
     printf(YELLOW BOLD);
     printf("\n");
     printSpace(65);
@@ -400,6 +393,12 @@ void revenueStatistics(Node *head) {
     printSpace(65);
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
+
+    int ok = revenue(head);
+    
+    if (!ok) {
+        return;
+    }
 
     printf(YELLOW BOLD);
     printf("\n");
@@ -411,7 +410,7 @@ void revenueStatistics(Node *head) {
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
-    top3RecordMaxFee(head, month, year);
+    top3RecordMaxFee(head);
 
     printf(YELLOW BOLD);
     printf("\n");
@@ -423,7 +422,7 @@ void revenueStatistics(Node *head) {
     printf("+----------------------------------------------------------------------+\n");
     printf(RESET);
 
-    top3ProvinceByFee(head, month, year);
+    top3ProvinceByFee(head);
 
     printf(CYAN BOLD);
     printf("\n");
@@ -443,7 +442,8 @@ void showHistory() {
 
     if (f == NULL) {
         printSpace(65);
-        printf(RED BOLD "Chua co lich su thao tac!\n" RESET);
+        printf(RED BOLD "   Chua co lich su thao tac!\n" RESET);
+        pauseScreen();
         return;
     }
 
@@ -451,22 +451,24 @@ void showHistory() {
     int found = 0;
 
     printf("\n");
-    printSpace(65);
-    printf(BLUE BOLD "====================== LICH SU THAO TAC ======================\n" RESET);
+    printf(BLUE BOLD);
+    printMiddle("========================================================================== LICH SU THAO TAC ==========================================================================");
+    printf(RESET);
 
     while (fgets(line, sizeof(line), f) != NULL) {
-        printSpace(65);
+        printSpace(18);
         printf("%s", line);
         found = 1;
     }
 
     if (found == 0) {
         printSpace(65);
-        printf("Chua co lich su thao tac!\n");
+        printf(RED BOLD "   Chua co lich su thao tac!\n" RESET);
     }
 
-    printSpace(65);
-    printf(BLUE BOLD "===============================================================\n" RESET);
+    printf(BLUE BOLD);
+    printMiddle("======================================================================================================================================================================");
+    printf(RESET);
     endScreen();
 
     fclose(f);
