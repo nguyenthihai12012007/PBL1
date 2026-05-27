@@ -348,10 +348,15 @@ void addRecordByUser(Node** head, Record R, char currentUsername[]) {
         p->next = newNode;
     }
 
+    char detail[200];
+    snprintf(detail,sizeof(detail),
+            "Them thue bao \"%s\""
+            ,newNode->data.phone);
+
     writeHistory(currentUsername,
                  "Them thue bao",
                  newNode->data.phone,
-                 "Them thue bao moi vao he thong");
+                 detail);
 }
 
 void addRecordByFile(Node** head, Record R) {

@@ -3,3 +3,6 @@
 ======================================================================================================================================================================
 | 27/05/2026 01:18:38 | nhuhoa    | Sua thue bao  | 0924889999 | Sua ten thue bao tu "Cong ty TNHH Thuong mai Hoang Long" thanh "Cong ty TNHH Hoang Long"            |
 | 27/05/2026 01:18:50 | nhuhoa    | Sua thue bao  | 0924889999 | Sua trang thai thue bao tu 1 thanh 3                                                                |
+| 27/05/2026 16:19:13 | nhuhoa    | Them thue bao | 0924234567 | Them thue bao moi vao he thong                                                                      |
+| 27/05/2026 16:20:00 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh thue bao tu "Hue" thanh "da nang"                                                          |
+| 27/05/2026 16:27:12 | nhuhoa    | Them thue bao | 0943543264 | Them thue bao "0943543264"                                                                          |
