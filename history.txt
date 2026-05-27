@@ -1,2 +1,5 @@
-[25/05/2026 14:41:04] Tai khoan: nhuhoa | Hanh dong: Them thue bao | Doi tuong: 0943987654 | Chi tiet: Them thue bao moi vao he thong
-[25/05/2026 14:41:45] Tai khoan: nhuhoa | Hanh dong: Sua dia chi | Doi tuong: 0975456789 | Chi tiet: Sua dia chi thue bao tu "&s" thanh "&s"
+======================================================================================================================================================================
+| Thoi gian           | Tai khoan | Hanh dong     | Doi tuong  | Chi tiet                                                                                            |
+======================================================================================================================================================================
+| 27/05/2026 01:18:38 | nhuhoa    | Sua thue bao  | 0924889999 | Sua ten thue bao tu "Cong ty TNHH Thuong mai Hoang Long" thanh "Cong ty TNHH Hoang Long"            |
+| 27/05/2026 01:18:50 | nhuhoa    | Sua thue bao  | 0924889999 | Sua trang thai thue bao tu 1 thanh 3                                                                |
