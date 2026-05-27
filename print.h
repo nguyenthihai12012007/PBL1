@@ -8,6 +8,7 @@ void printCenter(const char *text, int width);
 void printMiddle(const char *text);
 void printSystemHeader(const char *title);
 void printSystemFooter();
+void showUpdateResult(Node *head, const char text[]);
 void printStatus(int status);
 void print_record(Node* node);
 void print_all_record(Node *head);
