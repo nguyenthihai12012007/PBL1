@@ -106,47 +106,82 @@ void menu_update(Node* head,char currentUsername[]) {
                 pauseScreen();
                 break;
             }
-            case 4:{
-                printf("\n");
+            case 4: {
                 printSpace(65);
 
                 char oldProvince[50];
-                char detail[200];
+                char oldPhone[20];
+                char newProvince[50];
+                char detail[250];
+                char *prefix = NULL;
 
-                strcpy(oldProvince,head->data.province.tentinh);
+                strcpy(oldProvince, head->data.province.tentinh);
+                strcpy(oldPhone, head->data.phone);
 
                 printf("Nhap tinh moi: ");
-                fgets(head->data.province.tentinh,sizeof(head->data.province.tentinh),stdin);
-                head->data.province.tentinh[strcspn(head->data.province.tentinh,"\n")]='\0';
-                showUpdateResult(head, "Sua tinh thanh cong!");
 
-                snprintf(detail,sizeof(detail),
-                        "Sua tinh thue bao tu \"%s\" thanh \"%s\""
-                        ,oldProvince,head->data.province.tentinh);
+                do {
+                    fgets(newProvince, sizeof(newProvince), stdin);
+                    newProvince[strcspn(newProvince, "\n")] = '\0';
 
-                writeHistory(currentUsername,"Sua tinh",head->data.phone,detail);               
+                    toLowerCase(newProvince);
+
+                    if (!validateInput(newProvince)) {
+                        printSpace(65);
+                        printf(RED BOLD "Tinh khong hop le! Vui long nhap lai: " RESET);
+                        continue;
+                    }
+
+                    prefix = findPrefixByProvince(newProvince);
+
+                    if (prefix == NULL) {
+                        printSpace(65);
+                        printf(RED BOLD "Tinh khong co trong danh sach ma vung! Nhap lai: " RESET);
+                    }
+
+                } while (!validateInput(newProvince) || prefix == NULL);
+
+                strcpy(head->data.province.tentinh, newProvince);
+
+                updatePhoneAreaCode(&head->data);
+
+                printSpace(65);
+                printf("Sua tinh thanh cong!\n");
+
+                printSpace(65);
+                printf("So dien thoai moi: %s\n", head->data.phone);
+
+                snprintf(detail, sizeof(detail),
+                        "Sua tinh tu \"%s\" thanh \"%s\", so dien thoai tu \"%s\" thanh \"%s\"",
+                        oldProvince,
+                        head->data.province.tentinh,
+                        oldPhone,
+                        head->data.phone);
+
+                writeHistory(currentUsername, "Sua tinh", head->data.phone, detail);
+
                 pauseScreen();
                 break;
             }
-            case 5:{
-                int oldStatus = head->data.status;
-                char detail[150];
+            case 5: {
+                printSpace(65);
 
-                printf("\n");
-                //printf("Nhap trang thai moi: \n");
+                int oldStatus = head->data.status;
+                char detail[200];
+
+                printf("Nhap trang thai moi:\n");
                 head->data.status = inputStatus();
 
+                printSpace(65);
+                printf("Sua trang thai thanh cong!\n");
+
                 snprintf(detail, sizeof(detail),
-                        "Sua trang thai thue bao tu %d thanh %d",
+                        "Sua trang thai thue bao tu \"%d\" thanh \"%d\"",
                         oldStatus,
                         head->data.status);
 
-                writeHistory(currentUsername,
-                            "Sua thue bao",
-                            head->data.phone,
-                            detail);
+                writeHistory(currentUsername, "Sua trang thai", head->data.phone, detail);
 
-                showUpdateResult(head, "Sua trang thai thanh cong!");
                 pauseScreen();
                 break;
             }

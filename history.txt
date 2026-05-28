@@ -6,3 +6,7 @@
 | 27/05/2026 16:19:13 | nhuhoa    | Them thue bao | 0924234567 | Them thue bao moi vao he thong                                                                      |
 | 27/05/2026 16:20:00 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh thue bao tu "Hue" thanh "da nang"                                                          |
 | 27/05/2026 16:27:12 | nhuhoa    | Them thue bao | 0943543264 | Them thue bao "0943543264"                                                                          |
+| 28/05/2026 22:38:57 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh thue bao tu "da nang" thanh "ha noi"                                                       |
+| 28/05/2026 22:58:21 | nhuhoa    | Sua tinh      | 0924456789 | Sua tinh tu "da nang" thanh "ha noi", so dien thoai tu "0975456789" thanh "0924456789"              |
+| 28/05/2026 22:58:47 | nhuhoa    | Sua thue bao  | 0924456789 | Sua ten thue bao tu "Cong ty TNHH ABC" thanh "fushfew"                                              |
+| 28/05/2026 23:09:03 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh tu "ha noi" thanh "hue", so dien thoai tu "0924456789" thanh "0975456789"                  |
