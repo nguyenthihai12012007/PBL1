@@ -221,7 +221,7 @@ void menu_manage(Node **head,char currentUsername[]) {
             if(scanf("%d", &choice) != 1) {  
                 while(getchar() != '\n');  
                 printSpace(65);               
-                printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                printf(RED BOLD "   Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
             if(choice < 0 || choice > 4) {   
@@ -290,7 +290,7 @@ void menu_search(Node *head) {
             if(scanf("%d", &choice) != 1) {  
                 while(getchar() != '\n');  
                 printSpace(65);               
-                printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                printf(RED BOLD "   Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
             if(choice < 0 || choice > 5) {  
@@ -386,7 +386,7 @@ void statisticsMenu(Node *head) {
             if(scanf("%d", &choice) != 1) {  
                 while(getchar() != '\n'); 
                 printSpace(65);                
-                printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                printf(RED BOLD "   Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
             if(choice < 0 || choice > 5) {   
@@ -448,7 +448,7 @@ void menu_statistical(Node *head) {
             if(scanf("%d", &choice) != 1) {  
                 while(getchar() != '\n');   
                 printSpace(65);              
-                printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                printf(RED BOLD "   Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
             if(choice < 0 || choice > 4) {       
@@ -507,7 +507,7 @@ void menu_account(AccountNode **head,char currentUsername[]) {
             if(scanf("%d", &choice) != 1) {  
                 while(getchar() != '\n');  
                 printSpace(65);               
-                printf(RED BOLD "Loi: Vui long nhap so! Nhap lai: " RESET);                             
+                printf(RED BOLD "   Loi: Vui long nhap so! Nhap lai: " RESET);                             
                 continue;            
             }            
             if(choice < 0 || choice > 3) {   
@@ -545,4 +545,3 @@ void menu_account(AccountNode **head,char currentUsername[]) {
 
     } while(choice != 0);
 }
-
