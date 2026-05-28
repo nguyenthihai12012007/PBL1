@@ -267,7 +267,7 @@ int login(AccountNode *head,char currentUsername[]) {
                     return ROLE_ADMIN;
                 } else if (p->A.role == ROLE_STAFF) {
                     printf("\n");
-                    printSpace();
+                    printSpace(65);
                     printf(GREEN BOLD "   Dang nhap thanh cong!\n");
                     printSpace(65);
                     printf(GREEN BOLD "   Xin chao nhan vien : %s\n\n" RESET, currentUsername);
@@ -280,7 +280,7 @@ int login(AccountNode *head,char currentUsername[]) {
 
         printf("\n");
         printSpace(65);
-        printf(RED BOLD "   Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n\n" RESET);
+        printf(RED BOLD "   Sai ten dang nhap hoac mat khau. Vui long dang nhap lai!\n" RESET);
         pauseScreen();
 
     } while (1);
@@ -348,15 +348,10 @@ void addRecordByUser(Node** head, Record R, char currentUsername[]) {
         p->next = newNode;
     }
 
-    char detail[200];
-    snprintf(detail,sizeof(detail),
-            "Them thue bao \"%s\""
-            ,newNode->data.phone);
-
     writeHistory(currentUsername,
                  "Them thue bao",
                  newNode->data.phone,
-                 detail);
+                 "Them thue bao moi vao he thong");
 }
 
 void addRecordByFile(Node** head, Record R) {
@@ -565,7 +560,7 @@ int inputStatus() {
 
         if (choice < 1 || choice > 3) {
             printSpace(65);
-            printf(RED BOLD "Lua chon khong hop le! Vui long nhap lai: \n" RESET);
+            printf(RED BOLD "Lua chon khong hop le! Vui long nhap lai! \n\n" RESET);
         }
     } while (choice < 1 || choice > 3);
 
@@ -599,14 +594,19 @@ Account inputAccount() {
     printSpace(65);
     printf("----------------\n");
     int role;
+    printSpace(65);
+    printf("Nhap lua chon: ");
     do {
-        printSpace(65);
-        printf("Nhap lua chon: ");
-        scanf("%d", &role);
-
+        if (scanf("%d", &role) != 1) {
+            printSpace(65);
+            printf(RED BOLD "Loi: Vui long chi nhap chu so! Nhap lai: " RESET);
+            while(getchar() != '\n');
+            role = -1;
+            continue;
+        }
         if(role != ROLE_ADMIN && role != ROLE_STAFF) {
-            printSpace();
-            printf("Lua chon khong hop le!\n");
+            printSpace(65);
+            printf(RED BOLD "Lua chon khong hop le! Nhap lai: " RESET);
         }
 
     } while(role != ROLE_ADMIN && role != ROLE_STAFF);
@@ -876,12 +876,23 @@ void updateAccount(AccountNode *head,char currentUsername[]) {
                 printf("2. Staff\n");
                 printSpace(65);
                 printf("Nhap vai tro moi: ");
-                scanf("%d", &newRole);
-                if(newRole == ROLE_ADMIN || newRole == ROLE_STAFF) {
-                    found->A.role = newRole;
-                    printSpace(65);
-                    printf(GREEN BOLD "Sua vai tro thanh cong!\n" RESET);
-                }
+                do {
+                    if (scanf("%d", &newRole) != 1) {
+                        printSpace(65);
+                        printf(RED BOLD "Loi: Vui long chi nhap chu so! Nhap lai: " RESET);
+                        while(getchar() != '\n');
+                        newRole = -1;
+                        continue;
+                    }
+                    if(newRole != ROLE_ADMIN && newRole != ROLE_STAFF) {
+                        printSpace(65);
+                        printf(RED BOLD "Lua chon khong hop le! Nhap lai: " RESET);
+                    }
+                } while(newRole != ROLE_ADMIN && newRole != ROLE_STAFF);
+
+                found->A.role = newRole;
+                printSpace(65);
+                printf(GREEN BOLD "Sua vai tro thanh cong!\n" RESET);
                 pauseScreen();
                 break;
             }
@@ -1001,6 +1012,7 @@ void deleteRecord(Node **head,char currentUsername[]) {
         return;
     }
 
+    printf("\n");
     print_record(p);
 
     char confirm;
@@ -1188,7 +1200,12 @@ void statisticsByProvince(Node* head) {
         int printed = 0;
         Node* t = head;
         while (t != p) {
-            if (strcmp(t->data.province.tentinh, p->data.province.tentinh) == 0) {
+            char temp1[100], temp2[100];
+            strcpy(temp1, t->data.province.tentinh);
+            strcpy(temp2, p->data.province.tentinh);
+            toLowerCase(temp1);
+            toLowerCase(temp2);
+            if (strcmp(temp1, temp2) == 0) {
                 printed = 1;
                 break;
             }
@@ -1198,7 +1215,12 @@ void statisticsByProvince(Node* head) {
             int count = 0;
             Node* q = head;
             while (q != NULL) {
-                if (strcmp(p->data.province.tentinh, q->data.province.tentinh) == 0) {
+                char temp1[100], temp2[100];
+                strcpy(temp1, p->data.province.tentinh);
+                strcpy(temp2, q->data.province.tentinh);
+                toLowerCase(temp1);
+                toLowerCase(temp2);
+                if (strcmp(temp1, temp2) == 0) {
                     count++;
                 }
                 q = q->next;
@@ -1337,7 +1359,7 @@ void exportBill(Node *p) {
     fprintf(f, "=====================================================\n");
     fclose(f);
     printSpace(65);
-    printf("Da xuat bill ra file %s\n", filename);
+    printf("Da xuat bill ra file %s!\n", filename);
 }
 
 void calculateFee(Node *head) {
@@ -1434,7 +1456,12 @@ void calculateFee(Node *head) {
 
 int findProvinceIndex(ProvinceFee stats[], int count, char provinceName[]) {
     for (int i = 0; i < count; i++) {
-        if (strcmp(stats[i].provinceName, provinceName) == 0) {
+        char temp1[100], temp2[100];
+        strcpy(temp1, stats[i].provinceName);
+        strcpy(temp2, provinceName);
+        toLowerCase(temp1);
+        toLowerCase(temp2);
+        if (strcmp(temp1, temp2) == 0) {
             return i;
         }
     }
@@ -1454,7 +1481,12 @@ void pronvinceMaxRecord (Node *head) {
     while(p != NULL) {
         int found = -1;
         for(int i=0 ;i < count ;i++) {
-            if(strcmp(stats[i].province_name,p->data.province.tentinh) == 0) {
+            char temp1[100], temp2[100];
+            strcpy(temp1, stats[i].province_name);
+            strcpy(temp2, p->data.province.tentinh);
+            toLowerCase(temp1);
+            toLowerCase(temp2);
+            if(strcmp(temp1, temp2) == 0) {
                 found = i;
                 break;
             }
@@ -1618,12 +1650,19 @@ int main() {
             do {
                 menu_admin();
 
-                if (scanf("%d", &choice) != 1) { 
-                    printSpace(65);  
-                    printf("Loi: Vui long chi nhap chu so!\n");
-                    while(getchar() != '\n');
-                    continue;
-                }
+                do {
+                    if (scanf("%d", &choice) != 1) { 
+                        printSpace(65);  
+                        printf(RED BOLD"   Loi: Vui long chi nhap chu so! Nhap lai: " RESET);
+                        while(getchar() != '\n');
+                        choice = -1;
+                        continue;
+                    }
+                    if (choice < 0 || choice > 5) {
+                        printSpace(65);
+                        printf(RED BOLD "   Lua chon khong hop le! Nhap lai: " RESET);
+                    }
+                } while(choice < 0 || choice > 5);
 
                 switch(choice) {
                     case 1: 
@@ -1666,12 +1705,19 @@ int main() {
             do {
                 menu_staff();
 
-                if (scanf("%d", &choice) != 1) {  
-                    printSpace(65); 
-                    printf("Loi: Vui long chi nhap chu so!\n");
-                    while(getchar() != '\n');
-                    continue;
-                }
+                do {
+                    if (scanf("%d", &choice) != 1) { 
+                        printSpace(65);  
+                        printf(RED BOLD"   Loi: Vui long chi nhap chu so! Nhap lai: " RESET);
+                        while(getchar() != '\n');
+                        choice = -1;
+                        continue;
+                    }
+                    if (choice < 0 || choice > 5) {
+                        printSpace(65);
+                        printf(RED BOLD "   Lua chon khong hop le! Nhap lai: " RESET);
+                    }
+                } while(choice < 0 || choice > 4);
 
                 switch(choice) {
                     case 1: {
@@ -1697,13 +1743,12 @@ int main() {
                             print_record(cur);
                         } else {
                             printSpace(65);
-                            printf(RED BOLD "Khong tim thay so dien thoai nay!\n" RESET);
+                            printf(RED BOLD "Khong tim thay so dien thoai nay!\n\n" RESET);
                             printSpace(65);
-                            printf("Goi y cac so thue bao gan dung:\n");
-                            printSpace(65);            
+                            printf("Goi y cac so thue bao gan dung:\n");        
                             suggestSimilarPhone(head, phone);
                         }
-
+                        endScreen();
                         break;
                     }
                     case 2:
