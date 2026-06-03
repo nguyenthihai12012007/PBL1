@@ -107,6 +107,7 @@ void menu_update(Node* head,char currentUsername[]) {
                 break;
             }
             case 4: {
+                printf("\n");
                 printSpace(65);
 
                 char oldProvince[50];
@@ -145,8 +146,9 @@ void menu_update(Node* head,char currentUsername[]) {
 
                 updatePhoneAreaCode(&head->data);
 
+                printf("\n");
                 printSpace(65);
-                printf("Sua tinh thanh cong!\n");
+                printf(GREEN BOLD "Sua tinh thanh cong!\n" RESET);
 
                 printSpace(65);
                 printf("So dien thoai moi: %s\n", head->data.phone);
@@ -164,16 +166,14 @@ void menu_update(Node* head,char currentUsername[]) {
                 break;
             }
             case 5: {
-                printSpace(65);
-
+                printf("\n");
                 int oldStatus = head->data.status;
                 char detail[200];
 
-                printf("Nhap trang thai moi:\n");
+                //printf("Nhap trang thai moi:\n");
                 head->data.status = inputStatus();
 
-                printSpace(65);
-                printf("Sua trang thai thanh cong!\n");
+                showUpdateResult(head, "Sua trang thai thanh cong!");
 
                 snprintf(detail, sizeof(detail),
                         "Sua trang thai thue bao tu \"%d\" thanh \"%d\"",
@@ -364,7 +364,6 @@ void menu_search(Node *head) {
                     printf("\n");
                     printSpace(65);
                     printf("Goi y cac so thue bao gan dung:\n");
-           
                     suggestSimilarPhone(head, phone);
                 }
 
