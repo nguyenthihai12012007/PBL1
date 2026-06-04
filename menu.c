@@ -527,11 +527,11 @@ void menu_account(AccountNode **head,char currentUsername[]) {
         printf("\n");
         printSystemHeader("Quan ly tai khoan");
         printSpace(65);
-        printf("| " YELLOW "1." RESET " %-65s |\n", "Them nhan vien");
+        printf("| " YELLOW "1." RESET " %-65s |\n", "Them tai khoan");
         printSpace(65);
-        printf("| " YELLOW "2." RESET " %-65s |\n", "Xoa nhan vien");
+        printf("| " YELLOW "2." RESET " %-65s |\n", "Xoa tai khoan");
         printSpace(65);
-        printf("| " YELLOW "3." RESET " %-65s |\n", "Sua nhan vien");
+        printf("| " YELLOW "3." RESET " %-65s |\n", "Sua tai khoan");
         printSpace(65);
         printf("| " RED "0." RESET " %-65s |\n", "Quay lai");
         printSystemFooter();
