@@ -20,7 +20,10 @@
 #define GREEN "\033[32m"
 #define YELLOW "\033[33m"
 #define CYAN "\033[36m"
+#define PURPLE "\033[35m"
 #define BRIGHT_GREEN "\033[1;32m"
+#define BRIGHT_PURPLE "\033[1;35m"
+#define BRIGHT_RED "\033[1;31m"
 
 #define WIDTH 202
 
