@@ -1,18 +1,23 @@
-======================================================================================================================================================================
-| Thoi gian           | Tai khoan | Hanh dong     | Doi tuong  | Chi tiet                                                                                            |
-======================================================================================================================================================================
-| 27/05/2026 01:18:38 | nhuhoa    | Sua thue bao  | 0924889999 | Sua ten thue bao tu "Cong ty TNHH Thuong mai Hoang Long" thanh "Cong ty TNHH Hoang Long"            |
-| 27/05/2026 01:18:50 | nhuhoa    | Sua thue bao  | 0924889999 | Sua trang thai thue bao tu 1 thanh 3                                                                |
-| 27/05/2026 16:19:13 | nhuhoa    | Them thue bao | 0924234567 | Them thue bao moi vao he thong                                                                      |
-| 27/05/2026 16:20:00 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh thue bao tu "Hue" thanh "da nang"                                                          |
-| 27/05/2026 16:27:12 | nhuhoa    | Them thue bao | 0943543264 | Them thue bao "0943543264"                                                                          |
-| 28/05/2026 22:38:57 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh thue bao tu "da nang" thanh "ha noi"                                                       |
-| 28/05/2026 22:58:21 | nhuhoa    | Sua tinh      | 0924456789 | Sua tinh tu "da nang" thanh "ha noi", so dien thoai tu "0975456789" thanh "0924456789"              |
-| 28/05/2026 22:58:47 | nhuhoa    | Sua thue bao  | 0924456789 | Sua ten thue bao tu "Cong ty TNHH ABC" thanh "fushfew"                                              |
-| 28/05/2026 23:09:03 | nhuhoa    | Sua tinh      | 0975456789 | Sua tinh tu "ha noi" thanh "hue", so dien thoai tu "0924456789" thanh "0975456789"                  |
-| 04/06/2026 15:50:53 | nhuhoa    | Sua so thue b | 0975111111 | Sua so thue bao tu "0975456789" thanh "0975111111"                                                  |
-| 04/06/2026 15:51:19 | nhuhoa    | Sua tinh      | 0943111111 | Sua tinh tu "hue" thanh "da nang", so dien thoai tu "0975111111" thanh "0943111111"                 |
-| 04/06/2026 16:37:23 | nhuhoa    | Sua tinh      | 0975987654 | Sua tinh tu "da nang" thanh "hue", so dien thoai tu "0943987654" thanh "0975987654"                 |
-| 04/06/2026 16:37:41 | nhuhoa    | Sua thue bao  | 0975987654 | Sua ten thue bao tu "moimoi" thanh "hai"                                                            |
-| 04/06/2026 16:40:32 | nhuhoa    | Sua tinh      | 0975987654 | Sua tinh tu "da nang" thanh "hue", so dien thoai tu "0943987654" thanh "0975987654"                 |
-| 04/06/2026 16:40:41 | nhuhoa    | Sua thue bao  | 0975987654 | Sua ten thue bao tu "moimoi" thanh "aa"                                                             |
+========================================================================================================================================================================
+| Thoi gian           | Tai khoan | Hanh dong       | Doi tuong  | Chi tiet                                                                                            |
+========================================================================================================================================================================
+| 27/05/2026 01:18:38 | nhuhoa    | Sua thue bao    | 0924889999 | Sua ten thue bao tu "Cong ty TNHH Thuong mai Hoang Long" thanh "Cong ty TNHH Hoang Long"            |
+| 27/05/2026 01:18:50 | nhuhoa    | Sua thue bao    | 0924889999 | Sua trang thai thue bao tu 1 thanh 3                                                                |
+| 27/05/2026 16:19:13 | nhuhoa    | Them thue bao   | 0924234567 | Them thue bao moi vao he thong                                                                      |
+| 27/05/2026 16:20:00 | nhuhoa    | Sua tinh        | 0975456789 | Sua tinh thue bao tu "Hue" thanh "da nang"                                                          |
+| 27/05/2026 16:27:12 | nhuhoa    | Them thue bao   | 0943543264 | Them thue bao "0943543264"                                                                          |
+| 28/05/2026 22:38:57 | nhuhoa    | Sua tinh        | 0975456789 | Sua tinh thue bao tu "da nang" thanh "ha noi"                                                       |
+| 28/05/2026 22:58:21 | nhuhoa    | Sua tinh        | 0924456789 | Sua tinh tu "da nang" thanh "ha noi", so dien thoai tu "0975456789" thanh "0924456789"              |
+| 28/05/2026 22:58:47 | nhuhoa    | Sua thue bao    | 0924456789 | Sua ten thue bao tu "Cong ty TNHH ABC" thanh "fushfew"                                              |
+| 28/05/2026 23:09:03 | nhuhoa    | Sua tinh        | 0975456789 | Sua tinh tu "ha noi" thanh "hue", so dien thoai tu "0924456789" thanh "0975456789"                  |
+| 04/06/2026 15:50:53 | nhuhoa    | Sua so thue bao | 0975111111 | Sua so thue bao tu "0975456789" thanh "0975111111"                                                  |
+| 04/06/2026 15:51:19 | nhuhoa    | Sua tinh        | 0943111111 | Sua tinh tu "hue" thanh "da nang", so dien thoai tu "0975111111" thanh "0943111111"                 |
+| 04/06/2026 16:37:23 | nhuhoa    | Sua tinh        | 0975987654 | Sua tinh tu "da nang" thanh "hue", so dien thoai tu "0943987654" thanh "0975987654"                 |
+| 04/06/2026 16:37:41 | nhuhoa    | Sua thue bao    | 0975987654 | Sua ten thue bao tu "moimoi" thanh "hai"                                                            |
+| 04/06/2026 16:40:32 | nhuhoa    | Sua tinh        | 0975987654 | Sua tinh tu "da nang" thanh "hue", so dien thoai tu "0943987654" thanh "0975987654"                 |
+| 04/06/2026 16:40:41 | nhuhoa    | Sua thue bao    | 0975987654 | Sua ten thue bao tu "moimoi" thanh "aa"                                                             |
+| 04/06/2026 21:18:27 | nhuhoa    | Them thue bao   | 0948123457 | Them thue bao moi vao he thong                                                                      |
+| 04/06/2026 21:28:52 | nhuhoa    | Sua trang thai  | 0948123457 | Sua trang thai thue bao tu "2" thanh "1"                                                            |
+| 04/06/2026 21:37:31 | nhuhoa    | Sua thue bao    | 0948123457 | Sua ten thue bao tu "Hoa Binh" thanh "Cong ty Hanh Phuc"                                            |
+| 04/06/2026 21:39:35 | nhuhoa    | Sua dia chi     | 0948123457 | Sua dia chi thue bao tu "12 " thanh "12 Tran Quoc Toan"                                             |
+| 04/06/2026 22:19:04 | nhuhoa    | Them thue bao   | 0943038421 | Them thue bao moi vao he thong                                                                      |
