@@ -12,7 +12,7 @@ typedef struct Record {
     char phone[15];
     int status;
 
-    int onNetMinutes; // noi mang
+    int onNetMinutes; 
     int offNetMinutes;
 } Record;
 

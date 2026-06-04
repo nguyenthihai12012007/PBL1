@@ -797,6 +797,31 @@ void suggestSimilarPhone(Node *head, char inputPhone[]) {
     }
 }
 
+Node* suggestSimilarPhoneForUpdate(Node *head,char inputPhone[],int check ) {
+    Node* p = head;
+    char choice;
+    check = 0;
+
+    while(p != NULL) {
+        if(isSimilarPhone(p->data.phone,inputPhone) == 1) {
+            printf("\n");
+            print_record(p);
+            printSpace(65);
+            printf("Day co phai la thue bao ban muon tim? (y/n): ");
+            scanf(" %c",&choice);
+            getchar();
+
+            if(choice == 'Y' || choice == 'y') {
+            check = 1;
+            return p;
+            }
+        }
+        p = p->next;
+    }
+    printSpace(65);
+    return NULL;
+}
+
 Node* search_record(Node* head,char phone[15]) {
     if(head == NULL) {
         printf("\n");
@@ -940,6 +965,7 @@ void updateRecord(Node* head,char currentUsername[]) {
     Node* found=NULL;
 
     while(found==NULL) {
+        int check;
         printf("\n");
         printSpace(65);
         printf("Nhap so dien thoai thue bao can sua: ");
@@ -950,9 +976,20 @@ void updateRecord(Node* head,char currentUsername[]) {
             continue;
         }
         found=search_record(head,phone);
+    
         if(found==NULL) {
             printSpace(65);
-            printf(RED BOLD "Khong tim thay thue bao! Vui long nhap lai! \n" RESET);
+            printf(RED BOLD "Khong tim thay thue bao! \n" RESET);       
+            printf("\n");
+            found = suggestSimilarPhoneForUpdate(head,phone,check);
+
+            if(found == NULL && check == 0) {
+                printf("Khong co goi y nao phu hop!\n");
+            } else if (found != NULL && check == 1){
+                printSpace(65);
+                printf("Goi y so thue bao gan dung: \n");
+                printf("\n");
+            }
         }
     }
     print_record(found);

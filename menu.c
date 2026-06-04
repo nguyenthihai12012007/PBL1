@@ -148,10 +148,9 @@ void menu_update(Node* head,char currentUsername[]) {
 
                 printf("\n");
                 printSpace(65);
-                printf(GREEN BOLD "Sua tinh thanh cong!\n" RESET);
-
-                printSpace(65);
                 printf("So dien thoai moi: %s\n", head->data.phone);
+                printf("\n");
+                showUpdateResult(head,"Sua tinh thanh cong!");
 
                 snprintf(detail, sizeof(detail),
                         "Sua tinh tu \"%s\" thanh \"%s\", so dien thoai tu \"%s\" thanh \"%s\"",
