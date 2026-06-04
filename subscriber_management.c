@@ -229,13 +229,16 @@ int login(AccountNode *head,char currentUsername[]) {
         printMiddle("+======================================================================+");
         printf(RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET "                         SINH VIEN THUC HIEN                          " BLUE BOLD "|\n" RESET);
+        //printf(BLUE BOLD "|" RESET "                         SINH VIEN THUC HIEN                          " BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_RED "                         SINH VIEN THUC HIEN                          " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET " 1. Tran Nguyen Nhu Hoa - 102250015                                   " BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 1. Tran Nguyen Nhu Hoa - 102250015                                   " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET " 2. Nguyen Thi Hai      - 102250011                                   " BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 2. Nguyen Thi Hai - 102250011                                        " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET " Lop: 25T_DT1                                                         " BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET GREEN " Lop: 25T_DT1                                                         " RESET BLUE BOLD "|\n" RESET);
+        //printSpace(65);
+        //printf(BLUE BOLD "|" RESET " Giang vien huong dan: ĐỖ THỊ TUYẾT HOA                               " BLUE BOLD "|\n" RESET);
         printf(BLUE BOLD);
         printMiddle("+======================================================================+");
         printf(RESET);
@@ -318,7 +321,7 @@ void writeHistory(char username[], char action[], char target[], char detail[]) 
     if (fgetc(f) == EOF) {
         fprintf(f,
         "======================================================================================================================================================================\n");
-        fprintf(f, "| %-19s | %-9s | %-13s | %-10s | %-99s |\n", "Thoi gian", "Tai khoan", "Hanh dong", "Doi tuong", "Chi tiet");
+        fprintf(f, "| %-19s | %-9s | %-15s | %-10s | %-97s |\n", "Thoi gian", "Tai khoan", "Hanh dong", "Doi tuong", "Chi tiet");
         fprintf(f,
         "======================================================================================================================================================================\n");
     }
@@ -336,7 +339,7 @@ void writeHistory(char username[], char action[], char target[], char detail[]) 
             t->tm_min,
             t->tm_sec);
 
-    fprintf(f, " %-9.9s | %-13.13s | %-10.10s | %-99.99s |\n",
+    fprintf(f, " %-9.9s | %-15.15s | %-10.10s | %-99.99s |\n",
             username,
             action,
             target,
