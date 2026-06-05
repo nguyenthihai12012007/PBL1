@@ -946,6 +946,7 @@ void updateAccount(AccountNode *head,char currentUsername[]) {
                 pauseScreen();
         }
     } while(choice != 0);
+    saveAccountToFile("account.txt", head);
 }
 
 void updateRecord(Node* head,char currentUsername[]) {
@@ -1772,7 +1773,6 @@ int main() {
                 switch(choice) {
                     case 1: {
                         char phone[15];
-
                         printf("\n");
                         printSpace(65);
                         printf("Nhap so dien thoai thue bao can tim: ");
