@@ -229,16 +229,15 @@ int login(AccountNode *head,char currentUsername[]) {
         printMiddle("+======================================================================+");
         printf(RESET);
         printSpace(65);
-        //printf(BLUE BOLD "|" RESET "                         SINH VIEN THUC HIEN                          " BLUE BOLD "|\n" RESET);
         printf(BLUE BOLD "|" RESET BRIGHT_RED "                         SINH VIEN THUC HIEN                          " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
         printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 1. Tran Nguyen Nhu Hoa - 102250015                                   " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 2. Nguyen Thi Hai - 102250011                                        " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 2. Nguyen Thi Hai      - 102250011                                   " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET GREEN " Lop: 25T_DT1                                                         " RESET BLUE BOLD "|\n" RESET);
-        //printSpace(65);
-        //printf(BLUE BOLD "|" RESET " Giang vien huong dan: ĐỖ THỊ TUYẾT HOA                               " BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET GREEN BOLD " Lop: 25T_DT1                                                         " RESET BLUE BOLD "|\n" RESET);
+        printSpace(65);
+        printf(BLUE BOLD "|" RESET RED BOLD " Giang vien huong dan: ĐỖ THỊ TUYẾT HOA                               " RESET BLUE BOLD "|\n" RESET);
         printf(BLUE BOLD);
         printMiddle("+======================================================================+");
         printf(RESET);
@@ -1293,7 +1292,6 @@ void checkDuplicate(Node** head) {
     Node *p = *head;
     int found = 0;
 
-    printf("\n");
     while(p != NULL) {
         Node *prev = p;
         Node *q = p->next;
@@ -1301,6 +1299,7 @@ void checkDuplicate(Node** head) {
         while(q != NULL) {
             if(strcmp(p->data.province.tentinh,q->data.province.tentinh) == 0 &&
                 strcmp(p->data.phone,q->data.phone) == 0) {
+                    printf("\n");
                     printSpace(65);
                     printf("Phat hien thue bao trung so dien thoai trong tinh %s:\n",p->data.province.tentinh);
                     found = 1;
@@ -1314,7 +1313,6 @@ void checkDuplicate(Node** head) {
                     printf("\n");
                     printSpace(65);
                     printf("Xoa thanh cong thue bao 2\n");
-                    printf("\n");
 
                     Node* temp = q;
                     prev->next = q->next;
@@ -1328,6 +1326,7 @@ void checkDuplicate(Node** head) {
         p = p->next;
     }
     if(found == 0) {
+        printf("\n");
         printSpace(65);
         printf("Khong tim thay thue bao trung!");
     }
