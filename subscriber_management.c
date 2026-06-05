@@ -242,13 +242,6 @@ int login(AccountNode *head,char currentUsername[]) {
         printf(BLUE BOLD);
         printMiddle("+======================================================================+");
         printf(RESET);
-        /*printMiddle("|                        SINH VIEN THUC HIEN                           |");
-        printMiddle("| 1. Tran Nguyen Nhu Hoa - 102250015                                   |");
-        printMiddle("| 2. Nguyen Thi Hai      - 102250011                                   |");
-        printMiddle("| Lop: 25T_DT1                                                         |");
-        printf(BLUE BOLD);
-        printMiddle("+======================================================================+");
-        printf(RESET);*/
 
         printf(CYAN BOLD);
         printf("\n");
