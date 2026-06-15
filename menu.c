@@ -171,7 +171,7 @@ void menu_update(Node* head,char currentUsername[]) {
 
                 //printf("Nhap trang thai moi:\n");
                 head->data.status = inputStatus();
-
+ 
                 showUpdateResult(head, "Sua trang thai thanh cong!");
 
                 snprintf(detail, sizeof(detail),
@@ -270,7 +270,7 @@ void menu_manage(Node **head,char currentUsername[]) {
             case 1: {
                 Record newR = inputRecord();
                 addRecordByUser(head,newR,currentUsername);
-                saveRecordToFile("data1.txt", *head);
+                saveRecordToFile(RECORD_FILE, *head);
                 printSpace(65);
                 printf("Da them thue bao va luu vao file thanh cong!\n");
                 break;
