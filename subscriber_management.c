@@ -214,7 +214,7 @@ void loadAccountsToList(const char *filename, AccountNode **head) {
     fclose(f);
 }
 
-int login(AccountNode *head,char currentUsername[]) {
+int login(AccountNode *head, char currentUsername[]) {
     char username[30];
     char password[50];
 
@@ -229,15 +229,15 @@ int login(AccountNode *head,char currentUsername[]) {
         printMiddle("+======================================================================+");
         printf(RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET BRIGHT_RED "                         SINH VIEN THUC HIEN                          " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_RED "                         SINH VIÊN THỰC HIỆN                          " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 1. Tran Nguyen Nhu Hoa - 102250015                                   " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 1. Trần Nguyễn Như Hoà - 102250015                                   " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 2. Nguyen Thi Hai      - 102250011                                   " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET BRIGHT_PURPLE " 2. Nguyễn Thị Hải      - 102250011                                   " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET GREEN BOLD " Lop: 25T_DT1                                                         " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET GREEN BOLD " Lớp: 25T_DT1                                                         " RESET BLUE BOLD "|\n" RESET);
         printSpace(65);
-        printf(BLUE BOLD "|" RESET RED BOLD " Giang vien huong dan: ĐỖ THỊ TUYẾT HOA                               " RESET BLUE BOLD "|\n" RESET);
+        printf(BLUE BOLD "|" RESET RED BOLD " Giảng viên hướng dẫn: ĐỖ THỊ TUYẾT HOA                               " RESET BLUE BOLD "|\n" RESET);
         printf(BLUE BOLD);
         printMiddle("+======================================================================+");
         printf(RESET);
@@ -326,7 +326,7 @@ void writeHistory(char username[], char action[], char target[], char detail[]) 
     fprintf(f, "| %02d/%02d/%04d %02d:%02d:%02d |",
             t->tm_mday,
             t->tm_mon + 1,
-            t->tm_year + 1900,
+            t->tm_year + 1900, 
             t->tm_hour,
             t->tm_min,
             t->tm_sec);
@@ -383,6 +383,18 @@ void addRecordByFile(Node** head, Record R) {
     
 }
 
+void freeList(Node **head) {
+    Node *p = *head;
+
+    while (p != NULL) {
+        Node *temp = p;
+        p = p->next;
+        free(temp);
+    }
+
+    *head = NULL;
+}
+
 void readFile(const char *filename, Node **head,char currentUsername[]) {
     FILE *f = fopen(filename, "r");
     if (f == NULL) {
@@ -391,6 +403,8 @@ void readFile(const char *filename, Node **head,char currentUsername[]) {
         printf(RED BOLD "Khong mo duoc file!\n" RESET);
         return;
     }
+
+    freeList(head);
 
     char line[300];
     int valid = 0, invalid = 0;
@@ -990,7 +1004,7 @@ void updateRecord(Node* head,char currentUsername[]) {
     }
     print_record(found);
     menu_update(found, currentUsername);
-    saveRecordToFile(RECORD_FILE,head);
+    saveRecordToFile(RECORD_FILE, head);
 
     printSpace(65);
     printf("Cap nhat thanh cong!\n");
@@ -1042,7 +1056,7 @@ void deleteAccount(AccountNode **head,char currentUsername[]) {
     printf("Xoa thanh cong!\n");
 }
 
-void deleteRecord(Node **head,char currentUsername[]) {
+void deleteRecord(Node **head, char currentUsername[]) {
     char phone[15];
     printf("\n");
     printSpace(65);
@@ -1077,6 +1091,11 @@ void deleteRecord(Node **head,char currentUsername[]) {
         return;
     }
 
+    writeHistory(currentUsername,
+                 "Xoa thue bao",
+                 p->data.phone,
+                 "Xoa thue bao khoi he thong");
+
     if (prev == NULL) {
         *head = p->next;
     } else {
@@ -1087,6 +1106,7 @@ void deleteRecord(Node **head,char currentUsername[]) {
     saveRecordToFile(RECORD_FILE, *head);
     printSpace(65);
     printf("Xoa thanh cong!\n");
+
 }
 
 void listByProvince(Node* head) {
@@ -1306,11 +1326,11 @@ void checkDuplicate(Node** head) {
                     found = 1;
                     printSpace(65);
                     printf("Thue bao 1:\n");
-                    print_record(q);
+                    print_record(p);
                     printf("\n");
                     printSpace(65);
                     printf("Thue bao 2:\n");
-                    print_record(p);
+                    print_record(q);
                     printf("\n");
                     printSpace(65);
                     printf("Xoa thanh cong thue bao 2\n");
