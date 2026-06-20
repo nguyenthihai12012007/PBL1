@@ -1118,6 +1118,7 @@ void listByProvince(Node* head) {
     } 
 
     char province[50]; 
+    char provinceCompare[50];
     char tempProvince[50];
     int found = 0;
     int stt = 1;
@@ -1130,39 +1131,34 @@ void listByProvince(Node* head) {
     fgets(province, sizeof(province), stdin);
     province[strcspn(province, "\n")] = '\0';
 
-    toLowerCase(province);
+    strcpy(provinceCompare, province);
+    toLowerCase(provinceCompare);
 
     Node* p = head;
-    while (p != NULL) {
-        strcpy(tempProvince,p->data.province.tentinh);
-        toLowerCase(tempProvince);
-
-        if (strcmp(tempProvince, province) == 0) {
-            found = 1;
-            break;
-        }
-        p = p->next;
-    }
-    if (!found) {
-        printSpace(65);
-        printf(RED BOLD "Khong tim thay tinh nay!\n" RESET);
-        return;
-    }
-    printf("\n");
-    printSpace(46);
-    printf("                                         DANH SACH THEO TINH: %s\n", province);
-    p = head;
-    printHeader();
     while (p != NULL) {
         strcpy(tempProvince, p->data.province.tentinh);
         toLowerCase(tempProvince);
 
-        if (strcmp(tempProvince, province) == 0) {
+        if (strcmp(tempProvince, provinceCompare) == 0) {
+            if (!found) {
+                printf("\n");
+                printSpace(46);
+                printf("                                         DANH SACH THEO TINH: %s\n", province);
+                printHeader();
+                found = 1;
+            }
+
             printRow(stt, p);
             stt++;
-            found = 1;
         }
+
         p = p->next;
+    }
+    
+    if (!found) {
+        printSpace(65);
+        printf(RED BOLD "Khong tim thay tinh nay!\n" RESET);
+        return;
     }
     printFooter();
 }
@@ -1312,18 +1308,26 @@ void statisticsByProvince(Node* head) {
 void checkDuplicate(Node** head) {
     Node *p = *head;
     int found = 0;
+    int delete = 0;
 
     while(p != NULL) {
         Node *prev = p;
         Node *q = p->next;
 
         while(q != NULL) {
-            if(strcmp(p->data.province.tentinh,q->data.province.tentinh) == 0 &&
+            char tinh1[100];
+            char tinh2[100];
+            strcpy(tinh1, p->data.province.tentinh);
+            strcpy(tinh2, q->data.province.tentinh);
+            toLowerCase(tinh1);
+            toLowerCase(tinh2);
+            if(strcmp(tinh1, tinh2) == 0 &&
                 strcmp(p->data.phone,q->data.phone) == 0) {
                     printf("\n");
                     printSpace(65);
                     printf("Phat hien thue bao trung so dien thoai trong tinh %s:\n",p->data.province.tentinh);
                     found = 1;
+                    delete = 1;
                     printSpace(65);
                     printf("Thue bao 1:\n");
                     print_record(p);
@@ -1346,11 +1350,15 @@ void checkDuplicate(Node** head) {
         }
         p = p->next;
     }
+
     if(found == 0) {
         printf("\n");
         printSpace(65);
         printf("Khong tim thay thue bao trung!");
     }
+
+    if(delete)
+        saveRecordToFile(RECORD_FILE, *head);
 }
 
 void filterByStatus(Node *head) {
